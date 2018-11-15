@@ -92,16 +92,16 @@ organizerMarkedUp.pdf
 --------------------
 sysAdminMarkedUp.pdf
 --------------------
-1. This is a text field where the SA will enter a positive integer representing the number of days old they want their meetings to be in the results box.
+1. This is a text field where the SA will enter a positive integer representing the number of days old they want their schedules to be in the results box.
 
 2. Once the SA has entered a number, they will hit this 'Go' button, which will then send the request to the system and post the results to #3
 
-3. The results box will show the meetings that are N days old once requested with the Go button (#2)
+3. The results box will show the scheudles that are N days old once requested with the Go button (#2)
 
-4. The SA can hit this delete button to meetings that are in the results box
+4. The SA can hit this delete button to schedules that are in the results box
 
-5. This is a textbox where a number, N, willl be entered that represents the number of hours old a meeting has to be to appear in the results box.
+5. This is a textbox where a number, N, willl be entered that represents the number of hours old a schedule has to be to appear in the results box.
 
 6. Upon clicking, this 'Go' button will process the number in the text field and will make a request to the system for an update in the results box
 
-7. This results box will show the meetings that are N hours old once #6 is pressed.
+7. This results box will show the schedules that are N hours old once #6 is pressed.
