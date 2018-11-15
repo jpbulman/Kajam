@@ -86,6 +86,9 @@ organizerMarkedUp.pdf
 
 16. Once the organizer wants to make changes, they must enter their secret code. Once they do that, the set button (#10) will be clickable and they will be able to modify the schedule.
 
+17. These left and right arrows, when clicked, will go either to the previous week (left), or advance to the next week (right).
+
+
 --------------------
 sysAdminMarkedUp.pdf
 --------------------
