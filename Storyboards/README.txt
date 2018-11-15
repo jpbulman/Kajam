@@ -46,6 +46,10 @@ participantMarkedUp.pdf
 
 13. This arrow button will process the secret code and will send a request to get the corresponding meeting.
 
+14. These left and right arrows, when clicked, will go either to the previous week (left), or advance to the next week (right).
+
+15. A dark green box is a slot the participant has already signed up for.
+
 
 ---------------------
 organizerMarkedUp.pdf
