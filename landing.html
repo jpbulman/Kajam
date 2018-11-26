@@ -6,6 +6,8 @@
 </head>
 <body>
 
+<script src="landing.js"></script>
+
 <div class="title">
     <h1><span>Scheduler</span></h1>
 </div>
@@ -13,18 +15,18 @@
 <div class="mainForms">
     <form>
         <div>
-            <input type="text" name="scheduleID" placeholder="Enter Schedule ID">
+            <input type="text" id="scheduleID" name="scheduleID" placeholder="Enter Schedule ID">
         </div>
 
         <br>
 
         <div>
-            <input type="text" name="organizerID" placeholder="Enter Organizer ID">
+            <input type="text" id="organizerID" name="organizerID" placeholder="Enter Organizer ID">
         </div>
 
         <br>
         <div class="buttonDiv">
-            <input type="submit" name="Go" value="Go">
+            <input onclick="goAction()" type="submit" name="Go" value="Go">
         </div>
     </form>
 
