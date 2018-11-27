@@ -1,6 +1,6 @@
 body{
     background-color: royalblue;
-    text-align: center;
+    /* text-align: center; */
 }
 
 h1 span{
@@ -17,10 +17,6 @@ h1 span{
     text-align: center
 }
 
-.mainForms{
-    padding: 200px;
-}
-
 input[type=text], select{
     background-color: #f2f2f2;
     border-radius: 10px;
@@ -31,11 +27,10 @@ input[type=text], select{
 input[type=submit]{
     background: orange;
     border-radius: 10px;
-    width: 60px;
-    height: 60px;
     font-size: 30px;
     border: none;
     color: white;
+    padding: 20px;
 }
 
 input[type=submit]:hover{
@@ -65,4 +60,23 @@ input[type=submit]:hover{
 
 .buttonBottom:hover{
     background-color: darkorange;
+}
+
+.mainForms{
+    
+}
+
+.createAScheduleForm{
+    float: right;
+}
+
+.selecter{
+    float: left;
+    width: 100%;
+    color: gray;
+}
+
+.parent{
+    float: left;
+    margin-right: 10px;
 }
