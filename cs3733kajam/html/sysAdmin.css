@@ -21,7 +21,8 @@ h1 span{
     height: 400px;
     width: 400px;
     background-color: lightgray;
-    float: left;
+    /* float: left; */
+    margin-right: 10px;
 }
 
 .hoursOldContainer{
@@ -29,4 +30,17 @@ h1 span{
     height: 400px;
     width: 400px;
     background-color: lightgray;
+}
+
+.dayOldParent{
+    float: left;
+    text-align: center;
+}
+
+.hourOldParent{
+    float: left;
+    text-align: center;
+}
+
+.delButton{
 }
