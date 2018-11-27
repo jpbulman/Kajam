@@ -80,3 +80,7 @@ input[type=submit]:hover{
     float: left;
     margin-right: 10px;
 }
+
+input, select{
+    margin-bottom: .5em;
+}

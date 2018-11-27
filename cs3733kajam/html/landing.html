@@ -13,12 +13,11 @@
 </div>
 
 <div class="createAScheduleForm">
-    <form>
+    <form class="main-form">
         <div>
             <input type="text" id="scheduleName" placeholder="Schedule Name">
         </div>
-
-        <br>
+        
 
         <div>
             <select id="lengthOfMeetings" class="selecter">
@@ -29,32 +28,27 @@
                 <option value="60">60 minutes</option>
             </select>
         </div>
-
-        <br>
+        
 
         <div>
             <input type="text" id="startDay" placeholder="Start day (MM/DD/YYYY)">
         </div>
-
-        <br>
+        
 
         <div>
             <input type="text" id="endDay" placeholder="End day (MM/DD/YYYY)">
         </div>
-
-        <br>
+        
 
         <div>
             <input type="text" id="startHour" placeholder="Daily start hour (HH 0-23)">
         </div>
-
-        <br>
+        
 
         <div>
             <input type="text" id="endHour" placeholder="Daily end hour (HH 0-23)">
         </div>
-
-        <br>
+        
 
         <div>
             <input onclick="createNewSchedule()" type="submit" value="Create A Schedule">
@@ -67,14 +61,12 @@
         <div>
             <input type="text" id="scheduleID" name="scheduleID" placeholder="Enter Schedule ID">
         </div>
-
-        <br>
+        
 
         <div>
             <input type="text" id="organizerID" name="organizerID" placeholder="Enter Organizer ID">
         </div>
-
-        <br>
+        
         <div>
             <input onclick="goAction()" type="submit" name="Go" value="Go">
         </div>
