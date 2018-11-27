@@ -1,3 +1,32 @@
 body{
     background-color: royalblue;
 }
+
+.title{
+    text-align: center;
+}
+
+h1 span{
+    text-align: center;
+    color: white;
+    font-size: 40px;
+    background-color: orange;
+    padding: 30px;
+    border-radius: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.daysOldContainer{
+    overflow-y: scroll;
+    height: 400px;
+    width: 400px;
+    background-color: lightgray;
+    float: left;
+}
+
+.hoursOldContainer{
+    overflow-y: scroll;
+    height: 400px;
+    width: 400px;
+    background-color: lightgray;
+}
