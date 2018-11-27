@@ -2,11 +2,56 @@
 <html>
 <head>
 <title>System Administrator View</title>
+    <link rel="stylesheet" href="sysAdmin.css">
 </head>
 <body>
 
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
+<script src="sysAdmin.js"></script>
+
+<div class="title">
+    <h1><span>System Administrator View</span></h1>
+</div>
+
+
+<div class="dayOldParent">
+    <h1>Get schedules that are</h1>
+
+    <form>
+    
+        <input id="daysOldTF" type="text" placeholder="N">
+    
+    <h1>days old</h1>
+
+        <input onclick="checkInputDaysOld()" id="daysOldGoButton" type="submit" value="Go">
+    
+    <div class="daysOldContainer">
+    
+    </div>
+    
+        <input class="delButton" type="submit" value="Delete">
+    
+    </form>
+</div>
+
+
+
+<div class="hourOldParent">
+    <h1>Get schedules that are</h1>
+
+    <form>
+        <input id="hoursOldTF" type="text" placeholder="N">
+    
+    <h1>hours old</h1>
+    
+        <input onclick="checkInputHoursOld()" id="hoursOldGoButton" type="submit" value="Go">
+
+    <div class="hoursOldContainer">
+        
+    </div>
+
+    </form>
+
+</div>
 
 </body>
 </html>
