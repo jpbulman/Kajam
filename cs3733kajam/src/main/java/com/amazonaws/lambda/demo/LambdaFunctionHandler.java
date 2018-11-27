@@ -84,32 +84,36 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			ScheduleRequest req = new Gson().fromJson(body, ScheduleRequest.class);
 			logger.log(req.toString());
 			
-			//TODO: check the type of all the inputs
-			//TODO: Verify that endTime comes after startTime and endDate comes after startDate
-			LocalTime startTime = LocalTime.of(req.arg1, 0);
-			LocalTime endTime = LocalTime.of(req.arg2, 0);
-			LocalDate startDate = LocalDate.of(req.arg3, req.arg4, req.arg5);
-			LocalDate endDate = LocalDate.of(req.arg6, req.arg7, req.arg8);
-			
-			//TODO: parse the rest of the inputs and add them to the schedule response
-
-			//Parse Inputs
-			/*double val1 = 0.0;
+			int val1, val2, val3, val4, val5, val6, val7, val8, val9;
 			try {
-				val1 = Double.parseDouble(req.arg1);
-			} catch (NumberFormatException e) {
-				val1 = loadConstant(req.arg1);
+				val1 = Integer.parseInt(req.arg2);
+				val2 = Integer.parseInt(req.arg3);
+				val3 = Integer.parseInt(req.arg4);
+				val4 = Integer.parseInt(req.arg5);
+				val5 = Integer.parseInt(req.arg6);
+				val6 = Integer.parseInt(req.arg7);
+				val7 = Integer.parseInt(req.arg8);
+				val8 = Integer.parseInt(req.arg9);
+				val9 = Integer.parseInt(req.arg10);
+			} catch (NumberFormatException e){
+				//TODO: what should we do with invalid input
 			}
-
-			double val2 = 0.0;
-			try {
-				val2 = Double.parseDouble(req.arg2);
-			} catch (NumberFormatException e) {
-				val2 = loadConstant(req.arg2);
-			}*/
-
+			
+			
+			LocalTime startTime = LocalTime.of(val1, 0);
+			LocalTime endTime = LocalTime.of(val2, 0);
+			if(startTime.compareTo(endTime) >= 0) {
+				//TODO: Throw an error due to end time being after start time
+			}
+			
+			LocalDate startDate = LocalDate.of(val3, val4, val5);
+			LocalDate endDate = LocalDate.of(val6, val7, val8);
+			if(startDate.compareTo(endDate) > 0) {
+				//TODO: Throw an error due to end date being before start date
+			}
+			
 			// compute proper response
-			ScheduleResponse resp = new ScheduleResponse(val1 + val2, 200);
+			ScheduleResponse resp = new ScheduleResponse(req.arg1, startTime, endTime, startDate, endDate, val9, 200);
 	        responseJson.put("body", new Gson().toJson(resp));  
 		}
 		
