@@ -104,7 +104,7 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			int val8 = 0;
 			int val9 = 0;
 			
-			String r = null;
+			String r = "";
 			LocalTime startTime = null;
 			LocalTime endTime = null;
 			LocalDate startDate = null;
@@ -127,39 +127,39 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			try {
 				startTime = LocalTime.of(val1, 0);
 			} catch (Exception e){
-				r = "Invalid start time"; 
+				r += " Invalid start time"; 
 			}
 			
 			try {
 				endTime = LocalTime.of(val2, 0);
 			} catch (Exception e) {
-				r = "Invalid end time";
+				r += " Invalid end time";
 			}
 			
 			try {
 				startDate = LocalDate.of(val3, val4, val5);
 			} catch (Exception e) {
-				r = "Invalid start date";
+				r += " Invalid start date";
 			}
 			
 			try {
 				endDate = LocalDate.of(val6, val7, val8);
 			} catch (Exception e) {
-				r = "Invalid end date";
+				r += " Invalid end date";
 			}
 			
-			if(r == null) {
+			if(r.compareTo("") == 0) {
 				if(startTime.compareTo(endTime) >= 0) {
-					r = "endTime is before startTime";
+					r += " endTime is before startTime";
 				}
 				if(startDate.compareTo(endDate) > 0) {
-					r = "endDate is before startDate";
+					r += " endDate is before startDate";
 				}
 			}
 
 			
 			// compute proper response
-			if(r != null) {
+			if(r.compareTo("") == 0) {
 				ErrorResponse resp = new ErrorResponse(r, 400);
 				responseJson.put("body", new Gson().toJson(resp));
 			}else {
