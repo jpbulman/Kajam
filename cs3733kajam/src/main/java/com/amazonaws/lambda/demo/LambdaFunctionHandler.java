@@ -105,6 +105,10 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			int val9 = 0;
 			
 			String r = null;
+			LocalTime startTime = null;
+			LocalTime endTime = null;
+			LocalDate startDate = null;
+			LocalDate endDate = null;
 			
 			try {
 				val1 = Integer.parseInt(req.arg2);
@@ -120,18 +124,39 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 				r = "Invalid input format";
 			}
 			
-			
-			LocalTime startTime = LocalTime.of(val1, 0);
-			LocalTime endTime = LocalTime.of(val2, 0);
-			if(startTime.compareTo(endTime) >= 0) {
-				r = "endTime is before startTime";
+			try {
+				startTime = LocalTime.of(val1, 0);
+			} catch (Exception e){
+				r = "Invalid start time"; 
 			}
 			
-			LocalDate startDate = LocalDate.of(val3, val4, val5);
-			LocalDate endDate = LocalDate.of(val6, val7, val8);
-			if(startDate.compareTo(endDate) > 0) {
-				r = "endDate is before startDate";
+			try {
+				endTime = LocalTime.of(val2, 0);
+			} catch (Exception e) {
+				r = "Invalid end time";
 			}
+			
+			try {
+				startDate = LocalDate.of(val3, val4, val5);
+			} catch (Exception e) {
+				r = "Invalid start date";
+			}
+			
+			try {
+				endDate = LocalDate.of(val6, val7, val8);
+			} catch (Exception e) {
+				r = "Invalid end date";
+			}
+			
+			if(r == null) {
+				if(startTime.compareTo(endTime) >= 0) {
+					r = "endTime is before startTime";
+				}
+				if(startDate.compareTo(endDate) > 0) {
+					r = "endDate is before startDate";
+				}
+			}
+
 			
 			// compute proper response
 			if(r != null) {
