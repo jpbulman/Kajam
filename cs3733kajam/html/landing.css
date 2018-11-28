@@ -24,16 +24,18 @@ input[type=text], select{
     font-size: 32px;
 }
 
-input[type=submit]{
+input[type=button]{
     background: orange;
     border-radius: 10px;
     font-size: 30px;
     border: none;
     color: white;
     padding: 20px;
+    text-align: left;
+    width: 15.5em;
 }
 
-input[type=submit]:hover{
+input[type=button]:hover{
     background-color: darkorange;
 }
 

@@ -6,19 +6,115 @@
 </head>
 <body>
 
-<h1>Scehdule Name</h1>
+<h1>Schedule Name</h1>
 
-<div>
-    <table>
-        <tr>
-            <th>Mon</th>
-            <th>Tue</th>
-            <th>Wed</th>
-            <th>Thu</th>
-            <th>Fri</th>
-        </tr>
-    </table>
+<!-- <div class="tableContainer"> -->
+<table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Mon</th>
+        <th scope="col">Tue</th>
+        <th scope="col">Wed</th>
+        <th scope="col">Thu</th>
+        <th scope="col">Fri</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td>Larry the Bird</td>
+        <td>@twitter</td>
+        <td>Open</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+      </tr>
+    </tbody>
+</table>
+<!-- </div> -->
+
+<div class="functionContainer">
+  <h1>Delete A Meeting</h1>
+
+  <form>
+    <div>
+      <input type="text" placeholder="Enter your secret code">
+    </div>
+
+    <div>
+      <select>
+        <option selected disabled hidden>Choose A Meeting</option>
+      </select>
+    </div>
+
+    <input type="button" value="Cancel">
+  </form>
+
+  <h1>Search Open Time Slots</h1>
+
+  <form>
+
+    <!-- <div>
+      <input type="text" placeholder="🔎">
+    </div> -->
+    <select>
+      <option disabled selected hidden>Month</option>
+    </select>
+
+    <select>
+      <option disabled selected hidden>Year</option>
+    </select>
+
+    <select>
+        <option disabled selected hidden>Day of week</option>
+    </select>
+
+    <select>
+      <option disabled selected hidden>Day of month</option>
+    </select>
+
+    <select>
+        <option disabled selected hidden>Time slot</option>
+    </select>
+
+    <div>
+      <input type="button" value="Go">
+    </div>
+
+  </form>
+
+
+  <div class="filteredResults">
+    <h1 class="filteredResultsEntry">Entry 1</h1>
+    <h1 class="filteredResultsEntry">Entry 2</h1>
+    <h1 class="filteredResultsEntry">Entry 3</h1>
+    <h1 class="filteredResultsEntry">Entry 4</h1>
+    <h1 class="filteredResultsEntry">Entry 5</h1>
+  </div>
+
+  <h1>Your secret code is: 1729</h1>
+
 </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
 </body>
 </html>
