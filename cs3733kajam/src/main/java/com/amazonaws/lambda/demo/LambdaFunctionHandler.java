@@ -68,8 +68,9 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new ScheduleResponse("", LocalTime.now(), LocalTime.now(), LocalDate.now(), LocalDate.now(), 0, 200); //TODO: add more parameters
-				responseJson.put("body", new Gson().toJson(response));
+				//response = new ScheduleResponse("", LocalTime.now(), LocalTime.now(), LocalDate.now(), LocalDate.now(), 0, 200); //TODO: add more parameters
+				String s = "DONE";
+				responseJson.put("body", new Gson().toJson(s));
 		        processed = true;
 		        body = null;
 			}else {
@@ -102,6 +103,8 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			int val8 = 0;
 			int val9 = 0;
 			
+			String r = null;
+			
 			try {
 				val1 = Integer.parseInt(req.arg2);
 				val2 = Integer.parseInt(req.arg3);
@@ -113,25 +116,29 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 				val8 = Integer.parseInt(req.arg9);
 				val9 = Integer.parseInt(req.arg10);
 			} catch (NumberFormatException e){
-				//TODO: what should we do with invalid input
+				r = "Invalid input format";
 			}
 			
 			
 			LocalTime startTime = LocalTime.of(val1, 0);
 			LocalTime endTime = LocalTime.of(val2, 0);
 			if(startTime.compareTo(endTime) >= 0) {
-				//TODO: Throw an error due to end time being after start time
+				r = "endTime is before startTime";
 			}
 			
 			LocalDate startDate = LocalDate.of(val3, val4, val5);
 			LocalDate endDate = LocalDate.of(val6, val7, val8);
 			if(startDate.compareTo(endDate) > 0) {
-				//TODO: Throw an error due to end date being before start date
+				r = "endDate is before startDate";
 			}
 			
 			// compute proper response
-			ScheduleResponse resp = new ScheduleResponse(req.arg1, startTime, endTime, startDate, endDate, val9, 200);
-	        responseJson.put("body", new Gson().toJson(resp));  
+			if(r != null) {
+				responseJson.put("body", new Gson().toJson(r));
+			}else {
+				ScheduleResponse resp = new ScheduleResponse(req.arg1, startTime, endTime, startDate, endDate, val9, 200);
+				responseJson.put("body", new Gson().toJson(resp));  
+			}
 		}
 		
         logger.log("end result:" + responseJson.toJSONString());
