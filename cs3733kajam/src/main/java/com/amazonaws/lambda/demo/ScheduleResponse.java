@@ -16,7 +16,8 @@ public class ScheduleResponse {
 	UUID id;
 	int httpCode;
 
-	public ScheduleResponse(String name, LocalTime startTime, LocalTime endTime, LocalDate startDate, LocalDate endDate, int meetingDuration, int code) {
+	public ScheduleResponse(String name, LocalTime startTime, LocalTime endTime, LocalDate startDate, 
+			LocalDate endDate, int meetingDuration, int code) {
 		this.name = name;
 		
 		this.startTime = startTime;
@@ -37,5 +38,8 @@ public class ScheduleResponse {
 	
 	//TODO: figure out the format for this return
 	public String toString() {
+		return "Value(" + name + "," + startTime.toString() + "," + endTime.toString() + "," + 
+	startDate.toString() + "," + endDate.toString() + "," + meetingDuration + "," + id + "," + 
+				secretCode + ")";
 	}
 }
