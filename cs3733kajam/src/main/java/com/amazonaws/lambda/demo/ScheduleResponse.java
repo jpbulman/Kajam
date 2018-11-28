@@ -30,7 +30,7 @@ public class ScheduleResponse {
 		
 		httpCode = code;
 		
-		id = UUID.fromString(name);//TODO:figure out how to make this unique with schedules with the same name
+		id = UUID.randomUUID();//TODO:figure out how to make this unique with schedules with the same name
 		
 		Random random = new Random();
 		secretCode = random.nextInt(89999) + 10000;
