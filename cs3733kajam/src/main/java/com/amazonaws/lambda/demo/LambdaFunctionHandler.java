@@ -37,13 +37,14 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
     public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
     	
     	// FAKE fix this
-    	try {
+    	/*try {
 			DatabaseUtil.connect();
 			System.out.println("SUCCESS!");
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
+		}*/
+    	
     	LambdaLogger logger = context.getLogger();
 		logger.log("Loading Java Lambda handler of RequestStreamHandler");
 
