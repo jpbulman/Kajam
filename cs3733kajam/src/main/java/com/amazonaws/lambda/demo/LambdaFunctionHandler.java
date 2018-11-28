@@ -60,7 +60,7 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new ScheduleResponse(200); //TODO: add more parameters
+				response = new ScheduleResponse("", LocalTime.now(), LocalTime.now(), LocalDate.now(), LocalDate.now(), 0, 200); //TODO: add more parameters
 				responseJson.put("body", new Gson().toJson(response));
 		        processed = true;
 		        body = null;
@@ -73,7 +73,7 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
 			//TODO: add more parameters
-			response = new ScheduleResponse(422);  // unable to process input
+			response = new ScheduleResponse("", LocalTime.now(), LocalTime.now(), LocalDate.now(), LocalDate.now(), 0, 422);  // unable to process input
 	        responseJson.put("body", new Gson().toJson(response));
 	        processed = true;
 	        body = null;
@@ -84,7 +84,16 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			ScheduleRequest req = new Gson().fromJson(body, ScheduleRequest.class);
 			logger.log(req.toString());
 			
-			int val1, val2, val3, val4, val5, val6, val7, val8, val9;
+			int val1 = 0;
+			int val2 = 0;
+			int val3 = 0;
+			int val4 = 0;
+			int val5 = 0;
+			int val6 = 0;
+			int val7 = 0;
+			int val8 = 0;
+			int val9 = 0;
+			
 			try {
 				val1 = Integer.parseInt(req.arg2);
 				val2 = Integer.parseInt(req.arg3);
