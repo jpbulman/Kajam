@@ -18,8 +18,7 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.gson.Gson;
 
-import edu.wpi.cs.heineman.demo.AddRequest;
-import edu.wpi.cs.heineman.demo.AddResponse;
+import db.DatabaseUtil;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -36,6 +35,15 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 
     @Override
     public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
+    	
+    	// FAKE fix this
+    	try {
+			DatabaseUtil.connect();
+			System.out.println("SUCCESS!");
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     	LambdaLogger logger = context.getLogger();
 		logger.log("Loading Java Lambda handler of RequestStreamHandler");
 

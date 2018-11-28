@@ -74,7 +74,7 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 			logger.log(req.toString());
 
 			//TODO: get params from db?
-			ScheduleViewResponse resp = new ScheduleViewResponse( );
+			ScheduleViewResponse resp = null;  // new ScheduleViewResponse( );
 
 			// compute proper response
 	        responseJson.put("body", new Gson().toJson(resp));  
