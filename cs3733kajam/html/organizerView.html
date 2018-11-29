@@ -21,37 +21,37 @@ Tags on landing page
     <thead>
         <tr>
         <th scope="col">Time</th>
-        <th scope="col"><button type="button"><</button> Mon</th>
-        <th scope="col">Tue</th>
-        <th scope="col">Wed</th>
-        <th scope="col">Thu</th>
-        <th scope="col">Fri <button type="button">></button></th>
+        <th scope="col"><button type="button"><</button>   Mon</br>11/26/18</th>
+        <th scope="col">Tue</br>11/27/18</th>
+        <th scope="col">Wed</br>11/28/18</th>
+        <th scope="col">Thu</br>11/29/18</th>
+        <th scope="col">Fri   <button type="button">></button></br>11/20/18</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-        <td>Otto</td>
-        <td>@mdo</td>
+        <th scope="row">10:00</th>
+        <td bgcolor="#FFA500"></td>
+        <td>Otto</br><button type="button">Cancel</button></td>
+        <td>@mdo</br><button type="button">Cancel</button></td>
+        <td>Otto</br><button type="button">Cancel</button></td>
+        <td>@mdo</br><button type="button">Cancel</button></td>
         </tr>
         <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-        <td>Otto</td>
-        <td>@mdo</td>
+        <th scope="row">11:00</th>
+        <td>Jacob</br><button type="button">Cancel</button></td>
+        <td>Thornton</br><button type="button">Cancel</button></td>
+        <td bgcolor="#FFA500"></td>
+        <td>Otto</br><button type="button">Cancel</button></td>
+        <td bgcolor="#FFA500"></td>
         </tr>
         <tr>
-        <th scope="row">3</th>
-        <td>Larry the Bird</td>
-        <td>@twitter</td>
-        <td>Open</td>
-        <td>Otto</td>
-        <td>@mdo</td>
+        <th scope="row">12:00</th>
+        <td bgcolor="#FFA500"></td>
+        <td>@twitter</br><button type="button">Cancel</button></td>
+        <td><button type="button">Close Timeslot</button></td>
+        <td><button type="button">Close Timeslot</button></td>
+        <td bgcolor="#FFA500"></td>
         </tr>
     </tbody>
 </table>
@@ -89,6 +89,10 @@ Tags on landing page
             <input type="text" placeholder="Daily end hour (HH 00-23")>
         </div>
 
+        <div>
+            <input type="button" value="Set">
+        </div>
+
     </form>
 
     <h1>Set Availability</h1>
@@ -114,17 +118,23 @@ Tags on landing page
         <h2>On</h2>
 
         <select>
-            <option disabled selected hidden>Mondays, 9/13/18, all days, etc.</option>
-            <option>Mondays</option>
-            <option>Tuesdays</option>
-            <option>Wednesdays</option>
-            <option>Thursdays</option>
-            <option>Fridays</option>
+            <option disabled selected hidden>Mondays, Tuesdays,...,all days, etc.</option>
+            <option>All Mondays</option>
+            <option>All Tuesdays</option>
+            <option>All Wednesdays</option>
+            <option>All Thursdays</option>
+            <option>All Fridays</option>
             <option>All days</option>
         </select>
 
+        <h3>Or</h3>
+
         <div>
-            <input type="text" placeholder="Your secret code">
+            <input type="text" id="dayAvailability" placeholder="MM/DD/YYYY"></br>
+        </div>
+
+        <div>
+            <input type="text" placeholder="Your secret code"></br>
         </div>
 
         <div>
