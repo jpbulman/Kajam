@@ -188,19 +188,18 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			
 			}else {
 				
-				// TODO: Adding schedule to DB
-//				try {
-//					ScheduleResponse resp = new ScheduleResponse(req.arg1, startTime, endTime, startDate, endDate, val9, 200);
-//					if (createSchedule(resp.getId(), req.arg1, resp.getSecretCode(), val9, startTime, endTime, startDate, endDate)) {
-//						responseJson.put("body", new Gson().toJson(resp)); 
-//					} else { // could add schedule to DB
-//						ErrorResponse ErrResp = new ErrorResponse("Unable to create schedule", 400);
-//						responseJson.put("body", new Gson().toJson(ErrResp));
-//					}
-//				} catch (Exception e) {
-//					ErrorResponse ErrResp = new ErrorResponse("Unable to create schedule: " + e.getMessage(), 400);
-//					responseJson.put("body", new Gson().toJson(ErrResp));
-//				}
+				try {
+					ScheduleResponse resp = new ScheduleResponse(req.arg1, startTime, endTime, startDate, endDate, val9, 200);
+					if (createSchedule(resp.getId(), req.arg1, resp.getSecretCode(), val9, startTime, endTime, startDate, endDate)) {
+						responseJson.put("body", new Gson().toJson(resp)); 
+					} else { // could add schedule to DB
+						ErrorResponse ErrResp = new ErrorResponse("Unable to create schedule", 400);
+						responseJson.put("body", new Gson().toJson(ErrResp));
+					}
+				} catch (Exception e) {
+					ErrorResponse ErrResp = new ErrorResponse("Unable to create schedule: " + e.getMessage(), 400);
+					responseJson.put("body", new Gson().toJson(ErrResp));
+				}
 				
 				
 				ScheduleResponse resp = new ScheduleResponse(req.arg1, startTime, endTime, startDate, endDate, val9, 200);
