@@ -18,6 +18,9 @@ public class LambdaFunctionHandlerTest {
 
     private static final String SAMPLE_INPUT_STRING = "{\"foo\": \"bar\"}";
     private static final String EXPECTED_OUTPUT_STRING = "{\"headers\":{\"Access-Control-Allow-Origin\":\"*\",\"Access-Control-Allow-Methods\":\"GET,POST,OPTIONS\",\"Content-Type\":\"application\\/json\"},\"body\":\"{\\\"error\\\":\\\"Invalid input format Invalid start date Invalid end date\\\",\\\"httpCode\\\":400}\"}";    
+    private static final String SAMPLE_INPUT_STRING2 = "{\"foo\": \"bar\"}";
+    private static final String EXPECTED_OUTPUT_STRING2 = "{\"headers\":{\"Access-Control-Allow-Origin\":\"*\",\"Access-Control-Allow-Methods\":\"GET,POST,OPTIONS\",\"Content-Type\":\"application\\/json\"},\"body\":\"{\\\"error\\\":\\\"Invalid input format Invalid start date Invalid end date\\\",\\\"httpCode\\\":400}\"}";    
+    
     Context createContext(String apiCall) {
         TestContext ctx = new TestContext();
         ctx.setFunctionName(apiCall);
@@ -36,7 +39,21 @@ public class LambdaFunctionHandlerTest {
 
         // TODO: validate output here if needed.
         String sampleOutputString = output.toString();
-        System.out.println(sampleOutputString);
+        Assert.assertEquals(EXPECTED_OUTPUT_STRING, sampleOutputString);
+    }
+    
+    //Tests with valid inputs
+    @Test
+    public void testLambdaFunctionHandler2() throws IOException {
+        LambdaFunctionHandler handler = new LambdaFunctionHandler();
+
+        InputStream input = new ByteArrayInputStream(SAMPLE_INPUT_STRING.getBytes());;
+        OutputStream output = new ByteArrayOutputStream();
+
+        handler.handleRequest(input, output, createContext("sample"));
+
+        // TODO: validate output here if needed.
+        String sampleOutputString = output.toString();
         Assert.assertEquals(EXPECTED_OUTPUT_STRING, sampleOutputString);
     }
 }
