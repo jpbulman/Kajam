@@ -18,6 +18,7 @@ public class ScheduleDAO {
     	try  {
     		conn = DatabaseUtil.connect();
     	} catch (Exception e) {
+    		System.out.println(e);
     		conn = null;
     	}
     }
@@ -27,7 +28,7 @@ public class ScheduleDAO {
         
         try {
             Schedule s = null;
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Schedule WHERE id=?;");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Schedules WHERE id=?;");
             ps.setString(1,  id.toString());
             ResultSet resultSet = ps.executeQuery();
             
