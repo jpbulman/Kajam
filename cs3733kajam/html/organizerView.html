@@ -2,11 +2,140 @@
 <html>
 <head>
 <title>Organizer View</title>
+    <link rel="stylesheet" href="organizerView.css">
 </head>
 <body>
 
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
+
+<!-- TODO
+Update boxes in organizer and participant view
+Make an alert whether the HTTP request was succesful or not in the landing page
+Style everything
+Tags on landing page
+-->
+
+<h1>Schedule Name</h1>
+
+<!-- <div class="tableContainer"> -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+        <th scope="col">Time</th>
+        <th scope="col"><button type="button"><</button> Mon</th>
+        <th scope="col">Tue</th>
+        <th scope="col">Wed</th>
+        <th scope="col">Thu</th>
+        <th scope="col">Fri <button type="button">></button></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+        </tr>
+        <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+        </tr>
+        <tr>
+        <th scope="row">3</th>
+        <td>Larry the Bird</td>
+        <td>@twitter</td>
+        <td>Open</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="functionContainer">
+    <h1>Edit Schedule</h1>
+
+    <form>
+        <input type="text" placeholder="Enter schedule name">
+
+        <div>
+            <select>
+                <option disabled selected hidden>Length Of Meetings</option>
+                <option>10 minutes</option>
+                <option>15 minutes</option>
+                <option>20 minutes</option>
+                <option>30 minutes</option>
+                <option>60 minutes</option>
+            </select>
+        </div>
+
+        <div>
+            <input type="text" placeholder="Start day (MM/DD/YYYY)">
+        </div>
+
+        <div>
+            <input type="text" placeholder="End day (MM/DD/YYYY)">
+        </div>
+
+        <div>
+            <input type="text" placeholder="Daily start hour (HH 0-23)">
+        </div>
+
+        <div>
+            <input type="text" placeholder="Daily end hour (HH 00-23")>
+        </div>
+
+    </form>
+
+    <h1>Set Availability</h1>
+
+    <form>
+
+        <h2>I'm</h2>
+
+        <select>
+            <option disabled hidden selected>Available/Unavailable</option>
+            <option>Available</option>
+            <option>Unavailable</option>
+        </select>
+
+        <h2>From</h2>
+
+        <input type="text" placeholder="HH:MM">
+
+        <h2>To</h2>
+
+        <input type="text" placeholder="HH:MM">
+
+        <h2>On</h2>
+
+        <select>
+            <option disabled selected hidden>Mondays, 9/13/18, all days, etc.</option>
+            <option>Mondays</option>
+            <option>Tuesdays</option>
+            <option>Wednesdays</option>
+            <option>Thursdays</option>
+            <option>Fridays</option>
+            <option>All days</option>
+        </select>
+
+        <div>
+            <input type="text" placeholder="Your secret code">
+        </div>
+
+        <div>
+            <input type="button" value="Set">
+        </div>
+
+    </form>
+
+    <button type="button">Delete this schedule</button>
+
+</div>
 
 </body>
 </html>

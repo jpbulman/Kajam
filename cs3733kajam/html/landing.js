@@ -103,7 +103,7 @@ function createNewSchedule(){
         scheduleData = {}
         //String name, int startHour, int endHour, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay, int duration
         scheduleData["arg1"] = scheduleName;
-        scheduleData["arg2"] = startHour;
+        scheduleData["agr2"] = startHour;
         scheduleData["arg3"] = endHour;
         scheduleData["arg4"] = startDayYear;
         scheduleData["arg5"] = startDayMonth;
