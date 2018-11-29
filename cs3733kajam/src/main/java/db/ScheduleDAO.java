@@ -47,6 +47,19 @@ public class ScheduleDAO {
     }
     
     
+    public boolean deleteSchedule(Schedule s) throws Exception {
+        try {
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM Schedules WHERE id = ?;");
+            ps.setString(1, s.id.toString());
+            int numAffected = ps.executeUpdate();
+            ps.close();
+            
+            return (numAffected == 1);
+
+        } catch (Exception e) {
+            throw new Exception("Failed to insert schedule: " + e.getMessage());
+        }
+    }
     
     public boolean addSchedule(Schedule s) throws Exception {
         try {
@@ -75,7 +88,7 @@ public class ScheduleDAO {
             return true;
 
         } catch (Exception e) {
-            throw new Exception("Failed to insert constant: " + e.getMessage());
+            throw new Exception("Failed to insert schedule: " + e.getMessage());
         }
     }
     
@@ -84,8 +97,8 @@ public class ScheduleDAO {
         String name  = resultSet.getString("name");
         int secretCode = resultSet.getInt("secretCode");
         int duration = resultSet.getInt("duration");
-        int startTime = resultSet.getInt("startTime");
-        int endTime = resultSet.getInt("endTime");
+        int startTime = resultSet.getInt("startHour");
+        int endTime = resultSet.getInt("endHour");
         Date startDate = resultSet.getDate(7);
         Date endDate = resultSet.getDate(8);
         Timestamp ts = resultSet.getTimestamp(9);

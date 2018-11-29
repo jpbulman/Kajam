@@ -30,8 +30,8 @@ public class ScheduleDAOTest {
 	    ScheduleDAO sd = new ScheduleDAO();
 	    try {
 	    	// can add it
-	    	String id = UUID.randomUUID().toString().substring(0, 20); // no more than 20 because of DB restrictions...
-	    	Schedule schedule = new Schedule(UUID.fromString(id), "testName",123,30,LocalTime.of(0, 0), LocalTime.of(23, 0), LocalDate.of(2000, 1, 1), LocalDate.of(2001, 6, 1), new Timestamp(System.currentTimeMillis()));
+	    	String id = UUID.randomUUID().toString(); // no more than 20 because of DB restrictions...
+	    	Schedule schedule = new Schedule(UUID.fromString(id), "testName",125,30,LocalTime.of(0, 0), LocalTime.of(23, 0), LocalDate.of(2000, 1, 1), LocalDate.of(2001, 6, 1), new Timestamp(System.currentTimeMillis()));
 	    	boolean b = sd.addSchedule(schedule);
 	    	System.out.println("add schedule: " + b);
 	    	
@@ -40,7 +40,7 @@ public class ScheduleDAOTest {
 	    	System.out.println("S2:" + s2.id);
 	    	
 	    	// can delete it
-	    	//assertTrue (cd.deleteConstant(s2));
+	    	assertTrue (sd.deleteSchedule(s2));
 	    } catch (Exception e) {
 	    	fail ("didn't work:" + e.getMessage());
 	    }
