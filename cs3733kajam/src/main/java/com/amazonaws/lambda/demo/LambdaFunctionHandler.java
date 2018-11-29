@@ -159,7 +159,7 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 
 			
 			// compute proper response
-			if(r.compareTo("") == 0) {
+			if(r.compareTo("") != 0) {
 				ErrorResponse resp = new ErrorResponse(r, 400);
 				responseJson.put("body", new Gson().toJson(resp));
 			}else {

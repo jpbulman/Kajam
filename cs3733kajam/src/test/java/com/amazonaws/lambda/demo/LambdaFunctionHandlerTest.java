@@ -17,14 +17,14 @@ import com.amazonaws.services.lambda.runtime.Context;
 public class LambdaFunctionHandlerTest {
 
     private static final String SAMPLE_INPUT_STRING = "{\"foo\": \"bar\"}";
-    private static final String EXPECTED_OUTPUT_STRING = "{\"FOO\": \"BAR\"}";
-
+    private static final String EXPECTED_OUTPUT_STRING = "{\"headers\":{\"Access-Control-Allow-Origin\":\"*\",\"Access-Control-Allow-Methods\":\"GET,POST,OPTIONS\",\"Content-Type\":\"application\\/json\"},\"body\":\"{\\\"error\\\":\\\"Invalid input format Invalid start date Invalid end date\\\",\\\"httpCode\\\":400}\"}";    
     Context createContext(String apiCall) {
         TestContext ctx = new TestContext();
         ctx.setFunctionName(apiCall);
         return ctx;
     }
     
+    // Test create schedule with completely invalid inputs
     @Test
     public void testLambdaFunctionHandler() throws IOException {
         LambdaFunctionHandler handler = new LambdaFunctionHandler();
