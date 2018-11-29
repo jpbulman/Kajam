@@ -19,7 +19,7 @@ function createNewSchedule(){
     var startHour = parseInt(document.getElementById("startHour").value);
     var endHour = parseInt(document.getElementById("endHour").value);
 
-    if(scheduleName==""||lenMeetings==""||startDay==""||endDay==""||startHour==""||endHour==""){
+    if(scheduleName==""||lenMeetings==""||startDay==""||endDay==""||startHour===""||endHour===""){
         alert("Please fill in all of the required fields");
         return;
     }
