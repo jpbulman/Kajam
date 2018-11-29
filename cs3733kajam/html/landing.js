@@ -123,9 +123,13 @@ function createNewSchedule(){
 
         xhr.onloadend = function () {
             console.log(xhr);
-            console.log(xhr.request);
             if (xhr.readyState == XMLHttpRequest.DONE) {
               console.log ("XHR:" + xhr.responseText);
+
+                xhrTable = JSON.parse(xhr.responseText);
+
+                alert("Schedule request sent to server and returned code "+xhrTable["httpCode"]);
+
             } 
             else {
             
