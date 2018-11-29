@@ -8,7 +8,7 @@ public class DatabaseUtil {
 	// These are to be configured and NEVER stored in the code.
 	// once you retrieve this code, you can update
 	public final static String rdsMySqlDatabaseUrl = "schedulerdb.cfbp22d3rqy8.us-east-2.rds.amazonaws.com";
-	public final static String dbUsername = "kajamAdmnin";
+	public final static String dbUsername = "kajamAdmin";
 	public final static String dbPassword = "kajam:pass";
 		
 	public final static String jdbcTag = "jdbc:mysql://";

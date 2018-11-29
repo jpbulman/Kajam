@@ -6,8 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,6 +21,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.gson.Gson;
 
 import db.DatabaseUtil;
+import db.ScheduleDAO;
+import model.Schedule;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -32,18 +36,37 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			.withRegion("us-east-2").build();
 
 	boolean useRDS = true;
+	
+	
+	boolean createSchedule(UUID id, String name, int secretCode, int duration, LocalTime startTime, LocalTime endTime, LocalDate startDate, LocalDate endDate) throws Exception {
+		if (logger != null) { logger.log("in createSchedule"); }
+		ScheduleDAO dao = new ScheduleDAO();
+		
+		// check if present
+		Schedule exist = dao.getSchedule(id);
+		if (exist == null) {
+			Timestamp ts = new Timestamp(System.currentTimeMillis()); // create timestamp based on current time and date
+			Schedule schedule = new Schedule (id, name, secretCode, duration, startTime, endTime, startDate, endDate, ts);
+			return dao.addSchedule(schedule);
+		} else {
+			return false;
+			//return dao.updateConstant(constant);
+		}
+	}
+	
+	
 
     @Override
     public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
     	
     	// FAKE fix this
-    	/*try {
-			DatabaseUtil.connect();
-			System.out.println("SUCCESS!");
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}*/
+//    	try {
+//			DatabaseUtil.connect();
+//			System.out.println("SUCCESS!");
+//		} catch (Exception e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
     	
     	LambdaLogger logger = context.getLogger();
 		logger.log("Loading Java Lambda handler of RequestStreamHandler");
@@ -94,15 +117,15 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			ScheduleRequest req = new Gson().fromJson(body, ScheduleRequest.class);
 			logger.log(req.toString());
 			
-			int val1 = 0;
-			int val2 = 0;
-			int val3 = 0;
-			int val4 = 0;
-			int val5 = 0;
-			int val6 = 0;
-			int val7 = 0;
-			int val8 = 0;
-			int val9 = 0;
+			int val1 = 0; // start time
+			int val2 = 0; // end time
+			int val3 = 0; // start year
+			int val4 = 0; // start month
+			int val5 = 0; // start day
+			int val6 = 0; // end year
+			int val7 = 0; // end month
+			int val8 = 0; // end day
+			int val9 = 0; // duration
 			
 			String r = "";
 			LocalTime startTime = null;
@@ -159,10 +182,27 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 
 			
 			// compute proper response
-			if(r.compareTo("") != 0) {
+			if(r.compareTo("") != 0) { // If there is an error in input
 				ErrorResponse resp = new ErrorResponse(r, 400);
 				responseJson.put("body", new Gson().toJson(resp));
+			
 			}else {
+				
+				// TODO: Adding schedule to DB
+//				try {
+//					ScheduleResponse resp = new ScheduleResponse(req.arg1, startTime, endTime, startDate, endDate, val9, 200);
+//					if (createSchedule(resp.getId(), req.arg1, resp.getSecretCode(), val9, startTime, endTime, startDate, endDate)) {
+//						responseJson.put("body", new Gson().toJson(resp)); 
+//					} else { // could add schedule to DB
+//						ErrorResponse ErrResp = new ErrorResponse("Unable to create schedule", 400);
+//						responseJson.put("body", new Gson().toJson(ErrResp));
+//					}
+//				} catch (Exception e) {
+//					ErrorResponse ErrResp = new ErrorResponse("Unable to create schedule: " + e.getMessage(), 400);
+//					responseJson.put("body", new Gson().toJson(ErrResp));
+//				}
+				
+				
 				ScheduleResponse resp = new ScheduleResponse(req.arg1, startTime, endTime, startDate, endDate, val9, 200);
 				responseJson.put("body", new Gson().toJson(resp));  
 			}

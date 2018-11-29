@@ -42,4 +42,13 @@ public class ScheduleResponse {
 	startDate.toString() + "," + endDate.toString() + "," + meetingDuration + "," + id + "," + 
 				secretCode + ")";
 	}
+	
+	public int getSecretCode() {
+		return secretCode;
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
 }
