@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Landing Page</title>
+    <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+
+<script src="landing.js"></script>
+
+<div class="title">
+    <h1><span>Scheduler</span></h1>
+</div>
+
+<div class="createAScheduleForm">
+    <form class="main-form">
+        <div>
+            <input type="text" id="scheduleName" placeholder="Schedule Name">
+        </div>
+        
+
+        <div>
+            <select id="lengthOfMeetings" class="selecter">
+                <option value="10">10 minutes</option>
+                <option value="15">15 minutes</option>
+                <option value="20">20 minutes</option>
+                <option value="30">30 minutes</option>
+                <option value="60">60 minutes</option>
+            </select>
+        </div>
+        
+
+        <div>
+            <input type="text" id="startDay" placeholder="Start day (MM/DD/YYYY)">
+        </div>
+        
+
+        <div>
+            <input type="text" id="endDay" placeholder="End day (MM/DD/YYYY)">
+        </div>
+        
+
+        <div>
+            <input type="text" id="startHour" placeholder="Daily start hour (HH 0-23)">
+        </div>
+        
+
+        <div>
+            <input type="text" id="endHour" placeholder="Daily end hour (HH 0-23)">
+        </div>
+        
+
+        <div>
+            <input type="button" onclick="createNewSchedule()"  value="Create A Schedule">
+        </div>
+    </form>
+</div>
+
+<div class="mainForms">
+    <form>
+        <div>
+            <input type="text" id="scheduleID" name="scheduleID" placeholder="Enter Schedule ID">
+        </div>
+        
+
+        <div>
+            <input type="text" id="organizerID" name="organizerID" placeholder="Enter Organizer ID">
+        </div>
+        
+        <div>
+            <input onclick="goAction()" type="button" name="Go" value="Go">
+        </div>
+    </form>
+</div>
+
+
+</body>
+</html>
