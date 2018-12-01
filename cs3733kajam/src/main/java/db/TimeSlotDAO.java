@@ -74,7 +74,8 @@ public class TimeSlotDAO {
                 return false;
             }
 
-            ps = conn.prepareStatement("INSERT INTO TimeSlots (id,scheduleID,startTime, endTime,date,isFree) values(?,?,?,?,?,?);");
+            ps = conn.prepareStatement("INSERT INTO TimeSlots (id,scheduleID,startTime, "
+            		+ "endTime,date,isFree) values(?,?,?,?,?,?);");
             ps.setString(1,  t.id.toString());
             ps.setString(2,  t.scheduleID.toString());
             ps.setTime(3, Time.valueOf(t.startTime));
