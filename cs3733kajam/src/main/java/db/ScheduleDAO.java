@@ -57,7 +57,7 @@ public class ScheduleDAO {
             return (numAffected == 1);
 
         } catch (Exception e) {
-            throw new Exception("Failed to insert schedule: " + e.getMessage());
+            throw new Exception("Failed to delete schedule: " + e.getMessage());
         }
     }
     
@@ -69,7 +69,7 @@ public class ScheduleDAO {
             
             // already present?
             while (resultSet.next()) {
-            	Schedule sch = generateSchedule(resultSet);
+            	//Schedule sch = generateSchedule(resultSet);
                 resultSet.close();
                 return false;
             }
@@ -99,9 +99,9 @@ public class ScheduleDAO {
         int duration = resultSet.getInt("duration");
         int startTime = resultSet.getInt("startHour");
         int endTime = resultSet.getInt("endHour");
-        Date startDate = resultSet.getDate(7);
-        Date endDate = resultSet.getDate(8);
-        Timestamp ts = resultSet.getTimestamp(9);
+        Date startDate = resultSet.getDate("startDate");
+        Date endDate = resultSet.getDate("endDate");
+        Timestamp ts = resultSet.getTimestamp("creationDateTime");
         
         
         return new Schedule (UUID.fromString(id),name, secretCode, duration, LocalTime.of(startTime, 0),
