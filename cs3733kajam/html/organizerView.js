@@ -13,5 +13,6 @@ for(var i=0;i<x.length;i++){
 }
 
 id = id.substring(4,id.length);
-
-alert(id);
+getUrl = ""
+xhr = new XMLHttpRequest();
+xhr.open("GET",getUrl,true);
