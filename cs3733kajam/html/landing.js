@@ -131,7 +131,6 @@ function createNewSchedule(){
                 alert("Schedule request sent to server and returned code "+xhrTable["httpCode"]);
 
                 window.location.href = "organizerView.html?"+"id:"+xhrTable["id"].toString();
-                document.addForm = "1";
 
             } 
             else {
