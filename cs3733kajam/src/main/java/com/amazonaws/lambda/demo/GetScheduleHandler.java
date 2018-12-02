@@ -122,7 +122,7 @@ public class GetScheduleHandler implements RequestStreamHandler {
 				ErrorResponse resp = new ErrorResponse("Invalid ID", 400);
 				responseJson.put("body", new Gson().toJson(resp));
 			}else {
-				ScheduleResponse resp = new ScheduleResponse(s.name, s.startTime, s.endTime, s.startDate, s.endDate, s.duration, 200);
+				ScheduleResponse resp = new ScheduleResponse(s.name, s.startTime, s.endTime, s.startDate, s.endDate, s.duration, s.id, s.secretCode, 200);
 				responseJson.put("body", new Gson().toJson(resp));  
 			}
 		}

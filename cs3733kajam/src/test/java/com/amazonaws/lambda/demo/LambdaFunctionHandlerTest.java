@@ -62,8 +62,33 @@ public class LambdaFunctionHandlerTest {
 
         handler.handleRequest(input, output, createContext("sample"));
 
-        // TODO: validate output here if needed.
         String sampleOutputString = output.toString();
         Assert.assertTrue(sampleOutputString.contains("httpCode\\\":200"));
     }
+    
+    //Tests getSchedule
+    @Test
+    public void testGetSchedule() throws IOException {
+    	LambdaFunctionHandler handler = new LambdaFunctionHandler();
+        GetScheduleHandler handler2 = new GetScheduleHandler();
+
+        InputStream input = new ByteArrayInputStream(SAMPLE_INPUT_STRING2.getBytes());;
+        OutputStream output = new ByteArrayOutputStream();
+
+        handler.handleRequest(input, output, createContext("sample"));
+
+        String sampleOutputString = output.toString();
+        
+        String id = output.toString().substring(output.toString().lastIndexOf(",", output.toString().lastIndexOf(",")-1)+10,output.toString().lastIndexOf(",")-2);
+        String s = "{\n" + 
+        		"    \"arg1\": \"" + id + "\",\n" + "}";
+        InputStream input2 = new ByteArrayInputStream(s.getBytes());;
+        OutputStream output2 = new ByteArrayOutputStream();
+        
+        System.out.println("id" + id);
+        
+        handler2.handleRequest(input2, output2, createContext("sample2"));
+        Assert.assertEquals(output.toString(), output2.toString());
+    }
+
 }
