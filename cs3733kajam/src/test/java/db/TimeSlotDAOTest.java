@@ -1,14 +1,18 @@
 package db;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.junit.Test;
+
+import com.amazonaws.lambda.demo.LambdaFunctionHandler;
 
 import model.Schedule;
 import model.TimeSlot;
@@ -46,6 +50,19 @@ public class TimeSlotDAOTest {
 	    } catch (Exception e) {
 	    	fail ("didn't work:" + e.getMessage());
 	    }
+	}
+	
+	@Test
+	public void testFindAll() {
+		TimeSlotDAO td = new TimeSlotDAO();
+		
+		try {
+			ArrayList<TimeSlot> timeSlots = td.getAllTimeSlots(UUID.fromString("9de8607b-c846-4207-92e6-b0d4a110fbad"));
+			assertEquals(timeSlots.size(), 20);
+			
+		} catch(Exception e) {
+			fail ("didn't work:" + e.getMessage());
+		}
 	}
 	
 }

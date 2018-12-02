@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import model.TimeSlot;
@@ -43,6 +44,28 @@ public class TimeSlotDAO {
         } catch (Exception e) {
         	e.printStackTrace();
             throw new Exception("Failed in getting time slot: " + e.getMessage());
+        }
+    }
+    
+    public ArrayList<TimeSlot> getAllTimeSlots(UUID sID) throws Exception{
+    	
+        try {
+        	ArrayList<TimeSlot> timeSlots = new ArrayList<TimeSlot>();
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM TimeSlots WHERE scheduleID=?;");
+            ps.setString(1,  sID.toString());
+            ResultSet resultSet = ps.executeQuery();
+            
+            while (resultSet.next()) {
+            	timeSlots.add(generateTimeSlot(resultSet));
+            }
+            resultSet.close();
+            ps.close();
+            
+            return timeSlots;
+
+        } catch (Exception e) {
+        	e.printStackTrace();
+            throw new Exception("Failed in getting time slots: " + e.getMessage());
         }
     }
     
