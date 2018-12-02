@@ -21,13 +21,13 @@ public class LambdaFunctionHandlerTest {
     private static final String SAMPLE_INPUT_STRING2 = "{\n" + 
     		"    \"arg1\": \"name\",\n" + 
     		"    \"arg2\": \"3\",\n" + 
-    		"    \"arg3\": \"5\",\n" + 
-    		"    \"arg4\": \"2017\",\n" + 
+    		"    \"arg3\": \"4\",\n" + 
+    		"    \"arg4\": \"2018\",\n" + 
     		"    \"arg5\": \"1\",\n" + 
-    		"    \"arg6\": \"26\",\n" + 
+    		"    \"arg6\": \"22\",\n" + 
     		"    \"arg7\": \"2018\",\n" + 
-    		"    \"arg8\": \"6\",\n" + 
-    		"    \"arg9\": \"15\",\n" + 
+    		"    \"arg8\": \"1\",\n" + 
+    		"    \"arg9\": \"26\",\n" + 
     		"    \"arg10\": \"15\"\n" + 
     		"}";
     
