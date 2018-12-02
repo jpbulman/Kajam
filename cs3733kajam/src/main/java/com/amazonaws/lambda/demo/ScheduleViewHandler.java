@@ -6,7 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,6 +19,8 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
+
+import model.Schedule;
 
 
 public class ScheduleViewHandler implements RequestStreamHandler{
@@ -51,8 +56,8 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new ScheduleViewResponse("", null, null, null, null, 0, 0,200);  // OPTIONS needs a 200 response
-		        responseJson.put("body", new Gson().toJson(response));
+				ErrorResponse r = new ErrorResponse("DONE (OPTIONS)", 200);
+				responseJson.put("body", new Gson().toJson(r));
 		        processed = true;
 		        body = null;
 			} else {
@@ -63,7 +68,7 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new ScheduleViewResponse("", null, null, null, null, 0, 0,422);  // unable to process input
+			response = new ScheduleViewResponse(UUID.randomUUID(), LocalDate.now(), LocalDate.now(), LocalDate.now(), LocalDate.now(), LocalDate.now(), 400);  // unable to process input
 	        responseJson.put("body", new Gson().toJson(response));
 	        processed = true;
 	        body = null;
@@ -72,12 +77,108 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 		if (!processed) {
 			ScheduleViewRequest req = new Gson().fromJson(body, ScheduleViewRequest.class);
 			logger.log(req.toString());
-
-			//TODO: get params from db?
-			ScheduleViewResponse resp = null;  // new ScheduleViewResponse( );
-
-			// compute proper response
-	        responseJson.put("body", new Gson().toJson(resp));  
+			
+			String respError = "";
+			
+			GetScheduleHandler handler = new GetScheduleHandler();
+			Schedule s;
+			try {
+				s = handler.getSchedule(UUID.fromString(req.arg1));
+			} catch (Exception e) {
+				s = null;
+				respError = "Invalid ID ";
+			}
+			
+			int year = 0;
+			int month = 0;
+			int day = 0;
+			try {
+				year = Integer.parseInt(req.arg2);
+				month = Integer.parseInt(req.arg3);
+				day = Integer.parseInt(req.arg4);
+			} catch (NumberFormatException e) {
+				respError += "Invalid Input Error ";
+			}
+			
+			LocalDate dayInWeek = null;
+			try {
+				dayInWeek = LocalDate.of(year, month, day);
+			}catch(Exception e) {
+				respError += "Invalid date ";
+			}
+			
+			if(s != null) {
+				if(s.startDate.compareTo(dayInWeek) > 0) {
+					respError += "Invalid date (date is before start date) ";
+				}
+				
+				if(s.endDate.compareTo(dayInWeek) < 0) {
+					respError += "Invalid date (date is after end date) ";
+				}
+			}
+				
+			DayOfWeek d = null;
+			LocalDate mon = null;
+			LocalDate tues = null;
+			LocalDate wed = null;
+			LocalDate thur = null;
+			LocalDate fri = null;
+			try {
+				d = dayInWeek.getDayOfWeek();
+				if(d == DayOfWeek.SATURDAY) {
+					mon = dayInWeek.plusDays(-5);
+					tues = dayInWeek.plusDays(-4);
+					wed = dayInWeek.plusDays(-3);
+					thur = dayInWeek.plusDays(-2);
+					fri = dayInWeek.plusDays(-1);
+				}else if(d == DayOfWeek.SUNDAY) {
+					mon = dayInWeek.plusDays(1);
+					tues = dayInWeek.plusDays(2);
+					wed = dayInWeek.plusDays(3);
+					thur = dayInWeek.plusDays(4);
+					fri = dayInWeek.plusDays(5);
+				}else if(d == DayOfWeek.MONDAY) {
+					mon = dayInWeek;
+					tues = dayInWeek.plusDays(1);
+					wed = dayInWeek.plusDays(2);
+					thur = dayInWeek.plusDays(3);
+					fri = dayInWeek.plusDays(4);
+				}else if(d == DayOfWeek.TUESDAY) {
+					mon = dayInWeek.plusDays(-1);
+					tues = dayInWeek;
+					wed = dayInWeek.plusDays(1);
+					thur = dayInWeek.plusDays(2);
+					fri = dayInWeek.plusDays(3);
+				}else if(d == DayOfWeek.WEDNESDAY) {
+					mon = dayInWeek.plusDays(-2);
+					tues = dayInWeek.plusDays(-1);
+					wed = dayInWeek;
+					thur = dayInWeek.plusDays(1);
+					fri = dayInWeek.plusDays(2);
+				}else if(d == DayOfWeek.THURSDAY) {
+					mon = dayInWeek.plusDays(-3);
+					tues = dayInWeek.plusDays(-2);
+					wed = dayInWeek.plusDays(-1);
+					thur = dayInWeek;
+					fri = dayInWeek.plusDays(1);
+				}else {
+					mon = dayInWeek.plusDays(-4);
+					tues = dayInWeek.plusDays(-3);
+					wed = dayInWeek.plusDays(-2);
+					thur = dayInWeek.plusDays(-1);
+					fri = dayInWeek;
+				}
+			}catch(Exception e) {
+				//day in week is null
+			}
+			
+			if(respError.compareTo("")==0) {
+				ScheduleViewResponse resp = new ScheduleViewResponse(UUID.fromString(req.arg1), mon, tues, wed, thur, fri, 200);
+				responseJson.put("body", new Gson().toJson(resp)); 
+			}else {
+				ErrorResponse resp = new ErrorResponse(respError, 400);
+				responseJson.put("body", new Gson().toJson(resp));
+			}
 		}
 		
         logger.log("end result:" + responseJson.toJSONString());

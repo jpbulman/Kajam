@@ -6,35 +6,29 @@ import java.util.Random;
 import java.util.UUID;
 
 public class ScheduleViewResponse {
-	String name;
-	LocalTime startTime;
-	LocalTime endTime;
-	LocalDate startDate;
-	LocalDate endDate;
-	int meetingDuration;
-	int secretCode;
+	UUID id;
+	LocalDate mon;
+	LocalDate tues;
+	LocalDate wed;
+	LocalDate thurs;
+	LocalDate fri;
 	int httpCode;
 	
-	public ScheduleViewResponse(String name, LocalTime startTime, LocalTime endTime, LocalDate startDate, 
-			LocalDate endDate, int meetingDuration, int secret, int code) {
-		this.name = name;
+	public ScheduleViewResponse(UUID id, LocalDate Mon, LocalDate Tues, LocalDate Wed, LocalDate Thurs, LocalDate Fri, int code) {
+		this.id = id;
 		
-		this.startTime = startTime;
-		this.endTime = endTime;
-		
-		this.startDate = startDate;
-		this.endDate = endDate;
-		
-		this.meetingDuration = meetingDuration;
+		this.mon = Mon;
+		this.tues = Tues;
+		this.wed = Wed;
+		this.thurs = Thurs;
+		this.fri = Fri;
 		
 		httpCode = code;
-		secretCode = secret;
 	}
 	
 	//TODO: figure out the format for this return
 	public String toString() {
-		return "Value(" + name + "," + startTime.toString() + "," + endTime.toString() + "," + 
-	startDate.toString() + "," + endDate.toString() + "," + meetingDuration + "," + 
-				secretCode + ")";
+		return "Value(" + id + "," + mon.toString() + "," + tues.toString() + "," + 
+	wed.toString() + "," + thurs.toString() + "," + fri.toString() + ")";
 	}
 }

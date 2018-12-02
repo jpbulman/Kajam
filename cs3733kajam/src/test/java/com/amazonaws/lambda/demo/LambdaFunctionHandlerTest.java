@@ -85,8 +85,6 @@ public class LambdaFunctionHandlerTest {
         InputStream input2 = new ByteArrayInputStream(s.getBytes());;
         OutputStream output2 = new ByteArrayOutputStream();
         
-        System.out.println("id" + id);
-        
         handler2.handleRequest(input2, output2, createContext("sample2"));
         Assert.assertEquals(output.toString(), output2.toString());
     }
