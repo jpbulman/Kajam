@@ -92,7 +92,6 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				//response = new ScheduleResponse("", LocalTime.now(), LocalTime.now(), LocalDate.now(), LocalDate.now(), 0, 200); //TODO: add more parameters
 				ErrorResponse r = new ErrorResponse("DONE (OPTIONS)", 200);
 				responseJson.put("body", new Gson().toJson(r));
 		        processed = true;
@@ -113,7 +112,6 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 		}
 		
 		if (!processed) {
-			//TODO: create a ScheduleRequest
 			ScheduleRequest req = new Gson().fromJson(body, ScheduleRequest.class);
 			logger.log(req.toString());
 			
