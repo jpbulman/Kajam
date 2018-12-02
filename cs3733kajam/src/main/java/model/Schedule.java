@@ -1,8 +1,10 @@
 package model;
 
 import java.sql.Timestamp;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Schedule {
@@ -15,6 +17,7 @@ public class Schedule {
 	public LocalDate startDate;
 	public LocalDate endDate;
 	public Timestamp timestamp;
+	public ArrayList<TimeSlot> timeSlots;
 	
 	public Schedule(UUID id, String name, int secretCode, int duration, LocalTime startTime, LocalTime endTime,
 			LocalDate startDate, LocalDate endDate, Timestamp timestamp) {
@@ -28,7 +31,23 @@ public class Schedule {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.timestamp = timestamp;
+		timeSlots = new ArrayList<TimeSlot>();
+		generateTimeSlots();
 	}
 	
-
+	// Create time slots for every week day in schedule, within start and end hours
+	private void generateTimeSlots() {
+		for(LocalDate d = startDate; d.isBefore(endDate.plusDays(1)); d = d.plusDays(1)) {
+			DayOfWeek dow = d.getDayOfWeek();
+			if(dow != DayOfWeek.SATURDAY && dow != DayOfWeek.SUNDAY) {
+				LocalTime t = startTime;
+				while(t.isBefore(endTime)) {
+					timeSlots.add(new TimeSlot(id, t, t.plusMinutes(duration),d,false));
+					t = t.plusMinutes(duration);
+				}
+			}
+			
+		}
+		System.out.println("Generated " + timeSlots.size() + " time slots.");
+	}
 }

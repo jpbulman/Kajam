@@ -11,15 +11,16 @@ import java.util.UUID;
 import org.junit.Test;
 
 import model.Schedule;
+import model.TimeSlot;
 
-public class ScheduleDAOTest {
+public class TimeSlotDAOTest {
 
 	@Test
 	public void testFind() {
-	    ScheduleDAO sd = new ScheduleDAO();
+	    TimeSlotDAO td = new TimeSlotDAO();
 	    try {
-	    	Schedule s = sd.getSchedule(UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00d"));
-	    	System.out.println("Schedule " + s.name + " with id: " + s.id);
+	    	TimeSlot t = td.getTimeSlot(UUID.fromString("f344ade2-f7b2-4186-8f1f-65c9dabf185c"));
+	    	System.out.println("TimeSlot with id: " + t.id);
 	    } catch (Exception e) {
 	    	fail ("didn't work:" + e.getMessage());
 	    }
@@ -27,22 +28,24 @@ public class ScheduleDAOTest {
 	
 	@Test
 	public void testCreate() {
-	    ScheduleDAO sd = new ScheduleDAO();
+	    TimeSlotDAO td = new TimeSlotDAO();
 	    try {
 	    	// can add it
 	    	String id = UUID.randomUUID().toString();
-	    	Schedule schedule = new Schedule(UUID.fromString(id), "testName",125,30,LocalTime.of(0, 0), LocalTime.of(23, 0), LocalDate.of(2000, 1, 1), LocalDate.of(2001, 6, 1), new Timestamp(System.currentTimeMillis()));
-	    	boolean b = sd.addSchedule(schedule);
-	    	System.out.println("add schedule: " + b);
+	    	TimeSlot timeSlot = new TimeSlot(UUID.fromString(id), UUID.fromString(id),
+	    			LocalTime.of(12, 0), LocalTime.of(12, 30), LocalDate.of(2018, 12, 3), true);
+	    	boolean b = td.addTimeSlot(timeSlot);
+	    	System.out.println("add timeSlot: " + b);
 	    	
 	    	// can retrieve it
-	    	Schedule s2 = sd.getSchedule(UUID.fromString(id));
+	    	TimeSlot s2 = td.getTimeSlot(UUID.fromString(id));
 	    	System.out.println("S2:" + s2.id);
 	    	
 	    	// can delete it
-	    	assertTrue (sd.deleteSchedule(s2));
+	    	assertTrue (td.deleteTimeSlot(s2));
 	    } catch (Exception e) {
 	    	fail ("didn't work:" + e.getMessage());
 	    }
 	}
+	
 }
