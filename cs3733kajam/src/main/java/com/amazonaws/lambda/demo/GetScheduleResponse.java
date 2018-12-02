@@ -5,19 +5,18 @@ import java.util.Random;
 import java.util.UUID;
 import java.time.LocalDate;
 
-public class ScheduleResponse {
+public class GetScheduleResponse {
 	String name;
 	LocalTime startTime;
 	LocalTime endTime;
 	LocalDate startDate;
 	LocalDate endDate;
 	int meetingDuration;
-	int secretCode;
 	UUID id;
 	int httpCode;
 
-	public ScheduleResponse(String name, LocalTime startTime, LocalTime endTime, LocalDate startDate, 
-			LocalDate endDate, int meetingDuration, int code) {
+	public GetScheduleResponse(String name, LocalTime startTime, LocalTime endTime, LocalDate startDate, 
+			LocalDate endDate, int meetingDuration, UUID id, int code) {
 		this.name = name;
 		
 		this.startTime = startTime;
@@ -30,20 +29,12 @@ public class ScheduleResponse {
 		
 		httpCode = code;
 		
-		id = UUID.randomUUID();
-		
-		Random random = new Random();
-		secretCode = random.nextInt(89999) + 10000;
+		this.id = id;
 	}
 	
 	public String toString() {
 		return "Value(" + name + "," + startTime.toString() + "," + endTime.toString() + "," + 
-	startDate.toString() + "," + endDate.toString() + "," + meetingDuration + "," + id + "," + 
-				secretCode + ")";
-	}
-	
-	public int getSecretCode() {
-		return secretCode;
+	startDate.toString() + "," + endDate.toString() + "," + meetingDuration + "," + id + ")";
 	}
 
 	public UUID getId() {

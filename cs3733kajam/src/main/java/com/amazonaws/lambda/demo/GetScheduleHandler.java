@@ -74,7 +74,7 @@ public class GetScheduleHandler implements RequestStreamHandler {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 		
-		ScheduleResponse response;
+		GetScheduleResponse response;
 		
 		String body;
 		boolean processed = false;
@@ -100,7 +100,7 @@ public class GetScheduleHandler implements RequestStreamHandler {
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
 			//TODO: add more parameters
-			response = new ScheduleResponse("", LocalTime.now(), LocalTime.now(), LocalDate.now(), LocalDate.now(), 0, 422);  // unable to process input
+			response = new GetScheduleResponse("", LocalTime.now(), LocalTime.now(), LocalDate.now(), LocalDate.now(), 0, UUID.randomUUID(), 422);  // unable to process input
 	        responseJson.put("body", new Gson().toJson(response));
 	        processed = true;
 	        body = null;
@@ -109,21 +109,36 @@ public class GetScheduleHandler implements RequestStreamHandler {
 		if (!processed) {
 			GetScheduleRequest req = new Gson().fromJson(body, GetScheduleRequest.class);
 			logger.log(req.toString());
+			
+			String respError = "";
 
 			Schedule s;
 			try {
 				s = getSchedule(UUID.fromString(req.arg1));
 			} catch (Exception e) {
 				s = null;
+				respError += "Invalid ID ";
+			}
+			
+			int secretCode = 0;
+			try {
+				secretCode = Integer.parseInt(req.arg2);
+			}catch(NumberFormatException e) {
+				respError += "Invalid format for secretCode ";
 			}
 			
 			// compute proper response
-			if(s == null) { // If there is an error in input
-				ErrorResponse resp = new ErrorResponse("Invalid ID", 400);
+			if(respError.compareTo("") == 0) { // If there is an error in input
+				ErrorResponse resp = new ErrorResponse(respError, 400);
 				responseJson.put("body", new Gson().toJson(resp));
 			}else {
-				ScheduleResponse resp = new ScheduleResponse(s.name, s.startTime, s.endTime, s.startDate, s.endDate, s.duration, s.id, s.secretCode, 200);
-				responseJson.put("body", new Gson().toJson(resp));  
+				if(s.secretCode == secretCode) {
+					GetScheduleResponse resp = new GetScheduleResponse(s.name, s.startTime, s.endTime, s.startDate, s.endDate, s.duration, s.id, 200);
+					responseJson.put("body", new Gson().toJson(resp));
+				}else {
+					ErrorResponse resp = new ErrorResponse("Invalid secretCode", 400);
+					responseJson.put("body", new Gson().toJson(resp));
+				}
 			}
 		}
 		
