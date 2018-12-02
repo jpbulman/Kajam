@@ -22,7 +22,9 @@ import com.google.gson.Gson;
 
 import db.DatabaseUtil;
 import db.ScheduleDAO;
+import db.TimeSlotDAO;
 import model.Schedule;
+import model.TimeSlot;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -34,8 +36,6 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 	// handle to our s3 storage
 	private AmazonS3 s3 = AmazonS3ClientBuilder.standard()
 			.withRegion("us-east-2").build();
-
-	boolean useRDS = true;
 	
 	
 	boolean createSchedule(UUID id, String name, int secretCode, int duration, LocalTime startTime, LocalTime endTime, LocalDate startDate, LocalDate endDate) throws Exception {
@@ -46,7 +46,10 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 		Schedule exist = dao.getSchedule(id);
 		if (exist == null) {
 			Timestamp ts = new Timestamp(System.currentTimeMillis()); // create timestamp based on current time and date
-			Schedule schedule = new Schedule (id, name, secretCode, duration, startTime, endTime, startDate, endDate, ts);
+			Schedule schedule = new Schedule (id, name, secretCode, duration, startTime, endTime, startDate, endDate, ts);			
+			
+			//TODO: uncomment when ready to add time slots to db when creating schedules, delete original return statement
+			//return dao.addSchedule(schedule) && addTimeSlots(schedule); 
 			return dao.addSchedule(schedule);
 		} else {
 			return false;
@@ -54,19 +57,26 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 		}
 	}
 	
+	// Add time slots of newly created schedule to time slot table in RDS
+	boolean addTimeSlots(Schedule s) {
+		
+		s.generateTimeSlots();
+		TimeSlotDAO dao = new TimeSlotDAO();
+		
+		try {
+			for(TimeSlot t: s.timeSlots) {
+				dao.addTimeSlot(t);
+			}
+			return true;
+		}catch(Exception e){
+			return false;
+		}
+	}
+	
 	
 
     @Override
     public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
-    	
-    	// FAKE fix this
-//    	try {
-//			DatabaseUtil.connect();
-//			System.out.println("SUCCESS!");
-//		} catch (Exception e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
     	
     	LambdaLogger logger = context.getLogger();
 		logger.log("Loading Java Lambda handler of RequestStreamHandler");

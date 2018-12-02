@@ -19,7 +19,7 @@ public class TimeSlotDAOTest {
 	public void testFind() {
 	    TimeSlotDAO td = new TimeSlotDAO();
 	    try {
-	    	TimeSlot t = td.getTimeSlot(UUID.fromString("f344ade2-f7b2-4186-8f1f-65c9dabf185c"));
+	    	TimeSlot t = td.getTimeSlot(UUID.fromString("9be6e94a-b57d-4cf6-939c-289328895598"));
 	    	System.out.println("TimeSlot with id: " + t.id);
 	    } catch (Exception e) {
 	    	fail ("didn't work:" + e.getMessage());

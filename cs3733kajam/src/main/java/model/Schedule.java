@@ -32,11 +32,11 @@ public class Schedule {
 		this.endDate = endDate;
 		this.timestamp = timestamp;
 		timeSlots = new ArrayList<TimeSlot>();
-		generateTimeSlots();
+		//generateTimeSlots();
 	}
 	
 	// Create time slots for every week day in schedule, within start and end hours
-	private void generateTimeSlots() {
+	public void generateTimeSlots() {
 		for(LocalDate d = startDate; d.isBefore(endDate.plusDays(1)); d = d.plusDays(1)) {
 			DayOfWeek dow = d.getDayOfWeek();
 			if(dow != DayOfWeek.SATURDAY && dow != DayOfWeek.SUNDAY) {
