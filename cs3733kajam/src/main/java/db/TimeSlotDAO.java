@@ -47,12 +47,13 @@ public class TimeSlotDAO {
         }
     }
     
-    public ArrayList<TimeSlot> getAllTimeSlots(UUID sID) throws Exception{
+    // Get all time slots in a given schedule
+    public ArrayList<TimeSlot> getAllTimeSlots(UUID scheduleID) throws Exception{
     	
         try {
         	ArrayList<TimeSlot> timeSlots = new ArrayList<TimeSlot>();
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM TimeSlots WHERE scheduleID=?;");
-            ps.setString(1,  sID.toString());
+            ps.setString(1,  scheduleID.toString());
             ResultSet resultSet = ps.executeQuery();
             
             while (resultSet.next()) {

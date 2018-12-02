@@ -22,12 +22,35 @@ public class MeetingDAO {
     	}
     }
     
+    // Access meeting by meeting ID
     public Meeting getMeeting(UUID id) throws Exception {
         
         try {
             Meeting m = null;
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM Meetings WHERE id=?;");
             ps.setString(1,  id.toString());
+            ResultSet resultSet = ps.executeQuery();
+            
+            while (resultSet.next()) {
+                m = generateMeeting(resultSet);
+            }
+            resultSet.close();
+            ps.close();
+            
+            return m;
+
+        } catch (Exception e) {
+        	e.printStackTrace();
+            throw new Exception("Failed in getting meeting: " + e.getMessage());
+        }
+    }
+    
+    // Access meeting by time slot ID
+    public Meeting getMeetingByTimeSlotID(UUID timeSlotID) throws Exception {
+    	try {
+            Meeting m = null;
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Meetings WHERE timeSlotID=?;");
+            ps.setString(1,  timeSlotID.toString());
             ResultSet resultSet = ps.executeQuery();
             
             while (resultSet.next()) {
