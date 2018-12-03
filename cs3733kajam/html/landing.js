@@ -130,7 +130,7 @@ function createNewSchedule(){
 
                 alert("Schedule request sent to server and returned code "+xhrTable["httpCode"]);
 
-                window.location.href = "organizerView.html?"+"id:"+xhrTable["id"].toString();
+                window.location.href = "organizerView.html?"+"id="+xhrTable["id"].toString()+"&secretCode="+xhrTable["secretCode"];
 
             } 
             else {
