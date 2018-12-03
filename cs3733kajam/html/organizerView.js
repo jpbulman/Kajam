@@ -1,18 +1,45 @@
-var x = window.location.href;
-var id = "";
+var url = window.location.href;
+var setOfParams = ""
 
-for(var i=0;i<x.length;i++){
-    var curr = x.substring(i,i+1);
+for(var i=0;i<url.length;i++){
+    if(url.substring(i,i+1)==="?"){
+        for(var j=i;j<url.length;j++){
+            setOfParams+=url.substring(j,j+1);
+        }
+    }
+}
 
-    if(curr=="?"){
-        for(var j=i;j<x.length;j++){
-            id+=x.substring(j,j+1);
+urlParameters = {}
+
+for(var k=0;k<setOfParams.length;k++){
+    keyName = ""
+
+    while(setOfParams.substring(k,k+1) != "="){
+        keyName+=setOfParams.substring(k,k+1);
+        k++;
+    }
+    k++;
+
+    if(k==setOfParams.length){
+        break;
+    }
+
+    value = ""
+
+    while(setOfParams.substring(k,k+1)!="&"){
+        value+=setOfParams.substring(k,k+1);
+        k++;
+        if(k==setOfParams.length){
+            break;
         }
     }
 
+    urlParameters[keyName]=value;
 }
 
-id = id.substring(4,id.length);
-getUrl = ""
+getUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/schedule"
 xhr = new XMLHttpRequest();
 xhr.open("GET",getUrl,true);
+xhr.send(urlParameters["id"],urlParameters["secretCode"]);
+
+console.log(xhr.responseText);
