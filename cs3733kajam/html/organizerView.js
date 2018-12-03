@@ -41,8 +41,16 @@ for(var k=0;k<setOfParams.length;k++){
 getUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/schedule"
 xhr = new XMLHttpRequest();
 xhr.open("GET",getUrl,true);
-xhr.send(urlParameters["id"],urlParameters["secretCode"]);
-console.log(urlParameters["id"].toString(),urlParameters["secretCode"].toString());
+
+sender = {}
+
+sender["arg1" ] = urlParameters["id"];
+sender["arg2"] = urlParameters["secretCode"];
+sender = JSON.stringify(sender);
+
+xhr.send(sender);
+
+console.log(sender);
 
 xhr.onloadend = function(){
 
