@@ -44,7 +44,7 @@ public class GetScheduleHandler implements RequestStreamHandler {
 		if (exist == null) {
 			throw new NullPointerException();
 		} else {
-			return dao.getSchedule(id);
+			return exist;
 		}
 	}
 	
