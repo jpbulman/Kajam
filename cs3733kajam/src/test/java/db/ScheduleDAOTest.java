@@ -1,11 +1,13 @@
 package db;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Random;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -42,6 +44,22 @@ public class ScheduleDAOTest {
 	    	// can delete it
 	    	assertTrue (sd.deleteSchedule(s2));
 	    } catch (Exception e) {
+	    	fail ("didn't work:" + e.getMessage());
+	    }
+	}
+	
+	@Test
+	public void testUpdate() {
+		ScheduleDAO sd = new ScheduleDAO();
+		try {
+			Schedule s = sd.getSchedule(UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00d"));
+			Random random = new Random();
+			int newCode = random.nextInt(100)+1;
+			s.secretCode = newCode;
+			assertTrue(sd.updateSchedule(s));
+			assertEquals(sd.getSchedule(s.id).secretCode,newCode);
+			System.out.println("Changed test schedule secret code to "+newCode);
+		}catch (Exception e) {
 	    	fail ("didn't work:" + e.getMessage());
 	    }
 	}

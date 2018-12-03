@@ -3,7 +3,6 @@ package db;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -89,6 +88,28 @@ public class ScheduleDAO {
 
         } catch (Exception e) {
             throw new Exception("Failed to insert schedule: " + e.getMessage());
+        }
+    }
+    
+    public boolean updateSchedule(Schedule s) throws Exception {
+        try {
+        	String query = "UPDATE Schedules SET name=?, secretCode=?, duration=?, startHour=?, endHour=?, startDate=?, endDate=?, creationDateTime=? WHERE id=?;";
+        	PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1,  s.name);
+            ps.setInt(2, s.secretCode);
+            ps.setInt(3, s.duration);
+            ps.setInt(4, s.startTime.getHour());
+            ps.setInt(5, s.endTime.getHour());
+            ps.setDate(6, Date.valueOf(s.startDate));
+            ps.setDate(7, Date.valueOf(s.endDate));
+            ps.setTimestamp(8, s.timestamp);
+            ps.setString(9, s.id.toString());
+            int numAffected = ps.executeUpdate();
+            ps.close();
+            
+            return (numAffected == 1);
+        } catch (Exception e) {
+            throw new Exception("Failed to update schedule: " + e.getMessage());
         }
     }
     

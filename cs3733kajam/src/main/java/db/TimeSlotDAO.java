@@ -4,8 +4,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -111,6 +109,24 @@ public class TimeSlotDAO {
 
         } catch (Exception e) {
             throw new Exception("Failed to insert schedule: " + e.getMessage());
+        }
+    }
+    
+    public boolean updateTimeSlot(TimeSlot t) throws Exception {
+        try {
+        	String query = "UPDATE TimeSlots SET startTime=?, endTime=?, date=?, isFree=? WHERE id=?;";
+        	PreparedStatement ps = conn.prepareStatement(query);
+            ps.setTime(1, Time.valueOf(t.startTime));
+            ps.setTime(2, Time.valueOf(t.endTime));
+            ps.setDate(3, Date.valueOf(t.date));
+            ps.setBoolean(4, t.isFree);
+            ps.setString(5,  t.id.toString());
+            int numAffected = ps.executeUpdate();
+            ps.close();
+            
+            return (numAffected == 1);
+        } catch (Exception e) {
+            throw new Exception("Failed to update time slot: " + e.getMessage());
         }
     }
     

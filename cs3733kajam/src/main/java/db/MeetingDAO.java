@@ -109,6 +109,21 @@ public class MeetingDAO {
         }
     }
     
+    public boolean updateMeeting(Meeting m) throws Exception {
+        try {
+        	String query = "UPDATE Meetings SET name=?, secretCode=? WHERE id=?;";
+        	PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, m.name);
+            ps.setInt(2, m.secretCode);
+            ps.setString(3,  m.id.toString());
+            int numAffected = ps.executeUpdate();
+            ps.close();
+            
+            return (numAffected == 1);
+        } catch (Exception e) {
+            throw new Exception("Failed to update meeting: " + e.getMessage());
+        }
+    }
     
     
     
