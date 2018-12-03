@@ -64,6 +64,7 @@ public class LambdaFunctionHandlerTest {
 
         String sampleOutputString = output.toString();
         Assert.assertTrue(sampleOutputString.contains("httpCode\\\":200"));
+        System.out.println(sampleOutputString);
     }
     
     //Tests getSchedule
@@ -79,14 +80,20 @@ public class LambdaFunctionHandlerTest {
 
         String sampleOutputString = output.toString();
         
-        String id = output.toString().substring(output.toString().lastIndexOf(",", output.toString().lastIndexOf(",")-1)+10,output.toString().lastIndexOf(",")-2);
+        //String id = output.toString().substring(output.toString().lastIndexOf(",", output.toString().lastIndexOf(",")-1)+10,output.toString().lastIndexOf(",")-2);
+        //String secretCode = output.toString().substring(output.toString().lastIndexOf(",", output.toString().lastIndexOf(",", output.toString().lastIndexOf(",")-1)+14)+10, output.toString().lastIndexOf(",", output.toString().lastIndexOf(",")-1));
+        String id = "eea5770b-84ac-446f-bfdc-442f26fb2992";
+        String secretCode = "81075";
+        System.out.println("secretCode " + secretCode);
+        String expectedoutput = "{\"headers\":{\"Access-Control-Allow-Origin\":\"*\",\"Access-Control-Allow-Methods\":\"GET,POST,OPTIONS\",\"Content-Type\":\"application\\/json\"},\"body\":\"{\\\"name\\\":\\\"name\\\",\\\"startTime\\\":{\\\"hour\\\":3,\\\"minute\\\":0,\\\"second\\\":0,\\\"nano\\\":0},\\\"endTime\\\":{\\\"hour\\\":4,\\\"minute\\\":0,\\\"second\\\":0,\\\"nano\\\":0},\\\"startDate\\\":{\\\"year\\\":2018,\\\"month\\\":1,\\\"day\\\":22},\\\"endDate\\\":{\\\"year\\\":2018,\\\"month\\\":1,\\\"day\\\":26},\\\"meetingDuration\\\":15,\\\"id\\\":\\\"eea5770b-84ac-446f-bfdc-442f26fb2992\\\",\\\"httpCode\\\":200}\"}";
         String s = "{\n" + 
-        		"    \"arg1\": \"" + id + "\",\n" + "}";
+        		"    \"arg1\": \"" +  id + "\",\n" + 
+        		"    \"arg2\": \"" + secretCode + "\",\n" + "}";
         InputStream input2 = new ByteArrayInputStream(s.getBytes());;
         OutputStream output2 = new ByteArrayOutputStream();
         
         handler2.handleRequest(input2, output2, createContext("sample2"));
-        Assert.assertEquals(output.toString(), output2.toString());
+        Assert.assertEquals(expectedoutput, output2.toString());
     }
 
 }
