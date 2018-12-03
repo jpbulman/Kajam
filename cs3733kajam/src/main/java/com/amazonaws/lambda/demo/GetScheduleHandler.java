@@ -128,7 +128,7 @@ public class GetScheduleHandler implements RequestStreamHandler {
 			}
 			
 			// compute proper response
-			if(respError.compareTo("") == 0) { // If there is an error in input
+			if(respError.compareTo("") != 0) { // If there is an error in input
 				ErrorResponse resp = new ErrorResponse(respError, 400);
 				responseJson.put("body", new Gson().toJson(resp));
 			}else {
