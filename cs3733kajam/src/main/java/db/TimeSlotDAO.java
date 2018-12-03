@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -67,6 +69,34 @@ public class TimeSlotDAO {
             throw new Exception("Failed in getting time slots: " + e.getMessage());
         }
     }
+    
+    // Get time slot by scheduleID, date, and start time
+    public TimeSlot getTimeSlotByDateTime(UUID scheduleID, LocalDate date, LocalTime startTime)
+    		throws Exception {
+        
+        try {
+            TimeSlot t = null;
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM TimeSlots WHERE scheduleID=? AND"
+            		+ " date=? AND startTime=?;");
+            ps.setString(1,  scheduleID.toString());
+            ps.setDate(2, Date.valueOf(date));
+            ps.setTime(3, Time.valueOf(startTime));
+            ResultSet resultSet = ps.executeQuery();
+            
+            while (resultSet.next()) {
+                t = generateTimeSlot(resultSet);
+            }
+            resultSet.close();
+            ps.close();
+            
+            return t;
+
+        } catch (Exception e) {
+        	e.printStackTrace();
+            throw new Exception("Failed in getting time slot: " + e.getMessage());
+        }
+    }
+    
     
     public boolean deleteTimeSlot(TimeSlot t) throws Exception {
         try {
