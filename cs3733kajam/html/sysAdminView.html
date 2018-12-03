@@ -12,6 +12,7 @@
     <h1><span>System Administrator View</span></h1>
 </div>
 
+<div class="wrapper">
 
 <div class="dayOldParent">
     <h1>Get schedules that are</h1>
@@ -22,13 +23,13 @@
     
     <h1>days old</h1>
 
-        <input onclick="checkInputDaysOld()" id="daysOldGoButton" type="submit" value="Go">
+        <input class="go" onclick="checkInputDaysOld()" id="daysOldGoButton" type="button" value="Go">
     
     <div class="daysOldContainer">
     
     </div>
     
-        <input class="delButton" type="submit" value="Delete">
+        <input id="delButton" type="button" class="del" value="Delete">
     
     </form>
 </div>
@@ -43,13 +44,15 @@
     
     <h1>hours old</h1>
     
-        <input onclick="checkInputHoursOld()" id="hoursOldGoButton" type="submit" value="Go">
+        <input class="go" onclick="checkInputHoursOld()" id="hoursOldGoButton" type="button" value="Go">
 
     <div class="hoursOldContainer">
         
     </div>
 
     </form>
+
+</div>
 
 </div>
 

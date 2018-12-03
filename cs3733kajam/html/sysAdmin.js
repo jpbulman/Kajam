@@ -3,7 +3,6 @@ function checkInputDaysOld(){
 
     if(isNaN(val)){
         alert("Please enter a valid N value for the number of days old field");
-        alert(val);
     }
 
 }
@@ -17,3 +16,5 @@ function checkInputHoursOld(){
     }
 
 }
+
+// document.getElementById("delButton").disabled = true;

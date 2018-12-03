@@ -17,6 +17,7 @@ h1{
     border-radius: 10px;
     font-family: Arial, Helvetica, sans-serif;
     display: inline;
+    text-shadow: 1px 1px #000000;
 }
 
 input[type=text], select{
