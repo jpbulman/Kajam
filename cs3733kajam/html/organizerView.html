@@ -14,9 +14,9 @@ Style everything
 Tags on landing page
 -->
 
+<div style="float: left;width: 74%;margin-right: 1em;">
 <h1>Schedule Name</h1>
 
-<!-- <div class="tableContainer"> -->
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -55,23 +55,13 @@ Tags on landing page
         </tr>
     </tbody>
 </table>
+</div>
 
 <div class="functionContainer">
-    <h1>Edit Schedule</h1>
+    <h1 style="text-decoration: underline" >Edit Schedule</h1>
 
     <form>
         <input type="text" placeholder="Enter schedule name">
-
-        <!-- <div>
-            <select>
-                <option disabled selected hidden>Length Of Meetings</option>
-                <option>10 minutes</option>
-                <option>15 minutes</option>
-                <option>20 minutes</option>
-                <option>30 minutes</option>
-                <option>60 minutes</option>
-            </select>
-        </div> -->
 
         <div>
             <input type="text" placeholder="Start day (MM/DD/YYYY)">
@@ -81,21 +71,13 @@ Tags on landing page
             <input type="text" placeholder="End day (MM/DD/YYYY)">
         </div>
 
-        <!-- <div>
-            <input type="text" placeholder="Daily start hour (HH 0-23)">
-        </div>
-
         <div>
-            <input type="text" placeholder="Daily end hour (HH 00-23")>
-        </div> -->
-
-        <div>
-            <input type="button" value="Set">
+            <input class="set" type="button" value="Set">
         </div>
 
     </form>
 
-    <h1>Set Availability</h1>
+    <h1 style="text-decoration: underline">Set Availability</h1>
 
     <form>
 
@@ -127,7 +109,7 @@ Tags on landing page
             <option>All days</option>
         </select>
 
-        <h3>Or</h3>
+        <h2>Or</h2>
 
         <div>
             <input type="text" id="dayAvailability" placeholder="MM/DD/YYYY"></br>
@@ -138,12 +120,12 @@ Tags on landing page
         </div>
 
         <div>
-            <input type="button" value="Set">
+            <input style="margin-bottom: .5em;" class="set" type="button" value="Set">
         </div>
 
     </form>
 
-    <button type="button">Delete this schedule</button>
+    <button class="del" type="button">Delete this schedule</button>
 
 <script src="organizerView.js"></script>
 

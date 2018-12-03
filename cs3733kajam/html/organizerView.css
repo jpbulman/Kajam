@@ -4,11 +4,11 @@ body{
 
 table{
     border: 10px solid orange;
-    width: 74%;
+    width: 100%;
     border-radius: 15px;
     table-layout: fixed; 
     border-collapse: separate;
-    float: left;
+    /* float: left; */
     margin-right: 10px;
 }
 
@@ -24,7 +24,12 @@ td, th{
 h1{
     color: white;
     font-family: Arial, Helvetica, sans-serif;
-    
+    text-shadow: 1px 1px #000000;
+}
+
+h2{
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .functionContainer{
@@ -34,4 +39,51 @@ h1{
     height: auto;
     text-align: center;
     border-radius: 15px;
+}
+
+input[type=text]{
+    background-color: #f2f2f2;
+    border-radius: 7px;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.set{
+    border-radius: 5px;
+    background-color: #66CD00;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    font-size: 20px;
+    padding: 5px;
+}
+
+.set:hover{
+    background-color: #458B00;
+}
+
+.set:active{
+    background-color: #458B00;
+    transform: translateX(1px) translateY(1px);
+}
+
+.del{
+    background-color: red;
+    color: white;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    margin-bottom: .5em;
+}
+
+.del:hover{
+    background-color: darkred;
+}
+
+.del:active{
+    background-color: darkred;
+    transform: translateX(1px) translateY(1px);
 }
