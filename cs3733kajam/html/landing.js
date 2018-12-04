@@ -128,9 +128,14 @@ function createNewSchedule(){
 
                 xhrTable = JSON.parse(xhr.responseText);
 
-                alert("Schedule request sent to server and returned code "+xhrTable["httpCode"]);
+                console.log("Schedule request sent to server and returned code "+xhrTable["httpCode"]);
 
-                window.location.href = "organizerView.html?"+"id="+xhrTable["id"].toString()+"&secretCode="+xhrTable["secretCode"];
+                if(xhrTable["httpCode"]<400){
+                    window.location.href = "organizerView.html?"+"id="+xhrTable["id"].toString()+"&secretCode="+xhrTable["secretCode"];
+                }
+                else if(xhrTable["httpCode"] >= 400){
+                    
+                }
 
             } 
             else {
