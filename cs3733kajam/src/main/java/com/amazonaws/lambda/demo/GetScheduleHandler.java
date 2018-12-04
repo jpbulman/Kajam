@@ -107,6 +107,7 @@ public class GetScheduleHandler implements RequestStreamHandler {
 		
 		if (!processed) {
 			GetScheduleRequest req = new Gson().fromJson(body, GetScheduleRequest.class);
+			logger.log(body.toString());
 			logger.log(req.toString());
 			
 			String respError = "";
@@ -123,7 +124,7 @@ public class GetScheduleHandler implements RequestStreamHandler {
 			try {
 				secretCode = Integer.parseInt(req.arg2);
 			}catch(NumberFormatException e) {
-				respError += "Invalid format for secretCode ";
+				respError += "Invalid format for secretCode: " + secretCode + "  req.arg1 " + req.arg1 + " req.arg2 " + req.arg2 + " ";
 			}
 			
 			// compute proper response
