@@ -33,7 +33,10 @@ public class ScheduleDAOTest {
 	    try {
 	    	// can add it
 	    	String id = UUID.randomUUID().toString();
-	    	Schedule schedule = new Schedule(UUID.fromString(id), "testName",125,30,LocalTime.of(0, 0), LocalTime.of(3, 0), LocalDate.of(2000, 1, 1), LocalDate.of(2000, 1, 10), new Timestamp(System.currentTimeMillis()));
+	    	Schedule schedule = new Schedule(UUID.fromString(id), "testName",125,
+	    			30,LocalTime.of(0, 0), LocalTime.of(3, 0), 
+	    			LocalDate.of(2000, 1, 1), LocalDate.of(2000, 1, 10),
+	    			new Timestamp(System.currentTimeMillis()));
 	    	boolean b = sd.addSchedule(schedule);
 	    	System.out.println("add schedule: " + b);
 	    	
