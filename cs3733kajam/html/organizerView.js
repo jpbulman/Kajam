@@ -2,6 +2,29 @@ var url = window.location.href;
 var setOfParams = "";
 var q = "";
 
+function updateView(json){
+    console.log(json);
+    document.getElementById("schName").innerHTML = json["name"];
+
+    var startMonth = parseInt(json["startDate"]["month"]);
+    var startDay = parseInt(json["startDate"]["day"]);
+    var startYear = parseInt(json["startDate"]["year"]);
+
+    document.getElementById("mon").innerHTML = '<button type="button"><</button> Mon</br>'+startMonth+"/"+startDay+"/"+startYear;
+
+    var dayStartHour = parseInt(json["startTime"]["hour"]);
+    var dayEndHour = parseInt(json["endTime"]["hour"]);
+
+    // var currHour,currMinute;
+    // for(currHour = dayStartHour, currMinute = 0;i<10;i++){
+        
+    // }
+
+    // var row = document.getElementById("scheduleTable").insertRow(1);
+    // row.insertCell(0);
+
+}
+
 for(var i=0;i<url.length;i++){
     if(url.substring(i,i+1)==="?"){
         i++;
@@ -62,8 +85,7 @@ xhr.onloadend = function(){
     if(xhr.readyState == XMLHttpRequest.DONE){
         console.log(xhr.responseText);
         getBackParameters = JSON.parse(JSON.parse(xhr.responseText)["body"]);
-        console.log(getBackParameters["name"])
-        document.getElementById("schName").innerHTML = getBackParameters["name"];
+        updateView(getBackParameters);
     }
     else{
         console.log("POST request failed, either a connectiivity issue or a problem with the server");
