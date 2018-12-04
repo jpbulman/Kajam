@@ -41,9 +41,11 @@ for(var k=0;k<setOfParams.length;k++){
     urlParameters[keyName]=value;
 }
 
-getUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/schedule"
+getBackParameters = {}
+
+getUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleid"
 xhr = new XMLHttpRequest();
-xhr.open("GET",getUrl,true);
+xhr.open("POST",getUrl,true);
 
 sender = {}
 
@@ -59,9 +61,13 @@ xhr.onloadend = function(){
 
     if(xhr.readyState == XMLHttpRequest.DONE){
         console.log(xhr.responseText);
+        getBackParameters = JSON.parse(JSON.parse(xhr.responseText)["body"]);
+        console.log(getBackParameters["name"])
+        document.getElementById("schName").innerHTML = getBackParameters["name"];
     }
     else{
-        console.log("Did not work");
+        console.log("POST request failed, either a connectiivity issue or a problem with the server");
     }
 
 };
+console.log(getBackParameters["name"]);
