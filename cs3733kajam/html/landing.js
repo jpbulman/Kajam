@@ -130,12 +130,15 @@ function createNewSchedule(){
 
                 console.log("Schedule request sent to server and returned code "+xhrTable["httpCode"]);
 
-                if(xhrTable["httpCode"]<400){
-                    window.location.href = "organizerView.html?"+"id="+xhrTable["id"].toString()+"&secretCode="+xhrTable["secretCode"];
-                }
-                else if(xhrTable["httpCode"] >= 400){
-                    
-                }
+                window.location.href = "organizerView.html?"+"id="+xhrTable["id"].toString()+"&secretCode="+xhrTable["secretCode"];
+                alert();
+
+                // if(xhrTable["httpCode"]<400){
+                //     window.location.href = "organizerView.html?"+"id="+xhrTable["id"].toString()+"&secretCode="+xhrTable["secretCode"];
+                // }
+                // else if(xhrTable["httpCode"] >= 400){
+                //     window.location.href = "General400.html?"+xhrTable["httpCode"];
+                // }
 
             } 
             else {
