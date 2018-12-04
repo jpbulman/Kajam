@@ -1,5 +1,6 @@
 var url = window.location.href;
-var setOfParams = ""
+var setOfParams = "";
+var q = "";
 
 for(var i=0;i<url.length;i++){
     if(url.substring(i,i+1)==="?"){
@@ -9,6 +10,8 @@ for(var i=0;i<url.length;i++){
         }
     }
 }
+
+q=setOfParams;
 
 urlParameters = {}
 
@@ -44,7 +47,7 @@ xhr.open("GET",getUrl,true);
 
 sender = {}
 
-sender["arg1" ] = urlParameters["id"];
+sender["arg1"] = urlParameters["id"];
 sender["arg2"] = urlParameters["secretCode"];
 sender = JSON.stringify(sender);
 
@@ -61,4 +64,4 @@ xhr.onloadend = function(){
         console.log("Did not work");
     }
 
-}
+};
