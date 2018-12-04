@@ -21,7 +21,6 @@ public class Schedule {
 	
 	public Schedule(UUID id, String name, int secretCode, int duration, LocalTime startTime, LocalTime endTime,
 			LocalDate startDate, LocalDate endDate, Timestamp timestamp) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.secretCode = secretCode;

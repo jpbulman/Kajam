@@ -191,14 +191,15 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			
 			// compute proper response
 			if(r.compareTo("") != 0) { // If there is an error in input
-				ErrorResponse resp = new ErrorResponse(r, 400);
-				responseJson.put("body", new Gson().toJson(resp));
+				ErrorResponse ErrResp = new ErrorResponse(r, 400);
+				responseJson.put("body", new Gson().toJson(ErrResp));
 			
 			}else {
 				
 				try {
 					ScheduleResponse resp = new ScheduleResponse(req.arg1, startTime, endTime, startDate, endDate, val9, 200);
-					if (createSchedule(resp.getId(), req.arg1, resp.getSecretCode(), val9, startTime, endTime, startDate, endDate)) {
+					boolean scheduleCreated = createSchedule(resp.getId(), req.arg1, resp.getSecretCode(), val9, startTime, endTime, startDate, endDate);
+					if (scheduleCreated) {
 						responseJson.put("body", new Gson().toJson(resp)); 
 					} else { // could not add schedule to DB
 						ErrorResponse ErrResp = new ErrorResponse("Unable to create schedule", 400);
