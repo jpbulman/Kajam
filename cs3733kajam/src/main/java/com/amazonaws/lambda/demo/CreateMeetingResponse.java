@@ -20,10 +20,9 @@ public class CreateMeetingResponse {
 		
 		httpCode = code;
 		
-		id = UUID.randomUUID();
+		this.id = UUID.randomUUID();
 		
-		Random random = new Random();
-		secretCode = random.nextInt(89999) + 10000;
+		this.secretCode = secretCode;
 	}
 	
 	//TODO: figure out the format for this return

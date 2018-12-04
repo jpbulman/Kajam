@@ -24,12 +24,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.gson.Gson;
 
 import db.MeetingDAO;
-import db.ScheduleDAO;
 //import db.ScheduleDAO;
-import db.TimeSlotDAO;
 import model.Meeting;
-import model.Schedule;
-import model.TimeSlot;
 
 
 public class DeleteMeetingHandler implements RequestStreamHandler{
@@ -45,10 +41,20 @@ public class DeleteMeetingHandler implements RequestStreamHandler{
 	boolean deleteMeeting(UUID id, UUID timeSlotid, String name, int secretCode) throws Exception {
 		if (logger != null) { logger.log("in createMeeting"); }
 		MeetingDAO dao = new MeetingDAO();
-		
+		Meeting exist;
 		// check if present
-		Meeting exist = dao.getMeetingByTimeSlotID(timeSlotid);
+		
+		/*try {
+			//exist = dao.getMeetingByTimeSlotID(timeSlotid);
+			
+		} catch (Exception e){
+			//exist = null;
+			return false;
+			//throw new NullPointerException();
+		}*/
+		exist = dao.getMeetingByTimeSlotID(timeSlotid);
 		if (exist == null) {
+			//throw new NullPointerException();
 			return false;
 		} else if (exist.secretCode == secretCode) {
 			dao.deleteMeeting(exist);
@@ -127,9 +133,9 @@ public class DeleteMeetingHandler implements RequestStreamHandler{
 				respError = "Invalid input format";
 			}
 			try {
-				val1 = UUID.fromString(req.timeSlotID);
+				val3 = UUID.fromString(req.id);
 			} catch (Exception e) {
-				val1 = null;
+				val3 = null;
 				respError = "Invalid input format";
 			}
 			
@@ -149,7 +155,6 @@ public class DeleteMeetingHandler implements RequestStreamHandler{
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					logger.log("------catch strange error test-----");
-					e.printStackTrace();
 				}
 			}
 		}

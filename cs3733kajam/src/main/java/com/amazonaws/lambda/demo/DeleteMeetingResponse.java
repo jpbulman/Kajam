@@ -20,8 +20,7 @@ public class DeleteMeetingResponse {
 		
 		id = UUID.randomUUID();
 		
-		Random random = new Random();
-		secretCode = random.nextInt(89999) + 10000;
+		this.secretCode = secretCode;
 	}
 	
 	public String toString() {
