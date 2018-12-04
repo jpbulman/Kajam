@@ -1,13 +1,10 @@
 package db;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Time;
 import java.util.UUID;
 
 import model.Meeting;
-import model.TimeSlot;
 
 public class MeetingDAO {
 
@@ -23,7 +20,7 @@ public class MeetingDAO {
     }
     
     // Access meeting by meeting ID
-    public Meeting getMeeting(UUID id) throws Exception {
+    public Meeting getMeeting(UUID id) {
         
         try {
             Meeting m = null;
@@ -41,12 +38,13 @@ public class MeetingDAO {
 
         } catch (Exception e) {
         	e.printStackTrace();
-            throw new Exception("Failed in getting meeting: " + e.getMessage());
+        	return null;
+            //throw new Exception("Failed in getting meeting: " + e.getMessage());
         }
     }
     
     // Access meeting by time slot ID
-    public Meeting getMeetingByTimeSlotID(UUID timeSlotID) throws Exception {
+    public Meeting getMeetingByTimeSlotID(UUID timeSlotID) {
     	try {
             Meeting m = null;
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM Meetings WHERE timeSlotID=?;");
@@ -63,7 +61,8 @@ public class MeetingDAO {
 
         } catch (Exception e) {
         	e.printStackTrace();
-            throw new Exception("Failed in getting meeting: " + e.getMessage());
+            //throw new Exception("Failed in getting meeting: " + e.getMessage());
+        	return null;
         }
     }
     
