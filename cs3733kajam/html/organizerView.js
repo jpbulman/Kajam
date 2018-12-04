@@ -10,18 +10,46 @@ function updateView(json){
     var startDay = parseInt(json["startDate"]["day"]);
     var startYear = parseInt(json["startDate"]["year"]);
 
-    document.getElementById("mon").innerHTML = '<button type="button"><</button> Mon</br>'+startMonth+"/"+startDay+"/"+startYear;
+    var duration = parseInt(json["meetingDuration"]);
+
+    // var startingDate = new Date(startMonth+" "+startDay+" "+startYear);
+
+    // document.getElementById("mon").innerHTML = '<button type="button"><</button> Mon</br>'+startingDate.toDateString();
 
     var dayStartHour = parseInt(json["startTime"]["hour"]);
     var dayEndHour = parseInt(json["endTime"]["hour"]);
 
-    // var currHour,currMinute;
-    // for(currHour = dayStartHour, currMinute = 0;i<10;i++){
+    var currHour,currMinute, i;
+    for(currHour = dayStartHour, currMinute = 0, i=1;currHour<dayEndHour;i++){
         
-    // }
+        var row = document.getElementById("scheduleTable").insertRow(i);
+        var head = row.insertCell(0);
 
-    // var row = document.getElementById("scheduleTable").insertRow(1);
-    // row.insertCell(0);
+        currMinuteStr = (currMinute==0)? "00":currMinute;
+
+        enderHour = currHour;
+        enderMinute = (currMinute+duration);
+
+        if(enderMinute==60){
+            enderMinute="00";
+            enderHour++;
+        }
+
+        head.innerHTML = currHour+":"+currMinuteStr+" - "+enderHour+":"+enderMinute;
+
+        // Populate rest of the row
+        for(var a=1;a<=5;a++){
+            row.insertCell(a);
+        }
+
+        if(currMinute+duration == 60){
+            currMinute = 0;
+            currHour++;
+        }
+        else{
+            currMinute+=duration;
+        }
+    }
 
 }
 

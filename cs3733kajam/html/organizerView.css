@@ -9,7 +9,8 @@ table{
     table-layout: fixed; 
     border-collapse: separate;
     /* float: left; */
-    margin-right: 10px;
+    margin-right: .5em;
+    margin-bottom: .5em;
 }
 
 td, th{
