@@ -8,7 +8,7 @@ function getWeekDay(day){
 
 function fillInDate(dayOfWeek,actualDate){
     if(dayOfWeek=="Mon"){
-        document.getElementById(dayOfWeek).innerHTML = '<button onclick="" type="button"><</button> '+actualDate.toDateString();
+        document.getElementById(dayOfWeek).innerHTML = '<button onclick="getPrevWeek()" type="button"><</button> <a id="monDate">'+actualDate.toDateString()+'</a>';
     }
     else if(dayOfWeek.toString()=="Fri"){
         document.getElementById(dayOfWeek).innerHTML = actualDate.toDateString()+' <button onclick="getNextWeek()" type="button">></button>'; 
@@ -32,14 +32,18 @@ function getMonday(currDate){
     return currDate;
 }
 
-function getNextWeek(mondayOfThisWeek){
-    mondayOfThisWeek.setDate(mondayOfThisWeek.getDate()+7);
-    fillInWeek(mondayOfThisWeek);
+function getNextWeek(){
+    var mon = document.getElementById("monDate").innerHTML;
+    var d = new Date(mon);
+    d.setDate(d.getDate()+7);
+    fillInWeek(d);
 }
 
-function getPrevWeek(mondayOfThisWeek){
-    mondayOfThisWeek.setDate(mondayOfThisWeek.getDate()-7);
-    fillInWeek(mondayOfThisWeek);
+function getPrevWeek(){
+    var mon = document.getElementById("monDate").innerHTML;
+    var d = new Date(mon);
+    d.setDate(d.getDate()-7);
+    fillInWeek(d);
 }
 
 function updateView(json){
