@@ -43,7 +43,8 @@ public class TimeSlotDAO {
 
         } catch (Exception e) {
         	e.printStackTrace();
-            throw new Exception("Failed in getting time slot: " + e.getMessage());
+        	return null;
+            //throw new Exception("Failed in getting time slot: " + e.getMessage());
         }
     }
     
@@ -66,7 +67,8 @@ public class TimeSlotDAO {
 
         } catch (Exception e) {
         	e.printStackTrace();
-            throw new Exception("Failed in getting time slots: " + e.getMessage());
+        	return null;
+            //throw new Exception("Failed in getting time slots: " + e.getMessage());
         }
     }
     
@@ -93,7 +95,8 @@ public class TimeSlotDAO {
 
         } catch (Exception e) {
         	e.printStackTrace();
-            throw new Exception("Failed in getting time slot: " + e.getMessage());
+        	return null;
+            //throw new Exception("Failed in getting time slot: " + e.getMessage());
         }
     }
     

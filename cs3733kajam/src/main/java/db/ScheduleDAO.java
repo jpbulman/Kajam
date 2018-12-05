@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import model.Schedule;
@@ -41,8 +42,29 @@ public class ScheduleDAO {
 
         } catch (Exception e) {
         	e.printStackTrace();
-            throw new Exception("Failed in getting schedule: " + e.getMessage());
+        	return null;
+            //throw new Exception("Failed in getting schedule: " + e.getMessage());
         }
+    }
+    
+    public ArrayList<Schedule> getAllSchedules(){
+    	try {
+    		ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+    		PreparedStatement ps = conn.prepareStatement("SELECT * FROM Schedules;");
+    		ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                schedules.add(generateSchedule(resultSet));
+            }
+            resultSet.close();
+            ps.close();
+            
+            return schedules;
+    		
+    		
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		return null;
+    	}
     }
     
     

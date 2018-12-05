@@ -79,4 +79,25 @@ public class TimeSlotDAOTest {
 		}
 	}
 	
+	// Test updating isFree field
+	@Test
+	public void testUpdate() {
+		TimeSlotDAO td = new TimeSlotDAO();
+		
+		try {
+			TimeSlot t = td.getTimeSlot(UUID.fromString("9be6e94a-b57d-4cf6-939c-289328895598"));
+			System.out.println("isFree before update: "+ t.isFree);
+			boolean initialIsFree = t.isFree;
+			t.isFree = !t.isFree;
+			
+			assertTrue(td.updateTimeSlot(t));
+			t = td.getTimeSlot(UUID.fromString("9be6e94a-b57d-4cf6-939c-289328895598"));
+			System.out.println("isFree after update: "+ t.isFree);
+			assertEquals(t.isFree, !initialIsFree);
+			
+		} catch(Exception e) {
+			fail ("didn't work:" + e.getMessage());
+		}
+	}
+	
 }
