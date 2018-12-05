@@ -42,7 +42,7 @@ public class CreateMeetingHandler {
 		MeetingDAO dao = new MeetingDAO();
 		
 		// check if present
-		Meeting exist = dao.getMeetingByTimeSlotID(timeSlotid);
+		Meeting exist = dao.getMeeting(id);
 		if (exist == null) {
 			Meeting meeting = new Meeting(id, timeSlotid, name, secretCode);
 			dao.addMeeting(meeting);
@@ -117,22 +117,11 @@ public class CreateMeetingHandler {
 			
 			String r = "";
 
-			
-			try {
-				val2 = Integer.parseInt(req.secretCode);
-			} catch (NumberFormatException e){
-				r = "Invalid input format";
-			}
+	
 			try {
 				val1 = UUID.fromString(req.timeSlotID);
 			} catch (Exception e) {
 				val1 = null;
-				r = "Invalid input format";
-			}
-			try {
-				val3 = UUID.fromString(req.id);
-			} catch (Exception e) {
-				val3 = null;
 				r = "Invalid input format";
 			}
 			
@@ -147,7 +136,7 @@ public class CreateMeetingHandler {
 				
 				try {
 					CreateMeetingResponse resp = new CreateMeetingResponse(val3, val1, req.name, val2, 200);
-					if (createMeeting(val3, val1, req.name, val2)) {
+					if (createMeeting(resp.id, val1, req.name, resp.secretCode)) {
 						responseJson.put("body", new Gson().toJson(resp)); 
 					} else { // could add schedule to DB
 						ErrorResponse ErrResp = new ErrorResponse("Unable to create meeting", 400);

@@ -2,6 +2,50 @@ var url = window.location.href;
 var setOfParams = "";
 var q = "";
 
+function getWeekDay(day){
+    return day.substring(0,3);
+}
+
+function fillInDate(dayOfWeek,actualDate){
+    if(dayOfWeek=="Mon"){
+        document.getElementById(dayOfWeek).innerHTML = '<button onclick="getPrevWeek()" type="button"><</button> <a id="monDate">'+actualDate.toDateString()+'</a>';
+    }
+    else if(dayOfWeek.toString()=="Fri"){
+        document.getElementById(dayOfWeek).innerHTML = actualDate.toDateString()+' <button onclick="getNextWeek()" type="button">></button>'; 
+    }
+    else{
+        document.getElementById(dayOfWeek).innerHTML = actualDate.toDateString()
+    }
+}
+
+function fillInWeek(mon){
+    while(getWeekDay(mon.toDateString())!="Sat"){
+        fillInDate(getWeekDay(mon.toDateString()),mon);
+        mon.setDate(mon.getDate()+1);
+    }
+}
+
+function getMonday(currDate){
+    while(getWeekDay(currDate.toDateString())!="Mon"){
+        currDate.setDate(currDate.getDate()-1);
+    }
+    return currDate;
+}
+
+function getNextWeek(){
+    var mon = document.getElementById("monDate").innerHTML;
+    var d = new Date(mon);
+    d.setDate(d.getDate()+7);
+    fillInWeek(d);
+}
+
+function getPrevWeek(){
+    var mon = document.getElementById("monDate").innerHTML;
+    var d = new Date(mon);
+    d.setDate(d.getDate()-7);
+    fillInWeek(d);
+}
+
 function updateView(json){
     console.log(json);
     document.getElementById("schName").innerHTML = json["name"];
@@ -12,10 +56,12 @@ function updateView(json){
 
     var duration = parseInt(json["meetingDuration"]);
 
-    // var startingDate = new Date(startMonth+" "+startDay+" "+startYear);
+    var startingDate = new Date(startMonth+" "+startDay+" "+startYear);
 
-    // document.getElementById("mon").innerHTML = '<button type="button"><</button> Mon</br>'+startingDate.toDateString();
+    var mondayOfWeek = getMonday(startingDate);
+    fillInWeek(mondayOfWeek);
 
+    //This section populates the table with cells
     var dayStartHour = parseInt(json["startTime"]["hour"]);
     var dayEndHour = parseInt(json["endTime"]["hour"]);
 
@@ -120,4 +166,3 @@ xhr.onloadend = function(){
     }
 
 };
-console.log(getBackParameters["name"]);

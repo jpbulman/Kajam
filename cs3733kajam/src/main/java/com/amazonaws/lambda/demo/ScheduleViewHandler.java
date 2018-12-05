@@ -126,11 +126,11 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 			try {
 				d = dayInWeek.getDayOfWeek();
 				if(d == DayOfWeek.SATURDAY) {
-					mon = dayInWeek.plusDays(-5);
-					tues = dayInWeek.plusDays(-4);
-					wed = dayInWeek.plusDays(-3);
-					thur = dayInWeek.plusDays(-2);
-					fri = dayInWeek.plusDays(-1);
+					mon = dayInWeek.plusDays(2);
+					tues = dayInWeek.plusDays(3);
+					wed = dayInWeek.plusDays(4);
+					thur = dayInWeek.plusDays(5);
+					fri = dayInWeek.plusDays(6);
 				}else if(d == DayOfWeek.SUNDAY) {
 					mon = dayInWeek.plusDays(1);
 					tues = dayInWeek.plusDays(2);
