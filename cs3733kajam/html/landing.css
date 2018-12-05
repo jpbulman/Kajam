@@ -1,6 +1,5 @@
 body{
     background-color: royalblue;
-    /* text-align: center; */
 }
 
 .title {
@@ -11,9 +10,9 @@ body{
 
 h1{
     color: white;
-    font-size: 30px;
+    font-size: 1.75em;
     background-color: orange;
-    padding: 30px;
+    padding: 1em;
     border-radius: 10px;
     font-family: Arial, Helvetica, sans-serif;
     display: inline;
@@ -23,19 +22,19 @@ h1{
 input[type=text], select{
     background-color: #f2f2f2;
     border-radius: 10px;
-    height: 60px;
-    font-size: 32px;
+    height: 2em;
+    font-size: 2em;
 }
 
 input[type=button]{
     background: orange;
     border-radius: 10px;
-    font-size: 30px;
+    font-size: 1.85em;
     border: none;
     color: white;
-    padding: 20px;
+    padding: .75em;
     text-align: left;
-    width: 15.5em;
+    width: 15.9em;
 }
 
 input[type=button]:hover{
