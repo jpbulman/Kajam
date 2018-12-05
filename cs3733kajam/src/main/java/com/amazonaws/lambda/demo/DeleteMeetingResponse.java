@@ -18,7 +18,7 @@ public class DeleteMeetingResponse {
 		
 		httpCode = code;
 		
-		id = UUID.randomUUID();
+		this.id = id;
 		
 		this.secretCode = secretCode;
 	}
