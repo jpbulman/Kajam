@@ -49,8 +49,8 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 			Schedule schedule = new Schedule (id, name, secretCode, duration, startTime, endTime, startDate, endDate, ts);			
 			
 			//TODO: uncomment when ready to add time slots to db when creating schedules, delete original return statement
-			//return dao.addSchedule(schedule) && addTimeSlots(schedule); 
-			return dao.addSchedule(schedule);
+			return dao.addSchedule(schedule) && addTimeSlots(schedule); 
+			//return dao.addSchedule(schedule);
 		} else {
 			return false;
 			//return dao.updateConstant(constant);
