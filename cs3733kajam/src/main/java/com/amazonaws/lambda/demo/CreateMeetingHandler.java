@@ -100,7 +100,7 @@ public class CreateMeetingHandler {
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
 			//TODO: add more parameters
-			response = new CreateMeetingResponse(null, null,  "", 0, 400);  // unable to process input
+			response = new CreateMeetingResponse(null,  "", 400);  // unable to process input
 	        responseJson.put("body", new Gson().toJson(response));
 	        processed = true;
 	        body = null;
@@ -135,7 +135,7 @@ public class CreateMeetingHandler {
 			}else {
 				
 				try {
-					CreateMeetingResponse resp = new CreateMeetingResponse(val3, val1, req.name, val2, 200);
+					CreateMeetingResponse resp = new CreateMeetingResponse(val1, req.name, 200);
 					if (createMeeting(resp.id, val1, req.name, resp.secretCode)) {
 						responseJson.put("body", new Gson().toJson(resp)); 
 					} else { // could add schedule to DB

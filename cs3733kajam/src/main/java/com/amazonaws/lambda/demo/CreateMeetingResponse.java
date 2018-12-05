@@ -12,7 +12,7 @@ public class CreateMeetingResponse {
 	int secretCode;
 	int httpCode;
 	
-	public CreateMeetingResponse(UUID id, UUID timeSlotid, String name, int secretCode, int code) {
+	public CreateMeetingResponse(UUID timeSlotid, String name, int code) {
 		this.name = name;
 		
 		this.timeSlotID = timeSlotid;
@@ -22,7 +22,7 @@ public class CreateMeetingResponse {
 		this.id = UUID.randomUUID();
 		
 		Random random = new Random();
-		secretCode = random.nextInt(89999) + 10000;
+		this.secretCode = random.nextInt(89999) + 10000;
 	}
 	
 	//TODO: figure out the format for this return
