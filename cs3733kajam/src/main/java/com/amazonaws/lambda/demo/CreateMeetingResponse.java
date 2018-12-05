@@ -16,13 +16,13 @@ public class CreateMeetingResponse {
 		this.name = name;
 		
 		this.timeSlotID = timeSlotid;
-		this.secretCode = secretCode;
 		
 		httpCode = code;
 		
 		this.id = UUID.randomUUID();
 		
-		this.secretCode = secretCode;
+		Random random = new Random();
+		secretCode = random.nextInt(89999) + 10000;
 	}
 	
 	//TODO: figure out the format for this return
