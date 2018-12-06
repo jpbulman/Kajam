@@ -2,16 +2,16 @@ package com.amazonaws.lambda.demo;
 
 public class DeleteScheduleRequest {
 
-	String id;
+	String arg1;
 
-	public DeleteScheduleRequest(String id) {
+	public DeleteScheduleRequest(String arg1) {
 		super();
-		this.id = id;
+		this.arg1 = arg1;
 	}
 
 	@Override
 	public String toString() {
-		return "DeleteScheduleRequest [id=" + id + "]";
+		return "DeleteScheduleRequest [arg1=" + arg1 + "]";
 	}
 	
 }

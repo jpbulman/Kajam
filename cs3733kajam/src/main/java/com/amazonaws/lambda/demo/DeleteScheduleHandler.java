@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 import org.json.simple.JSONObject;
@@ -15,6 +17,8 @@ import org.json.simple.parser.ParseException;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.gson.Gson;
 
 import db.MeetingDAO;
@@ -28,6 +32,9 @@ import model.TimeSlot;
 public class DeleteScheduleHandler implements RequestStreamHandler {
 
 	public LambdaLogger logger = null;
+	
+	private AmazonS3 s3 = AmazonS3ClientBuilder.standard()
+			.withRegion("us-east-2").build();
 	
 	boolean deleteSchedule(UUID id) throws Exception {
 		if (logger != null) { logger.log("in createSchedule"); }
@@ -79,12 +86,22 @@ public class DeleteScheduleHandler implements RequestStreamHandler {
 			JSONObject event = (JSONObject) parser.parse(reader);
 			logger.log("event:" + event.toJSONString());
 
-			body = (String)event.get("body");
-			if (body == null) {
-				body = event.toJSONString();  // this is only here to make testing easier
+			String method = (String) event.get("httpMethod");
+			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
+				logger.log("Options request");
+				ErrorResponse r = new ErrorResponse("DONE (OPTIONS)", 200);
+				responseJson.put("body", new Gson().toJson(r));
+		        processed = true;
+		        body = null;
+			}else {
+				body = (String)event.get("body");
+				if (body == null) {
+					body = event.toJSONString();  // this is only here to make testing easier
+				}
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
+			//TODO: add more parameters
 			response = new DeleteScheduleResponse(null, 422);  // unable to process input
 	        responseJson.put("body", new Gson().toJson(response));
 	        processed = true;
@@ -99,7 +116,7 @@ public class DeleteScheduleHandler implements RequestStreamHandler {
 			String respError = "";
 			
 			try {
-				val1 = UUID.fromString(req.id);
+				val1 = UUID.fromString(req.arg1);
 			} catch (Exception e) {
 				val1 = null;
 				respError = "Invalid input format";
