@@ -11,13 +11,21 @@ function goAction(){
 var createScheduleURL = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/schedule   "
 // var createScheduleURL = "";
 function createNewSchedule(){
-
     var scheduleName = document.getElementById("scheduleName").value;
     var lenMeetings = parseInt(document.getElementById("lengthOfMeetings").value.substring(0,2));
     var startDay = document.getElementById("startDay").value;
     var endDay = document.getElementById("endDay").value;
     var startHour = parseInt(document.getElementById("startHour").value);
     var endHour = parseInt(document.getElementById("endHour").value);
+
+    if(scheduleName=="override"){
+        scheduleName = "debugger";
+        lenMeetings = 10;
+        startDay = "12/05/2018";
+        endDay = "12/06/2018";
+        startHour = 0;
+        endHour = 1;
+    }
 
     if(scheduleName==""||lenMeetings==""||startDay==""||endDay==""||startHour===""||endHour===""){
         alert("Please fill in all of the required fields");
@@ -100,6 +108,8 @@ function createNewSchedule(){
             return;
         }
 
+        document.getElementById("gearWrapper").style.visibility = "visible";
+        document.getElementById("loading").style.visibility = "visible";
         scheduleData = {}
         //String name, int startHour, int endHour, int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay, int duration
         scheduleData["arg1"] = scheduleName;
@@ -130,21 +140,24 @@ function createNewSchedule(){
 
                 console.log("Schedule request sent to server and returned code "+xhrTable["httpCode"]);
 
-                window.location.href = "organizerView.html?"+"id="+xhrTable["id"].toString()+"&secretCode="+xhrTable["secretCode"];
-                alert();
-
-                // if(xhrTable["httpCode"]<400){
-                //     window.location.href = "organizerView.html?"+"id="+xhrTable["id"].toString()+"&secretCode="+xhrTable["secretCode"];
-                // }
-                // else if(xhrTable["httpCode"] >= 400){
-                //     window.location.href = "General400.html?"+xhrTable["httpCode"];
-                // }
+                if(parseInt(xhrTable["httpCode"])<400){
+                    document.getElementById("gearWrapper").style.visibility = "hidden";
+                    document.getElementById("loading").style.visibility = "hidden";
+                    window.location.href = "organizerView.html?"+"id="+xhrTable["id"]+"&secretCode="+xhrTable["secretCode"];
+                    alert("IMPORTANT: Your schedule ID is "+xhrTable["id"]+" and your secret code is "+xhrTable["secretCode"]+". Please don't lose this information, you will need it to log back on later!");
+                }
+                else{
+                    window.location.href = "Error Pages/General400.html";
+                } 
 
             } 
             else {
-            
+                console.log("waiting")
             }
         };
     }
 
 }
+
+document.getElementById("gearWrapper").style.visibility = "hidden";
+document.getElementById("loading").style.visibility = "hidden";

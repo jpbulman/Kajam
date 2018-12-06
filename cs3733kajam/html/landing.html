@@ -7,8 +7,6 @@
 </head>
 <body>
 
-<script src="landing.js"></script>
-
 <div class="title">
     <h1 style="float:left;margin-top: 0">Organizer Login</h1>
     <h1 style="margin: 0 auto;">Scheduler</h1>
@@ -24,6 +22,7 @@
 
         <div>
             <select id="lengthOfMeetings" class="selecter">
+                <option hidden selected disabled>Length Of Meetings</option>
                 <option value="10">10 minutes</option>
                 <option value="15">15 minutes</option>
                 <option value="20">20 minutes</option>
@@ -76,6 +75,26 @@
     </form>
 </div>
 
+<div id="gearWrapper" class="gearWrapper">
+<div class="gear" id="gear1">
+	<div class="teeth" id="teeth1"></div>
+	<div class="teeth" id="teeth2"></div>
+	<div class="teeth" id="teeth3"></div>
+	<div class="teeth" id="teeth4"></div>
+	<div class="gear-inner"></div>
+</div>
+<div class="gear" id="gear2">
+	<div class="teeth" id="teeth1"></div>
+	<div class="teeth" id="teeth2"></div>
+	<div class="teeth" id="teeth3"></div>
+	<div class="teeth" id="teeth4"></div>
+    <div class="gear-inner"></div>
+</div>
+</div>
+
+<h2 id="loading" class="loading">Creating Schedule</h2>
+
+<script src="landing.js"></script>
 
 </body>
 </html>
