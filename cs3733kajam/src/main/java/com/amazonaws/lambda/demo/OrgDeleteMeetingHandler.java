@@ -6,9 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.UUID;
 
 import org.json.simple.JSONObject;
@@ -23,46 +20,35 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.gson.Gson;
 
 import db.MeetingDAO;
-import db.ScheduleDAO;
-//import db.ScheduleDAO;
 import model.Meeting;
-import model.Schedule;
 
-public class CreateMeetingHandler implements RequestStreamHandler {
+public class OrgDeleteMeetingHandler implements RequestStreamHandler {
+
+
 	public LambdaLogger logger = null;
 
 	// handle to our s3 storage
 	private AmazonS3 s3 = AmazonS3ClientBuilder.standard()
 			.withRegion("us-east-2").build();
-
-	boolean useRDS = true;
 	
 	
-	boolean createMeeting(UUID id, UUID timeSlotid, String name, int secretCode) throws Exception {
+	boolean deleteMeeting(UUID id, UUID timeSlotid, String name, int secretCode) throws Exception {
 		if (logger != null) { logger.log("in createMeeting"); }
 		MeetingDAO dao = new MeetingDAO();
-		
+		Meeting exist;
 		// check if present
-		Meeting exist = dao.getMeeting(id);
+		exist = dao.getMeeting(id);
 		if (exist == null) {
-			Meeting meeting = new Meeting(id, timeSlotid, name, secretCode);
-			dao.addMeeting(meeting);
-			return true;
-		} else {
 			return false;
+		} else {
+			dao.deleteMeeting(exist);
+			return true;
 		}
 	}
 	
+
+    @Override
     public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
-    	
-    	// FAKE fix this
-//    	try {
-//			DatabaseUtil.connect();
-//			System.out.println("SUCCESS!");
-//		} catch (Exception e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
     	
     	LambdaLogger logger = context.getLogger();
 		logger.log("Loading Java Lambda handler of RequestStreamHandler");
@@ -75,7 +61,7 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 		
-		CreateMeetingResponse response;
+		DeleteMeetingResponse response;
 		
 		String body;
 		boolean processed = false;
@@ -101,55 +87,55 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
 			//TODO: add more parameters
-			response = new CreateMeetingResponse(null,  "", 400);  // unable to process input
+			response = new DeleteMeetingResponse(null, null, "", 0, 400);  // unable to process input
 	        responseJson.put("body", new Gson().toJson(response));
 	        processed = true;
 	        body = null;
 		}
-		
+
 		if (!processed) {
-			//TODO: create a ScheduleRequest
-			CreateMeetingRequest req = new Gson().fromJson(body, CreateMeetingRequest.class);
+			DeleteMeetingRequest req = new Gson().fromJson(body, DeleteMeetingRequest.class);
 			logger.log(req.toString());
-		
+			
+			String respError = "";
 			UUID val1 = null; // timeslot
 			int val2 = 0;     // secretcode
 			UUID val3 = null; // id
 			
-			String r = "";
-
-	
+			Meeting m;
+			try {
+				val2 = Integer.parseInt(req.secretCode);
+			} catch (NumberFormatException e){
+				respError = "Invalid input format";
+			}
 			try {
 				val1 = UUID.fromString(req.timeSlotID);
 			} catch (Exception e) {
 				val1 = null;
-				r = "Invalid input format";
+				respError = "Invalid input format";
+			}
+			try {
+				val3 = UUID.fromString(req.id);
+			} catch (Exception e) {
+				val3 = null;
+				respError = "Invalid input format";
 			}
 			
-			
-			
 			// compute proper response
-			if(r.compareTo("") != 0) { // If there is an error in input
-				ErrorResponse resp = new ErrorResponse(r, 400);
+			if(respError.compareTo("") != 0) { // If there is an error in input
+				ErrorResponse resp = new ErrorResponse(respError, 400);
 				responseJson.put("body", new Gson().toJson(resp));
-			
 			}else {
-				
 				try {
-					CreateMeetingResponse resp = new CreateMeetingResponse(val1, req.name, 200);
-					if (createMeeting(resp.id, val1, req.name, resp.secretCode)) {
-						responseJson.put("body", new Gson().toJson(resp)); 
-					} else { // could add schedule to DB
-						ErrorResponse ErrResp = new ErrorResponse("Unable to create meeting", 400);
-						responseJson.put("body", new Gson().toJson(ErrResp));
+					if(deleteMeeting(val3, val1, req.name, val2)) {
+						DeleteMeetingResponse resp = new DeleteMeetingResponse(val3, val1, req.name, val2, 200);
+						responseJson.put("body", new Gson().toJson(resp));
 					}
 				} catch (Exception e) {
-					ErrorResponse ErrResp = new ErrorResponse("Unable to create meeting: " + e.getMessage(), 400);
-					responseJson.put("body", new Gson().toJson(ErrResp));
+					// TODO Auto-generated catch block
 				}
 			}
 		}
-		
         logger.log("end result:" + responseJson.toJSONString());
         logger.log(responseJson.toJSONString());
         OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");

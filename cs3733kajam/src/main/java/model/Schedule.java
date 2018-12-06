@@ -41,7 +41,7 @@ public class Schedule {
 			if(dow != DayOfWeek.SATURDAY && dow != DayOfWeek.SUNDAY) {
 				LocalTime t = startTime;
 				while(t.isBefore(endTime)) {
-					timeSlots.add(new TimeSlot(id, t, t.plusMinutes(duration),d,false));
+					timeSlots.add(new TimeSlot(id, t, t.plusMinutes(duration),d,true));
 					t = t.plusMinutes(duration);
 				}
 			}

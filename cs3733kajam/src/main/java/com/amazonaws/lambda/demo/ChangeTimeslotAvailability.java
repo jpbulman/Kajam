@@ -165,23 +165,34 @@ public class ChangeTimeslotAvailability implements RequestStreamHandler{
 				ErrorResponse resp = new ErrorResponse(respError, 400);
 				responseJson.put("body", new Gson().toJson(resp));
 			}else {
+				TimeSlotDAO daoTS = new TimeSlotDAO();
 				if(req.arg7.compareTo("available") == 0) {
 					s.isFree = true;
+					try {
+						daoTS.updateTimeSlot(s);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					response = new ChangeTimeslotAvailabilityResponse(id, date, startTime, true, 200);
 					responseJson.put("body", new Gson().toJson(response));
 				}else {
 					s.isFree = false;
-					MeetingDAO dao = new MeetingDAO();
+					try {
+						daoTS.updateTimeSlot(s);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					MeetingDAO daoM = new MeetingDAO();
 					Meeting m = null;
 					try {
-						m = dao.getMeeting(s.id);
+						m = daoM.getMeeting(s.id);
 					} catch (Exception e) {
 						m = null;
 					}
 					
 					if(m != null) {
 						try {
-							dao.deleteMeeting(m);
+							daoM.deleteMeeting(m);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
