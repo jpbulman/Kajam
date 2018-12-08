@@ -182,21 +182,6 @@ public class ChangeTimeslotAvailability implements RequestStreamHandler{
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					MeetingDAO daoM = new MeetingDAO();
-					Meeting m = null;
-					try {
-						m = daoM.getMeeting(s.id);
-					} catch (Exception e) {
-						m = null;
-					}
-					
-					if(m != null) {
-						try {
-							daoM.deleteMeeting(m);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
 					
 					response = new ChangeTimeslotAvailabilityResponse(id, date, startTime, false, 200);
 					responseJson.put("body", new Gson().toJson(response));

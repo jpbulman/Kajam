@@ -160,26 +160,32 @@ public class GetTimeSlotParticipant implements RequestStreamHandler{
 				respError += "No timeslot matches given parameters ";
 			}
 			
+			Meeting m;
+			try {
+				m = getMeeting(s.id);
+			}catch(Exception e) {
+				m = null;
+			}
+			
 			// compute proper response
 			if(respError.compareTo("") != 0) { // If there is an error in input
 				ErrorResponse resp = new ErrorResponse(respError, 400);
 				responseJson.put("body", new Gson().toJson(resp));
 			}else {
 				if(s.isFree == true) {
-					GetTimeslotParticipantResponse resp = new GetTimeslotParticipantResponse(id, date, startTime, false, true, "NONE", 200);
-					responseJson.put("body", new Gson().toJson(resp));
-				}else {
-					Meeting m;
-					try {
-						m = getMeeting(s.id);
-					}catch(Exception e) {
-						m = null;
-					}
 					if(m != null) {
 						GetTimeslotParticipantResponse resp = new GetTimeslotParticipantResponse(id, date, startTime, false, false, m.name, 200);
 						responseJson.put("body", new Gson().toJson(resp));
 					}else {
-						GetTimeslotParticipantResponse resp = new GetTimeslotParticipantResponse(id, date, startTime, true, false, "NONE", 200);
+						GetTimeslotParticipantResponse resp = new GetTimeslotParticipantResponse(id, date, startTime, false, true, "NONE", 200);
+						responseJson.put("body", new Gson().toJson(resp));
+					}
+				}else {
+					if(m != null) {
+						GetTimeslotParticipantResponse resp = new GetTimeslotParticipantResponse(id, date, startTime, true, false, m.name, 200);
+						responseJson.put("body", new Gson().toJson(resp));
+					}else {
+						GetTimeslotParticipantResponse resp = new GetTimeslotParticipantResponse(id, date, startTime, true, true, "NONE", 200);
 						responseJson.put("body", new Gson().toJson(resp));
 					}
 				}
