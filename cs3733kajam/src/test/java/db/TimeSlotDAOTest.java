@@ -55,8 +55,8 @@ public class TimeSlotDAOTest {
 		
 		try {
 			ArrayList<TimeSlot> timeSlots = td.getAllTimeSlots(UUID.fromString(
-					"9de8607b-c846-4207-92e6-b0d4a110fbad"));
-			assertEquals(timeSlots.size(), 20);
+					"7b01ba4d-8bfa-48ac-8b3a-f8b5b94b9aec"));
+			assertEquals(timeSlots.size(), 3);
 			
 		} catch(Exception e) {
 			fail ("didn't work:" + e.getMessage());
@@ -69,11 +69,11 @@ public class TimeSlotDAOTest {
 		
 		try {
 			TimeSlot t = td.getTimeSlotByDateTime(UUID.fromString(
-					"9de8607b-c846-4207-92e6-b0d4a110fbad"), LocalDate.of(2018, 12, 6),
-					LocalTime.of(14, 0));
-			assertEquals(t.scheduleID.toString(), "9de8607b-c846-4207-92e6-b0d4a110fbad");
-			assertEquals(t.date,LocalDate.of(2018, 12, 6));
-			assertEquals(t.startTime,LocalTime.of(14, 0));
+					"7b01ba4d-8bfa-48ac-8b3a-f8b5b94b9aec"), LocalDate.of(2018, 12, 4),
+					LocalTime.of(1, 0));
+			assertEquals(t.scheduleID.toString(), "7b01ba4d-8bfa-48ac-8b3a-f8b5b94b9aec");
+			assertEquals(t.date,LocalDate.of(2018, 12, 4));
+			assertEquals(t.startTime,LocalTime.of(1, 0));
 		} catch(Exception e) {
 			fail ("didn't work:" + e.getMessage());
 		}

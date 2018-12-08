@@ -66,7 +66,7 @@ public class DeleteScheduleTest {
 		}
         
         String SAMPLE_INPUT_STRING3 = "{\n" + 
-        		"    \"id\": \""+id+"\"\n}";
+        		"    \"arg1\": \""+id+"\"\n}";
 
         InputStream input = new ByteArrayInputStream(SAMPLE_INPUT_STRING3.getBytes());;
         OutputStream output = new ByteArrayOutputStream();
