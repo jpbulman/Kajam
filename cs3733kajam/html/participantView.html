@@ -46,10 +46,19 @@
         <script>
             function makeTextField(){
               document.getElementById("11").type='text'
-              console.log(document.getElementById("11"))
+              // document.getElementById("11").onkeypress='changeBack(event)'
             } 
+
+            function changeBack(event){
+              var x = event.which || event.keyCode;
+              console.log(x==13)
+              if(x==13){
+                document.getElementById("11").type="button";
+                console.log(document.getElementById("11"))
+              }
+            }
         </script>
-        <td><button id="11" onclick="makeTextField()" type="button">Book Meeting</button></td>
+        <td><input onkeypress="changeBack(event)" id="11" onclick="makeTextField()" type="button" value="Book Meeting"></button></td>
         <td><button type="button">Book Meeting</button></td>
         <td bgcolor="#FFA500"></td>
       </tr>
