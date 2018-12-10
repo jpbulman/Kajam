@@ -199,9 +199,6 @@ function updateView(json){
         for(var a=1;a<=5;a++){
             var cell = row.insertCell(a);
             if(a==1 && i==1){
-                cell.setAttribute("data-starterHour",currHour);
-                cell.setAttribute("data-starterMinute",currMinuteStr)
-                cell.setAttribute("data-DOW",a);
 
                 var dateInformation = getCurrColDateInfo(a);
 
@@ -223,14 +220,23 @@ function updateView(json){
                     if(tsvReq.readyState==XMLHttpRequest.DONE){
                         var body = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
                         var ts = body["ts"]
+                        console.log(ts)
 
                         var row=1;
                         var col=1;
 
                         var table = document.getElementById("scheduleTable")
+                        console.log(ts)
 
                         for(var k=0;k<ts.length;k++){
+                            // console.log(ts.length)
                             var currentCell = table.rows[row].cells[col];
+                            currentCell.setAttribute("data-year",ts[k]["date"]["year"])
+                            currentCell.setAttribute("data-month",ts[k]["date"]["month"])
+                            currentCell.setAttribute("data-dayOfMonth",ts[k]["date"]["day"])
+                            currentCell.setAttribute("data-hour",ts[k]["startTime"]["hour"])
+                            currentCell.setAttribute("data-minute",ts[k]["startTime"]["minute"])
+                            currentCell.setAttribute("data-isFree",ts[k]["isFree"])
 
                             if(ts[k]["isFree"]){
                                 currentCell.innerHTML="Open";
@@ -245,6 +251,33 @@ function updateView(json){
                                     this.classList.remove("openTS");
                                     this.classList.add("closedTS");
                                     this.innerHTML = "Closed";
+
+                                    //id, year,m day,h,m,avail
+
+                                    var changeAvailReq = new XMLHttpRequest();
+                                    var availURL = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/timeslotavailability"
+                                    changeAvailReq.open("POST",availURL,true);
+
+                                    sender = {}
+                                    sender["arg1"] = scheduleID;
+                                    sender["arg2"] = this.getAttribute("data-year")
+                                    sender["arg3"] = this.getAttribute("data-month")
+                                    sender["arg4"] = this.getAttribute("data-dayOfMonth")
+                                    sender["arg5"] = this.getAttribute("data-hour")
+                                    sender["arg6"] = this.getAttribute("data-minute")
+                                    sender["arg7"] = (this.getAttribute("data-isFree")) ? "unavailable":"available";
+
+                                    changeAvailReq.send(JSON.stringify(sender));
+                                    console.log(JSON.stringify(sender));
+                                    changeAvailReq.onloadend = function(){
+
+                                        if(changeAvailReq.readyState==XMLHttpRequest.DONE){
+                                            console.log("Done")
+                                            console.log(changeAvailReq.responseText)
+                                        }
+
+                                    }
+
                                 }
                                 else if(this.innerHTML=="Closed"){
                                     this.classList.remove("closedTS");
@@ -255,12 +288,12 @@ function updateView(json){
                                     //Alert to confirm to cancel a meeting
                                 }
                             }
-
-                            if(col%5==0){
-                                col=0;
-                                row++;
+                            // console.log(row,col)
+                            if(row%(ts.length/5)==0){
+                                row=0;
+                                col+=1;
                             }
-                            col++;
+                            row++;
                         }
 
                     }

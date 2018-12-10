@@ -45,15 +45,15 @@ for(var k=0;k<setOfParams.length;k++){
 
 getBackParameters = {}
 
-getUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleid"
+getUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleid/participant"
 xhr = new XMLHttpRequest();
 xhr.open("POST",getUrl,true);
 
 sender = {}
 theScheduleID = urlParameters["id"];
 sender["arg1"] = urlParameters["id"];
-sender["arg2"] = urlParameters["secretCode"];
 sender = JSON.stringify(sender);
+console.log(sender)
 
 xhr.send(sender);
 
@@ -73,7 +73,7 @@ xhr.onloadend = function(){
         updateView(getBackParameters);
     }
     else{
-        console.log("POST request failed, either a connectiivity issue or a problem with the server");
+        console.log("POST request failed, either a connectivity issue or a problem with the server");
     }
 
 };

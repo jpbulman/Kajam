@@ -8,10 +8,31 @@
 </head>
 <body>
 
-<h1 id="schName">Participant View</h1>
+<script src="participantView.js"></script>
+
+<div style="float: left;width: 74%;margin-right: 1em;">
+  <h1 style="text-align: center" id="schName">Participant View</h1>
+  
+  <table id="scheduleTable" class="table table-bordered">
+      <thead>
+          <tr>
+          <th scope="col">Time</th>
+          <th id="Mon" scope="col"><button type="button"><</button> Mon<a id="monDate">11/26/18></a></th>
+          <th id="Tue" scope="col">Tue</br>11/27/18</th>
+          <th id="Wed" scope="col">Wed</br>11/28/18</th>
+          <th id="Thu" scope="col">Thu</br>11/29/18</th>
+          <th id="Fri" scope="col">Fri   <button type="button">></button></br>11/20/18</th>
+          </tr>
+      </thead>
+      <tbody id="tableBody">
+      </tbody>
+  </table>
+</div>
+
+<!-- <h1 id="schName">Participant View</h1> -->
 
 <!-- <div class="tableContainer"> -->
-<table id="scheduleTable">
+<!-- <table id="scheduleTable">
     <thead>
       <tr>
         <th scope="col">Time</th>
@@ -64,7 +85,7 @@
       </tr>
     </tbody>
 </table>
-<!-- </div> -->
+</div> -->
 
 <div class="functionContainer">
   <h1>Delete A Meeting</h1>
@@ -141,8 +162,6 @@
   <h1>Your secret code is: 1729</h1>
 
 </div>
-
-<script src="participantView.js"></script>
 
 </body>
 </html>

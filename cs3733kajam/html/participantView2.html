@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Participant View</title>
+    <link rel="stylesheet" href="participantView.css">
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="-1">
+</head>
+<body>
+
+<div style="float: left;width: 74%;margin-right: 1em;">
+<h1 style="text-align: center" id="schName">Participant View</h1>
+
+<!-- <div class="tableContainer"> -->
+<table id="scheduleTable" class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col"><button type="button"><</button> Mon<a id="monDate">11/26/18></a></th>
+        <th scope="col">Tue</br>11/27/18</th>
+        <th scope="col">Wed</br>11/28/18</th>
+        <th scope="col">Thu</br>11/29/18</th>
+        <th scope="col">Fri   <button type="button">></button></br>11/20/18</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody">
+    </tbody>
+</table>
+</div>
+<!-- </div> -->
+
+<div class="functionContainer">
+  <h1 style="text-decoration:underline">Delete A Meeting</h1>
+
+  <form>
+    <div>
+      <input type="text" placeholder="Enter your secret code">
+    </div>
+
+    <div>
+      <select>
+        <option selected disabled hidden>Choose A Meeting</option>
+      </select>
+    </div>
+
+    <input type="button" value="Cancel">
+  </form>
+
+  <h1 style="text-decoration: underline">Search Open Time Slots</h1>
+
+  <form>
+
+    <!-- <div>
+      <input type="text" placeholder="🔎">
+    </div> -->
+    <select>
+      <option disabled selected hidden>Month</option>
+    </select>
+
+    <select>
+      <option disabled selected hidden>Year</option>
+    </select>
+
+    <select>
+        <option disabled selected hidden>Day of week</option>
+    </select>
+
+    <select>
+      <option disabled selected hidden>Day of month</option>
+    </select>
+
+    <select>
+        <option disabled selected hidden>Time slot</option>
+    </select>
+
+    <div>
+      <input type="button" value="Go">
+    </div>
+
+  </form>
+
+  <div></br></div>
+
+  <div class="filteredResults">
+    <h1 class="filteredResultsEntry">Timeslot 1</h1>
+    <h1 class="filteredResultsEntry">Timeslot 2</h1>
+    <h1 class="filteredResultsEntry">Timeslot 3</h1>
+    <h1 class="filteredResultsEntry">Timeslot 4</h1>
+    <h1 class="filteredResultsEntry">Timeslot 5</h1>
+  </div>
+
+  <div></br></div>
+
+  <div>
+    <input type="text" id="meetingName" placeholder="Meeting Name"></br>
+  </div>
+
+  <div></br></div>
+
+  <div>
+    <input style="margin-bottom: .5em;" class="set" type="button" value="Book Meeting">
+  </div>
+
+  <h1>Your secret code is: 1729</h1>
+
+</div>
+
+<script src="participantView.js"></script>
+
+</body>
+</html>
