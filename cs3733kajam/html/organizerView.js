@@ -28,8 +28,14 @@ function fillInWeek(mon){
 }
 
 function getMonday(currDate){
-    while(getWeekDay(currDate.toDateString())!="Mon"){
-        currDate.setDate(currDate.getDate()-1);
+    if(getWeekDay(currDate.toDateString())=="Sat" || getWeekDay(currDate.toDateString())=="Sun"){
+        while(getWeekDay(currDate.toDateString())!="Mon"){
+            currDate.setDate(currDate.getDate()+1);
+        }
+    }else{
+        while(getWeekDay(currDate.toDateString())!="Mon"){
+            currDate.setDate(currDate.getDate()-1);
+        }
     }
     return currDate;
 }
@@ -200,7 +206,7 @@ function updateView(json){
                 var dateInformation = getCurrColDateInfo(a);
 
                 var tsvReq = new XMLHttpRequest();
-                var posterUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleView/timeslotview";
+                var posterUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleView";
                 tsvReq.open("POST",posterUrl,true);
             
                 sender = {}
@@ -208,8 +214,8 @@ function updateView(json){
                 sender["arg2"] = dateInformation["year"].toString();
                 sender["arg3"] = (dateInformation["month"]+1).toString();
                 sender["arg4"] = dateInformation["day"].toString();
-                sender["arg5"] = currHour.toString();
-                sender["arg6"] = currMinute.toString();
+
+                console.log(JSON.stringify(sender));
 
                 tsvReq.send(JSON.stringify(sender));
 

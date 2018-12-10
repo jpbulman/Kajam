@@ -20,6 +20,8 @@ import org.json.simple.parser.ParseException;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.gson.Gson;
 
 import db.ScheduleDAO;
@@ -32,10 +34,13 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 
 	public LambdaLogger logger = null;
 	
+	// handle to our s3 storage
+	private AmazonS3 s3 = AmazonS3ClientBuilder.standard()
+			.withRegion("us-east-2").build();
+	
 	//TODO: add lines about s3 storage and RDS?
 	
 	TimeSlot getTimeSlot(UUID id, LocalDate date, LocalTime startTime) throws Exception{
-		if (logger != null) { logger.log("in getSchedule"); }
 		TimeSlotDAO dao = new TimeSlotDAO();
 		
 		// check if present 
@@ -62,13 +67,29 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 	
 	
 	ArrayList<TimeSlot> getTimeSlotsByDate(UUID id, LocalDate date, LocalTime startTime, LocalTime endTime, int duration) throws Exception{
+		if (logger != null) { logger.log("in getTimeSlotsByDate"); }
 		ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
 		LocalTime currentTime = startTime;
+		if (logger != null) { 
+			logger.log("currentTime " + currentTime.toString()); 
+			logger.log("startTime " + startTime.toString());
+			logger.log("endTime " + endTime.toString());
+			logger.log("duration " + duration);
+			logger.log("date " + date);
+		}
 		while(currentTime.isBefore(endTime)) {
-			ts.add(getTimeSlot(id, date, currentTime));
-			currentTime.plusMinutes(duration);
+			TimeSlot s = getTimeSlot(id, date, currentTime);
+			if(s != null) {
+				ts.add(s);
+			}
+			
+			if (logger != null) { 
+				logger.log("timeslot " + s.toString()); 
+			}
+			currentTime = currentTime.plusMinutes(duration);
 		}
 		
+		if (logger != null) { logger.log("at end of getTimeSlotsByDate"); }
 		return ts;
 	}
 	
@@ -155,15 +176,18 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 				respError += "Invalid date ";
 			}
 			
+			boolean flag = false; //invalid date (date is either before/after start/end date)
 			if(s != null) {
-				if(s.startDate.compareTo(dayInWeek) > 0) {
-					respError += "Invalid date (date is before start date) ";
+				if(s.startDate.isAfter(dayInWeek)) {
+					flag = true;
 				}
 				
-				if(s.endDate.compareTo(dayInWeek) < 0) {
-					respError += "Invalid date (date is after end date) ";
+				if(s.endDate.isBefore(dayInWeek)) {
+					flag = true;
 				}
 			}
+			
+			logger.log("flag " + flag);
 				
 			DayOfWeek d = null;
 			LocalDate mon = null;
@@ -220,20 +244,46 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 				e.printStackTrace();
 			}
 			
+			
 			ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
 			
 			try {
-				ts.addAll(getTimeSlotsByDate(s.id, mon, startHour, endHour, duration));
-				ts.addAll(getTimeSlotsByDate(s.id, tues, startHour, endHour, duration));
-				ts.addAll(getTimeSlotsByDate(s.id, wed, startHour, endHour, duration));
-				ts.addAll(getTimeSlotsByDate(s.id, thur, startHour, endHour, duration));
-				ts.addAll(getTimeSlotsByDate(s.id, fri, startHour, endHour, duration));
+				if(flag) {
+					if(s.startDate.isBefore(mon) && s.endDate.isAfter(mon)) {
+						ts.addAll(getTimeSlotsByDate(s.id, mon, startHour, endHour, duration));
+					}
+					
+					if(s.startDate.isBefore(tues) && s.endDate.isAfter(tues)) {
+						ts.addAll(getTimeSlotsByDate(s.id, tues, startHour, endHour, duration));
+					}
+					
+					if(s.startDate.isBefore(wed) && s.endDate.isAfter(wed)) {
+						ts.addAll(getTimeSlotsByDate(s.id, wed, startHour, endHour, duration));
+					}
+					
+					if(s.startDate.isBefore(thur) && s.endDate.isAfter(thur)) {
+						ts.addAll(getTimeSlotsByDate(s.id, thur, startHour, endHour, duration));
+					}
+					
+					if(s.startDate.isBefore(fri) && s.endDate.isAfter(fri)) {
+						ts.addAll(getTimeSlotsByDate(s.id, fri, startHour, endHour, duration));
+					}
+				}else {
+					ts.addAll(getTimeSlotsByDate(s.id, mon, startHour, endHour, duration));
+					logger.log("Monday timeslots " + ts.toString());
+					ts.addAll(getTimeSlotsByDate(s.id, tues, startHour, endHour, duration));
+					logger.log("Tuesday timeslots " + ts.toString());
+					ts.addAll(getTimeSlotsByDate(s.id, wed, startHour, endHour, duration));
+					logger.log("Wednesday timeslots " + ts.toString());
+					ts.addAll(getTimeSlotsByDate(s.id, thur, startHour, endHour, duration));
+					logger.log("Thursday timeslots " + ts.toString());
+					ts.addAll(getTimeSlotsByDate(s.id, fri, startHour, endHour, duration));
+					logger.log("Friday timeslots " + ts.toString());
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				respError += "Errored while collecting timeslots ";
 			}
-			
-			System.out.println(ts.toString());
 			
 			
 			
