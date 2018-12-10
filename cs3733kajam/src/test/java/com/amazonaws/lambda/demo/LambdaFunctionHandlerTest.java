@@ -31,6 +31,7 @@ public class LambdaFunctionHandlerTest {
     		"    \"arg10\": \"15\"\n" + 
     		"}";
     
+    
     Context createContext(String apiCall) {
         TestContext ctx = new TestContext();
         ctx.setFunctionName(apiCall);
@@ -58,6 +59,21 @@ public class LambdaFunctionHandlerTest {
         LambdaFunctionHandler handler = new LambdaFunctionHandler();
 
         InputStream input = new ByteArrayInputStream(SAMPLE_INPUT_STRING2.getBytes());;
+        OutputStream output = new ByteArrayOutputStream();
+
+        handler.handleRequest(input, output, createContext("sample"));
+
+        String sampleOutputString = output.toString();
+        Assert.assertTrue(sampleOutputString.contains("httpCode\\\":200"));
+        System.out.println(sampleOutputString);
+    }
+    
+    //Tests with valid inputs
+    @Test
+    public void testScheduleView() throws IOException {
+        ScheduleViewHandler handler = new ScheduleViewHandler();
+
+        InputStream input = new ByteArrayInputStream(SAMPLE_INPUT_STRING3.getBytes());;
         OutputStream output = new ByteArrayOutputStream();
 
         handler.handleRequest(input, output, createContext("sample"));

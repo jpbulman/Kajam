@@ -22,6 +22,7 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
+import db.ScheduleDAO;
 import db.TimeSlotDAO;
 import model.Schedule;
 import model.TimeSlot;
@@ -45,6 +46,20 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 			return exist;
 		}
 	}
+	
+	Schedule getSchedule(UUID id) throws Exception{
+		if (logger != null) { logger.log("in getSchedule"); }
+		ScheduleDAO dao = new ScheduleDAO();
+		
+		// check if present
+		Schedule exist = dao.getSchedule(id);
+		if (exist == null) {
+			throw new NullPointerException();
+		} else {
+			return exist;
+		}
+	}
+	
 	
 	ArrayList<TimeSlot> getTimeSlotsByDate(UUID id, LocalDate date, LocalTime startTime, LocalTime endTime, int duration) throws Exception{
 		ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
@@ -107,11 +122,16 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 			logger.log(req.toString());
 			
 			String respError = "";
+			int duration = 0;
+			LocalTime startHour = LocalTime.now();
+			LocalTime endHour = LocalTime.now();
 			
-			GetScheduleHandler handler = new GetScheduleHandler();
 			Schedule s;
 			try {
-				s = handler.getSchedule(UUID.fromString(req.arg1));
+				s = getSchedule(UUID.fromString(req.arg1));
+				duration = s.duration;
+				startHour = s.startTime;
+				endHour = s.endTime;
 			} catch (Exception e) {
 				s = null;
 				respError = "Invalid ID ";
@@ -201,9 +221,6 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 			}
 			
 			ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
-			int duration = s.duration;
-			LocalTime startHour = s.startTime;
-			LocalTime endHour = s.endTime;
 			
 			try {
 				ts.addAll(getTimeSlotsByDate(s.id, mon, startHour, endHour, duration));
@@ -215,6 +232,8 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 				e.printStackTrace();
 				respError += "Errored while collecting timeslots ";
 			}
+			
+			System.out.println(ts.toString());
 			
 			
 			
