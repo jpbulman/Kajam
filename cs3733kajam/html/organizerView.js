@@ -221,10 +221,52 @@ function updateView(json){
 
                 tsvReq.onloadend = function(){
                     if(tsvReq.readyState==XMLHttpRequest.DONE){
-                        console.log(JSON.parse(tsvReq.responseText)["body"])
+                        var body = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
+                        var ts = body["ts"]
+
+                        var row=1;
+                        var col=1;
+
+                        var table = document.getElementById("scheduleTable")
+
+                        for(var k=0;k<ts.length;k++){
+                            var currentCell = table.rows[row].cells[col];
+
+                            if(ts[k]["isFree"]){
+                                currentCell.innerHTML="Open";
+                                currentCell.classList.add("openTS")
+                            }
+                            else{
+
+                            }
+
+                            currentCell.onclick = function (){
+                                if(this.innerHTML=="Open"){
+                                    this.classList.remove("openTS");
+                                    this.classList.add("closedTS");
+                                    this.innerHTML = "Closed";
+                                }
+                                else if(this.innerHTML=="Closed"){
+                                    this.classList.remove("closedTS");
+                                    this.classList.add("openTS");
+                                    this.innerHTML = "Open";
+                                }
+                                else{
+                                    //Alert to confirm to cancel a meeting
+                                }
+                            }
+
+                            if(col%5==0){
+                                col=0;
+                                row++;
+                            }
+                            col++;
+                        }
+
                     }
                 }
             }
+        }
 
             //     if(tsvReq.readyState == XMLHttpRequest.DONE){
             //         console.log("Done")
@@ -342,7 +384,6 @@ function updateView(json){
             // else{
 
             // }
-        }
 
         if(currMinute+duration == 60){
             currMinute = 0;
