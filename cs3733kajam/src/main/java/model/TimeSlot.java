@@ -11,6 +11,7 @@ public class TimeSlot {
 	public LocalTime endTime;
 	public LocalDate date;
 	public boolean isFree;
+	public boolean hasMeeting;
 	public Meeting meeting;
 	
 	// Constructor to auto generate ID
@@ -22,7 +23,8 @@ public class TimeSlot {
 		this.endTime = endTime;
 		this.date = date;
 		this.isFree = isFree;
-		this.meeting = null;
+		this.hasMeeting = false;
+		this.meeting = new Meeting();
 	}
 	
 	// Constructor if ID is given
@@ -34,12 +36,14 @@ public class TimeSlot {
 		this.endTime = endTime;
 		this.date = date;
 		this.isFree = isFree;
+		this.hasMeeting = false;
 		this.meeting = new Meeting();
 	}
 
+	@Override
 	public String toString() {
 		return "TimeSlot [id=" + id + ", scheduleID=" + scheduleID + ", startTime=" + startTime + ", endTime=" + endTime
-				+ ", date=" + date + ", isFree=" + isFree + ", meeting=" + meeting + "]";
+				+ ", date=" + date + ", isFree=" + isFree + ", hasMeeting=" + hasMeeting + ", meeting=" + meeting + "]";
 	}
 	
 	
