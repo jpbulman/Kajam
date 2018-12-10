@@ -235,23 +235,23 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 			ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
 			
 			try {
-				if(s.startDate.isBefore(mon) && s.endDate.isAfter(mon)) {
+				if(s.startDate.isBefore(mon.minusDays(1)) && s.endDate.isAfter(mon.plusDays(1))) {
 					ts.addAll(getTimeSlotsByDate(s.id, mon, startHour, endHour, duration));
 				}
 				
-				if(s.startDate.isBefore(tues) && s.endDate.isAfter(tues)) {
+				if(s.startDate.isBefore(tues.minusDays(1)) && s.endDate.isAfter(tues.plusDays(1))) {
 					ts.addAll(getTimeSlotsByDate(s.id, tues, startHour, endHour, duration));
 				}
 				
-				if(s.startDate.isBefore(wed) && s.endDate.isAfter(wed)) {
+				if(s.startDate.isBefore(wed.minusDays(1)) && s.endDate.isAfter(wed.plusDays(1))) {
 					ts.addAll(getTimeSlotsByDate(s.id, wed, startHour, endHour, duration));
 				}
 				
-				if(s.startDate.isBefore(thur) && s.endDate.isAfter(thur)) {
+				if(s.startDate.isBefore(thur.minusDays(1)) && s.endDate.isAfter(thur.plusDays(1))) {
 					ts.addAll(getTimeSlotsByDate(s.id, thur, startHour, endHour, duration));
 				}
 				
-				if(s.startDate.isBefore(fri) && s.endDate.isAfter(fri)) {
+				if(s.startDate.isBefore(fri.minusDays(1)) && s.endDate.isAfter(fri.plusDays(1))) {
 					ts.addAll(getTimeSlotsByDate(s.id, fri, startHour, endHour, duration));
 				}
 			} catch (Exception e) {
