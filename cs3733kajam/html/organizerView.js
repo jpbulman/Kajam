@@ -1,6 +1,6 @@
 var url = window.location.href;
 var setOfParams = "";
-var q = "";
+// var q = "";
 
 var theScheduleID = "";
 
@@ -191,96 +191,102 @@ function updateView(json){
 
         // Populate rest of the row
         for(var a=1;a<=5;a++){
-
             var cell = row.insertCell(a);
-            cell.setAttribute("data-starterHour",currHour);
-            cell.setAttribute("data-starterMinute",currMinuteStr)
-            cell.setAttribute("data-DOW",a);
+            if(a==1 && i==1){
+                cell.setAttribute("data-starterHour",currHour);
+                cell.setAttribute("data-starterMinute",currMinuteStr)
+                cell.setAttribute("data-DOW",a);
 
-            var dateInformation = getCurrColDateInfo(a);
+                var dateInformation = getCurrColDateInfo(a);
 
-            var tsvReq = new XMLHttpRequest();
-            var posterUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleView/timeslotview";
-            tsvReq.open("POST",posterUrl,true);
-        
-            sender = {}
-            sender["arg1"] = scheduleID.toString();
-            sender["arg2"] = dateInformation["year"].toString();
-            sender["arg3"] = (dateInformation["month"]+1).toString();
-            sender["arg4"] = dateInformation["day"].toString();
-            sender["arg5"] = currHour.toString();
-            sender["arg6"] = currMinute.toString();
-        
-            tsvReq.send(JSON.stringify(sender));
-            // console.log(JSON.stringify(sender))
-        
-            tsvReq.onloadend = function(){
-                if(tsvReq.readyState == XMLHttpRequest.DONE){
-                    console.log(1)
-                    var parsedInfo = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
-        
-                    if(parsedInfo["httpCode"]==400){
-                        console.log("INCORRECT:")
-                        console.log(sender)
-                    }
-                    else{
-                        // console.log(parsedInfo)
-                        if(parsedInfo["free"]){
+                var tsvReq = new XMLHttpRequest();
+                var posterUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleView/timeslotview";
+                tsvReq.open("POST",posterUrl,true);
+            
+                sender = {}
+                sender["arg1"] = scheduleID.toString();
+                sender["arg2"] = dateInformation["year"].toString();
+                sender["arg3"] = (dateInformation["month"]+1).toString();
+                sender["arg4"] = dateInformation["day"].toString();
+                sender["arg5"] = currHour.toString();
+                sender["arg6"] = currMinute.toString();
 
-                            var tb = document.getElementById("scheduleTable")
-                            var toModifyCell;
+                tsvReq.send(JSON.stringify(sender));
 
-                            for(var rower = 0;rower<tb.rows.length;rower++){
-                                for(var coler = 0;coler<tb.rows[rower].cells.length;coler++){
-                                    var currCell = tb.rows[rower].cells[coler];
-
-                                    var dayOfTheWeek = currCell.getAttribute("data-DOW");
-                                    var cellHour = currCell.getAttribute("data-starterHour");
-                                    var cellMin = currCell.getAttribute("data-starterMinute");
-
-                                    var dateInf = new Date(parsedInfo["date"]["year"],parsedInfo["date"]["month"]-1,parsedInfo["date"]["day"])
-                                    var gottenDow = dateInf.getDay();
-
-                                    if(cellHour==parsedInfo["time"]["hour"]&&cellMin==parsedInfo["time"]["minute"]){
-                                        // console.log(gottenDow)
-                                    }
-
-                                    // console.log(dayOfTheWeek,cellHour,cellMin)
-
-                                }
-                            }
-
-                            // console.log("here")
-                            // cell.classList.add("openTS");
-                            // cell.innerHTML = "1";
-                            // getCurrColDateInfo(1)
-                            // cell.onclick = function (){
-                            //     if(this.innerHTML=="Open"){
-                            //         this.classList.remove("openTS");
-                            //         this.classList.add("closedTS");
-                            //         this.innerHTML = "Closed";
-                            //     }
-                            //     else if(this.innerHTML=="Closed"){
-                            //         this.classList.remove("closedTS");
-                            //         this.classList.add("openTS");
-                            //         this.innerHTML = "Open";
-                            //     }
-                            //     else{
-                            //         //Alert to confirm to cancel a meeting
-                            //     }
-                            // }
-                        }
-                        else{
-
-                        }
-
+                tsvReq.onloadend = function(){
+                    if(tsvReq.readyState==XMLHttpRequest.DONE){
+                        console.log(JSON.parse(tsvReq.responseText)["body"])
                     }
                 }
-                else{
-                    console.log(2)
-                }
+            }
+
+            //     if(tsvReq.readyState == XMLHttpRequest.DONE){
+            //         console.log("Done")
+            //         var parsedInfo = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
         
-            };
+            //         if(parsedInfo["httpCode"]==400){
+            //             console.log("INCORRECT:")
+            //             console.log(sender)
+            //         }
+            //         else{
+            //             // console.log(parsedInfo)
+            //             if(parsedInfo["free"]){
+
+            //                 var tb = document.getElementById("scheduleTable")
+            //                 var toModifyCell;
+
+            //                 for(var rower = 0;rower<tb.rows.length;rower++){
+            //                     for(var coler = 0;coler<tb.rows[rower].cells.length;coler++){
+            //                         var currCell = tb.rows[rower].cells[coler];
+
+            //                         var dayOfTheWeek = currCell.getAttribute("data-DOW");
+            //                         var cellHour = currCell.getAttribute("data-starterHour");
+            //                         var cellMin = currCell.getAttribute("data-starterMinute");
+
+            //                         var dateInf = new Date(parsedInfo["date"]["year"],parsedInfo["date"]["month"]-1,parsedInfo["date"]["day"])
+            //                         var gottenDow = dateInf.getDay();
+
+            //                         if(cellHour==parsedInfo["time"]["hour"]&&cellMin==parsedInfo["time"]["minute"]){
+            //                             // console.log(gottenDow)
+            //                         }
+
+            //                         // console.log(dayOfTheWeek,cellHour,cellMin)
+
+            //                     }
+            //                 }
+
+            //                 // console.log("here")
+            //                 // cell.classList.add("openTS");
+            //                 // cell.innerHTML = "1";
+            //                 // getCurrColDateInfo(1)
+            //                 // cell.onclick = function (){
+            //                 //     if(this.innerHTML=="Open"){
+            //                 //         this.classList.remove("openTS");
+            //                 //         this.classList.add("closedTS");
+            //                 //         this.innerHTML = "Closed";
+            //                 //     }
+            //                 //     else if(this.innerHTML=="Closed"){
+            //                 //         this.classList.remove("closedTS");
+            //                 //         this.classList.add("openTS");
+            //                 //         this.innerHTML = "Open";
+            //                 //     }
+            //                 //     else{
+            //                 //         //Alert to confirm to cancel a meeting
+            //                 //     }
+            //                 // }
+            //             }
+            //             else{
+
+            //             }
+
+            //         }
+            //     }
+            //     else{
+            //         // logged[logged.length].push(2)
+            //         // console.log("Not done")
+            //     }
+        
+            // };
 
             // if(viewInfo!=false){
             //     console.log("Here!")
@@ -355,7 +361,7 @@ for(var i=0;i<url.length;i++){
     }
 }
 
-q=setOfParams;
+// q=setOfParams;
 
 urlParameters = {}
 
