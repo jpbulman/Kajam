@@ -14,8 +14,9 @@ public class ScheduleViewResponse {
 	LocalDate wed;
 	LocalDate thurs;
 	LocalDate fri;
-	int httpCode;
 	ArrayList<TimeSlot> ts;
+	int httpCode;
+
 	
 	public ScheduleViewResponse(UUID id, LocalDate Mon, LocalDate Tues, LocalDate Wed, LocalDate Thurs, LocalDate Fri, ArrayList<TimeSlot> ts, int code) {
 		this.id = id;

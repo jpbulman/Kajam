@@ -28,8 +28,14 @@ function fillInWeek(mon){
 }
 
 function getMonday(currDate){
-    while(getWeekDay(currDate.toDateString())!="Mon"){
-        currDate.setDate(currDate.getDate()-1);
+    if(getWeekDay(currDate.toDateString())=="Sat" || getWeekDay(currDate.toDateString())=="Sun"){
+        while(getWeekDay(currDate.toDateString())!="Mon"){
+            currDate.setDate(currDate.getDate()+1);
+        }
+    }else{
+        while(getWeekDay(currDate.toDateString())!="Mon"){
+            currDate.setDate(currDate.getDate()-1);
+        }
     }
     return currDate;
 }

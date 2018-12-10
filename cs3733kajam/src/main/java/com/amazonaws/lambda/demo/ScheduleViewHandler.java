@@ -157,14 +157,16 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 			
 			boolean flag = false; //invalid date (date is either before/after start/end date)
 			if(s != null) {
-				if(s.startDate.compareTo(dayInWeek) > 0) {
+				if(s.startDate.isAfter(dayInWeek)) {
 					flag = true;
 				}
 				
-				if(s.endDate.compareTo(dayInWeek) < 0) {
+				if(s.endDate.isBefore(dayInWeek)) {
 					flag = true;
 				}
 			}
+			
+			logger.log("flag " + flag);
 				
 			DayOfWeek d = null;
 			LocalDate mon = null;
@@ -247,17 +249,20 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 					}
 				}else {
 					ts.addAll(getTimeSlotsByDate(s.id, mon, startHour, endHour, duration));
+					logger.log("Monday timeslots " + ts.toString());
 					ts.addAll(getTimeSlotsByDate(s.id, tues, startHour, endHour, duration));
+					logger.log("Tuesday timeslots " + ts.toString());
 					ts.addAll(getTimeSlotsByDate(s.id, wed, startHour, endHour, duration));
+					logger.log("Wednesday timeslots " + ts.toString());
 					ts.addAll(getTimeSlotsByDate(s.id, thur, startHour, endHour, duration));
+					logger.log("Thursday timeslots " + ts.toString());
 					ts.addAll(getTimeSlotsByDate(s.id, fri, startHour, endHour, duration));
+					logger.log("Friday timeslots " + ts.toString());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				respError += "Errored while collecting timeslots ";
 			}
-			
-			System.out.println(ts.toString());
 			
 			
 			
