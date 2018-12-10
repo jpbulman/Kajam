@@ -34,7 +34,7 @@ public class TimeSlot {
 		this.endTime = endTime;
 		this.date = date;
 		this.isFree = isFree;
-		this.meeting = null;
+		this.meeting = new Meeting();
 	}
 
 	public String toString() {
