@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +22,9 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
+import db.TimeSlotDAO;
 import model.Schedule;
+import model.TimeSlot;
 
 
 public class ScheduleViewHandler implements RequestStreamHandler{
@@ -28,6 +32,30 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 	public LambdaLogger logger = null;
 	
 	//TODO: add lines about s3 storage and RDS?
+	
+	TimeSlot getTimeSlot(UUID id, LocalDate date, LocalTime startTime) throws Exception{
+		if (logger != null) { logger.log("in getSchedule"); }
+		TimeSlotDAO dao = new TimeSlotDAO();
+		
+		// check if present 
+		TimeSlot exist = dao.getTimeSlotByDateTime(id, date, startTime);
+		if (exist == null) {
+			throw new NullPointerException();
+		} else {
+			return exist;
+		}
+	}
+	
+	ArrayList<TimeSlot> getTimeSlotsByDate(UUID id, LocalDate date, LocalTime startTime, LocalTime endTime, int duration) throws Exception{
+		ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
+		LocalTime currentTime = startTime;
+		while(currentTime.isBefore(endTime)) {
+			ts.add(getTimeSlot(id, date, currentTime));
+			currentTime.plusMinutes(duration);
+		}
+		
+		return ts;
+	}
 	
     @Override
     public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
@@ -68,7 +96,7 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new ScheduleViewResponse(UUID.randomUUID(), LocalDate.now(), LocalDate.now(), LocalDate.now(), LocalDate.now(), LocalDate.now(), 400);  // unable to process input
+			response = new ScheduleViewResponse(UUID.randomUUID(), LocalDate.now(), LocalDate.now(), LocalDate.now(), LocalDate.now(), LocalDate.now(), null, 400);  // unable to process input
 	        responseJson.put("body", new Gson().toJson(response));
 	        processed = true;
 	        body = null;
@@ -172,8 +200,25 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 				//day in week is null
 			}
 			
+			ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
+			int duration = s.duration;
+			LocalTime startHour = s.startTime;
+			LocalTime endHour = s.endTime;
+			
+			try {
+				ts.addAll(getTimeSlotsByDate(s.id, mon, startHour, endHour, duration));
+				ts.addAll(getTimeSlotsByDate(s.id, tues, startHour, endHour, duration));
+				ts.addAll(getTimeSlotsByDate(s.id, wed, startHour, endHour, duration));
+				ts.addAll(getTimeSlotsByDate(s.id, thur, startHour, endHour, duration));
+				ts.addAll(getTimeSlotsByDate(s.id, fri, startHour, endHour, duration));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			
+			
 			if(respError.compareTo("")==0) {
-				ScheduleViewResponse resp = new ScheduleViewResponse(UUID.fromString(req.arg1), mon, tues, wed, thur, fri, 200);
+				ScheduleViewResponse resp = new ScheduleViewResponse(UUID.fromString(req.arg1), mon, tues, wed, thur, fri, ts, 200);
 				responseJson.put("body", new Gson().toJson(resp)); 
 			}else {
 				ErrorResponse resp = new ErrorResponse(respError, 400);
