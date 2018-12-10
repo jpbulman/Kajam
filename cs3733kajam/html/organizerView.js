@@ -5,18 +5,18 @@ var q = "";
 var theScheduleID = "";
 
 function getWeekDay(day){
-    return day.substring(0,3);
+    return day.toString().substring(0,3);
 }
 
 function fillInDate(dayOfWeek,actualDate){
     if(dayOfWeek=="Mon"){
-        document.getElementById(dayOfWeek).innerHTML = '<button onclick="getPrevWeek()" type="button"><</button> <a id="monDate">'+actualDate.toDateString()+'</a>';
+        document.getElementById(dayOfWeek).innerHTML = '<button onclick="getPrevWeek()" type="button"><</button> <a id="MonDate">'+actualDate.toDateString()+'</a>';
     }
     else if(dayOfWeek.toString()=="Fri"){
-        document.getElementById(dayOfWeek).innerHTML = actualDate.toDateString()+' <button onclick="getNextWeek()" type="button">></button>'; 
+        document.getElementById(dayOfWeek).innerHTML = '<a id="FriDate">'+actualDate.toDateString()+'</a>'+' <button onclick="getNextWeek()" type="button">></button>'; 
     }
     else{
-        document.getElementById(dayOfWeek).innerHTML = actualDate.toDateString()
+        document.getElementById(dayOfWeek).innerHTML = '<a id="'+getWeekDay(actualDate)+'Date">'+actualDate.toDateString()
     }
 }
 
@@ -35,20 +35,22 @@ function getMonday(currDate){
 }
 
 function getNextWeek(){
-    var mon = document.getElementById("monDate").innerHTML;
+    var mon = document.getElementById("MonDate").innerHTML;
     var d = new Date(mon);
     d.setDate(d.getDate()+7);
     fillInWeek(d);
 }
 
 function getPrevWeek(){
-    var mon = document.getElementById("monDate").innerHTML;
+    var mon = document.getElementById("MonDate").innerHTML;
     var d = new Date(mon);
     d.setDate(d.getDate()-7);
     fillInWeek(d);
 }
 
 function getTimeSlotView(schId,year,month,day,startHour,startMinute){
+    // console.log(schId,year,month,day,startHour,startMinute)
+
     var tsvReq = new XMLHttpRequest();
     var posterUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleView/timeslotview";
     tsvReq.open("POST",posterUrl,true);
@@ -62,21 +64,45 @@ function getTimeSlotView(schId,year,month,day,startHour,startMinute){
     sender["arg6"] = startMinute.toString();
 
     tsvReq.send(JSON.stringify(sender));
-    console.log(JSON.stringify(sender));
+    // console.log(JSON.stringify(sender));
+
+    var asdf = true;
+    httpCoder = 400;
 
     tsvReq.onloadend = function(){
 
         if(tsvReq.readyState == XMLHttpRequest.DONE){
-            console.log("getTimeSlotView invoked. Returned:");
-            var parsedInfo = JSON.parse(tsvReq.responseText);
-            console.log(parsedInfo["body"]);
+            // console.log("getTimeSlotView invoked. Returned:");
+            var parsedInfo = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
+            // console.log(parsedInfo["closed"])
+
+            // console.log(parsedInfo)
+
+            if(parsedInfo["httpCode"]==400){
+                // // return false;
+                // console.log(" no")
+                console.log("INCORRECT:"+ schId,year,month,day,startHour,startMinute)
+            }
+            else{
+                // console.log("CORRECT:"+ schId,year,month,day,startHour,startMinute)
+                // console.log(asdf)
+                httpCoder = parsedInfo["httpCode"];
+                asdf = parsedInfo;
+                console.log(asdf)
+                // return parsedInfo;
+            }
         }
         else{
-            console.log("ERROR: Could not get time slot view properly");
+
         }
 
     };
 
+    // while(httpCoder>300){
+        
+    // }
+
+    return asdf;
 }
 
 function deleteSchedule(){
@@ -103,7 +129,26 @@ function deleteSchedule(){
             console.log("ERROR: Could not delete schedule properly");
         }
     }
+}
 
+function getCurrColDateInfo(column){
+    var id = "";
+    switch(column){
+        case 1:id="Mon";break;
+        case 2:id="Tue";break;
+        case 3:id="Wed";break;
+        case 4:id="Thu";break;
+        case 5:id="Fri";break;
+    }
+    var x = document.getElementById(id+"Date").innerHTML;
+    var d = new Date(x);
+    
+    var information = {};
+    information["year"] = d.getFullYear();
+    information["month"] = d.getMonth();
+    information["day"] = d.getDate();
+
+    return information;
 }
 
 function updateView(json){
@@ -146,29 +191,145 @@ function updateView(json){
 
         // Populate rest of the row
         for(var a=1;a<=5;a++){
+
             var cell = row.insertCell(a);
-            if(a==1 && i==1){
-                cell.classList.add("openTS");
-                cell.innerHTML = "Open";;
-                cell.onclick = function(){
-                    if(this.innerHTML=="Open"){
-                        this.classList.remove("openTS");
-                        this.classList.add("closedTS");
-                        this.innerHTML = "Closed";
-                    }
-                    else if(this.innerHTML=="Closed"){
-                        this.classList.remove("closedTS");
-                        this.classList.add("openTS");
-                        this.innerHTML = "Open";
+            cell.setAttribute("data-starterHour",currHour);
+            cell.setAttribute("data-starterMinute",currMinuteStr)
+            cell.setAttribute("data-DOW",a);
+
+            var dateInformation = getCurrColDateInfo(a);
+
+            var tsvReq = new XMLHttpRequest();
+            var posterUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleView/timeslotview";
+            tsvReq.open("POST",posterUrl,true);
+        
+            sender = {}
+            sender["arg1"] = scheduleID.toString();
+            sender["arg2"] = dateInformation["year"].toString();
+            sender["arg3"] = (dateInformation["month"]+1).toString();
+            sender["arg4"] = dateInformation["day"].toString();
+            sender["arg5"] = currHour.toString();
+            sender["arg6"] = currMinute.toString();
+        
+            tsvReq.send(JSON.stringify(sender));
+            // console.log(JSON.stringify(sender))
+        
+            tsvReq.onloadend = function(){
+                if(tsvReq.readyState == XMLHttpRequest.DONE){
+                    console.log(1)
+                    var parsedInfo = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
+        
+                    if(parsedInfo["httpCode"]==400){
+                        console.log("INCORRECT:")
+                        console.log(sender)
                     }
                     else{
-                        //Alert to confirm to cancel a meeting
+                        // console.log(parsedInfo)
+                        if(parsedInfo["free"]){
+
+                            var tb = document.getElementById("scheduleTable")
+                            var toModifyCell;
+
+                            for(var rower = 0;rower<tb.rows.length;rower++){
+                                for(var coler = 0;coler<tb.rows[rower].cells.length;coler++){
+                                    var currCell = tb.rows[rower].cells[coler];
+
+                                    var dayOfTheWeek = currCell.getAttribute("data-DOW");
+                                    var cellHour = currCell.getAttribute("data-starterHour");
+                                    var cellMin = currCell.getAttribute("data-starterMinute");
+
+                                    var dateInf = new Date(parsedInfo["date"]["year"],parsedInfo["date"]["month"]-1,parsedInfo["date"]["day"])
+                                    var gottenDow = dateInf.getDay();
+
+                                    if(cellHour==parsedInfo["time"]["hour"]&&cellMin==parsedInfo["time"]["minute"]){
+                                        // console.log(gottenDow)
+                                    }
+
+                                    // console.log(dayOfTheWeek,cellHour,cellMin)
+
+                                }
+                            }
+
+                            // console.log("here")
+                            // cell.classList.add("openTS");
+                            // cell.innerHTML = "1";
+                            // getCurrColDateInfo(1)
+                            // cell.onclick = function (){
+                            //     if(this.innerHTML=="Open"){
+                            //         this.classList.remove("openTS");
+                            //         this.classList.add("closedTS");
+                            //         this.innerHTML = "Closed";
+                            //     }
+                            //     else if(this.innerHTML=="Closed"){
+                            //         this.classList.remove("closedTS");
+                            //         this.classList.add("openTS");
+                            //         this.innerHTML = "Open";
+                            //     }
+                            //     else{
+                            //         //Alert to confirm to cancel a meeting
+                            //     }
+                            // }
+                        }
+                        else{
+
+                        }
+
                     }
                 }
-            }
-            else{
+                else{
+                    console.log(2)
+                }
+        
+            };
 
-            }
+            // if(viewInfo!=false){
+            //     console.log("Here!")
+            //     if(viewInfo["free"]){
+            //         cell.classList.add("openTS");
+            //         cell.innerHTML = "Open";
+            //         getCurrColDateInfo(1)
+            //         cell.onclick = function (){
+            //             if(this.innerHTML=="Open"){
+            //                 this.classList.remove("openTS");
+            //                 this.classList.add("closedTS");
+            //                 this.innerHTML = "Closed";
+            //             }
+            //             else if(this.innerHTML=="Closed"){
+            //                 this.classList.remove("closedTS");
+            //                 this.classList.add("openTS");
+            //                 this.innerHTML = "Open";
+            //             }
+            //             else{
+            //                 //Alert to confirm to cancel a meeting
+            //             }
+            //         }
+            //     }
+            // }
+
+            // if(a==1 && i==1){
+            //     // var viewInfo = getTimeSlotView(scheduleID,dateInformation["year"],dateInformation["month"]+1,dateInformation["day"],currHour,currMinute);
+            //     cell.classList.add("openTS");
+            //     cell.innerHTML = "Open";
+            //     getCurrColDateInfo(1)
+            //     cell.onclick = function (){
+            //         if(this.innerHTML=="Open"){
+            //             this.classList.remove("openTS");
+            //             this.classList.add("closedTS");
+            //             this.innerHTML = "Closed";
+            //         }
+            //         else if(this.innerHTML=="Closed"){
+            //             this.classList.remove("closedTS");
+            //             this.classList.add("openTS");
+            //             this.innerHTML = "Open";
+            //         }
+            //         else{
+            //             //Alert to confirm to cancel a meeting
+            //         }
+            //     }
+            // }
+            // else{
+
+            // }
         }
 
         if(currMinute+duration == 60){
@@ -181,7 +342,8 @@ function updateView(json){
     }
 
     // console.log(document.getElementById("11").innerHTML)    
-    getTimeSlotView(scheduleID,startYear,startMonth,startDay,dayStartHour,"00");
+    // console.log(startYear)
+    // getTimeSlotView(scheduleID,startYear,startMonth,startDay,dayStartHour,"00");
 }
 
 for(var i=0;i<url.length;i++){
@@ -242,6 +404,12 @@ xhr.onloadend = function(){
     if(xhr.readyState == XMLHttpRequest.DONE){
         console.log("Got back schedule information:"+xhr.responseText);
         getBackParameters = JSON.parse(JSON.parse(xhr.responseText)["body"]);
+
+
+        if(getBackParameters["httpCode"]==400){
+            window.location.href = "Error Pages/General400.html"
+        }
+
         updateView(getBackParameters);
     }
     else{

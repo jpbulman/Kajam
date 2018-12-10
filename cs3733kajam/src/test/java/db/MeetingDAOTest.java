@@ -1,6 +1,7 @@
 package db;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.UUID;
@@ -43,6 +44,21 @@ public class MeetingDAOTest {
 	    } catch (Exception e) {
 	    	fail ("didn't work:" + e.getMessage());
 	    }
+	}
+	
+	@Test
+	public void testUpdate() {
+		MeetingDAO md = new MeetingDAO();
+		try {
+			Meeting m = md.getMeeting(UUID.fromString("eea5770b-84ac-446f-bfdc-442f26fb2992"));
+			String newName = UUID.randomUUID().toString();
+			m.name = newName;
+			assertTrue(md.updateMeeting(m));
+			m = md.getMeeting(UUID.fromString("eea5770b-84ac-446f-bfdc-442f26fb2992"));
+			assertEquals(m.name, newName);
+		}catch(Exception e) {
+			fail("didn't work:"+e.getMessage());
+		}
 	}
 	
 	

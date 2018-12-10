@@ -147,7 +147,8 @@ function createNewSchedule(){
                     alert("IMPORTANT: Your schedule ID is "+xhrTable["id"]+" and your secret code is "+xhrTable["secretCode"]+". Please don't lose this information, you will need it to log back on later!");
                 }
                 else{
-                    window.location.href = "Error Pages/General400.html";
+                    // window.location.href = "Error Pages/General400.html";
+                    console.log(xhrTable)
                 } 
 
             } 
