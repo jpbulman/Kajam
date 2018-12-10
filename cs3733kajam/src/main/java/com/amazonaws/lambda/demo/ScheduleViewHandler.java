@@ -235,23 +235,23 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 			ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
 			
 			try {
-				if(s.startDate.isBefore(mon.minusDays(1)) && s.endDate.isAfter(mon.plusDays(1))) {
+				if(s.startDate.isBefore(mon.plusDays(1)) && s.endDate.isAfter(mon.minusDays(1))) {
 					ts.addAll(getTimeSlotsByDate(s.id, mon, startHour, endHour, duration));
 				}
 				
-				if(s.startDate.isBefore(tues.minusDays(1)) && s.endDate.isAfter(tues.plusDays(1))) {
+				if(s.startDate.isBefore(tues.plusDays(1)) && s.endDate.isAfter(tues.minusDays(1))) {
 					ts.addAll(getTimeSlotsByDate(s.id, tues, startHour, endHour, duration));
 				}
 				
-				if(s.startDate.isBefore(wed.minusDays(1)) && s.endDate.isAfter(wed.plusDays(1))) {
+				if(s.startDate.isBefore(wed.plusDays(1)) && s.endDate.isAfter(wed.minusDays(1))) {
 					ts.addAll(getTimeSlotsByDate(s.id, wed, startHour, endHour, duration));
 				}
 				
-				if(s.startDate.isBefore(thur.minusDays(1)) && s.endDate.isAfter(thur.plusDays(1))) {
+				if(s.startDate.isBefore(thur.plusDays(1)) && s.endDate.isAfter(thur.minusDays(1))) {
 					ts.addAll(getTimeSlotsByDate(s.id, thur, startHour, endHour, duration));
 				}
 				
-				if(s.startDate.isBefore(fri.minusDays(1)) && s.endDate.isAfter(fri.plusDays(1))) {
+				if(s.startDate.isBefore(fri.plusDays(1)) && s.endDate.isAfter(fri.minusDays(1))) {
 					ts.addAll(getTimeSlotsByDate(s.id, fri, startHour, endHour, duration));
 				}
 			} catch (Exception e) {
