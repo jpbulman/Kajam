@@ -17,4 +17,11 @@ public class Meeting {
 		this.secretCode = secretCode;
 	}
 	
+	public Meeting() {
+		id = null;
+		timeSlotID = null;
+		name = "";
+		secretCode = 0;
+	}
+	
 }
