@@ -175,19 +175,6 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 			}catch(Exception e) {
 				respError += "Invalid date ";
 			}
-			
-			boolean flag = false; //invalid date (date is either before/after start/end date)
-			if(s != null) {
-				if(s.startDate.isAfter(dayInWeek)) {
-					flag = true;
-				}
-				
-				if(s.endDate.isBefore(dayInWeek)) {
-					flag = true;
-				}
-			}
-			
-			logger.log("flag " + flag);
 				
 			DayOfWeek d = null;
 			LocalDate mon = null;
@@ -248,37 +235,24 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 			ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
 			
 			try {
-				if(flag) {
-					if(s.startDate.isBefore(mon) && s.endDate.isAfter(mon)) {
-						ts.addAll(getTimeSlotsByDate(s.id, mon, startHour, endHour, duration));
-					}
-					
-					if(s.startDate.isBefore(tues) && s.endDate.isAfter(tues)) {
-						ts.addAll(getTimeSlotsByDate(s.id, tues, startHour, endHour, duration));
-					}
-					
-					if(s.startDate.isBefore(wed) && s.endDate.isAfter(wed)) {
-						ts.addAll(getTimeSlotsByDate(s.id, wed, startHour, endHour, duration));
-					}
-					
-					if(s.startDate.isBefore(thur) && s.endDate.isAfter(thur)) {
-						ts.addAll(getTimeSlotsByDate(s.id, thur, startHour, endHour, duration));
-					}
-					
-					if(s.startDate.isBefore(fri) && s.endDate.isAfter(fri)) {
-						ts.addAll(getTimeSlotsByDate(s.id, fri, startHour, endHour, duration));
-					}
-				}else {
+				if(s.startDate.isBefore(mon) && s.endDate.isAfter(mon)) {
 					ts.addAll(getTimeSlotsByDate(s.id, mon, startHour, endHour, duration));
-					logger.log("Monday timeslots " + ts.toString());
+				}
+				
+				if(s.startDate.isBefore(tues) && s.endDate.isAfter(tues)) {
 					ts.addAll(getTimeSlotsByDate(s.id, tues, startHour, endHour, duration));
-					logger.log("Tuesday timeslots " + ts.toString());
+				}
+				
+				if(s.startDate.isBefore(wed) && s.endDate.isAfter(wed)) {
 					ts.addAll(getTimeSlotsByDate(s.id, wed, startHour, endHour, duration));
-					logger.log("Wednesday timeslots " + ts.toString());
+				}
+				
+				if(s.startDate.isBefore(thur) && s.endDate.isAfter(thur)) {
 					ts.addAll(getTimeSlotsByDate(s.id, thur, startHour, endHour, duration));
-					logger.log("Thursday timeslots " + ts.toString());
+				}
+				
+				if(s.startDate.isBefore(fri) && s.endDate.isAfter(fri)) {
 					ts.addAll(getTimeSlotsByDate(s.id, fri, startHour, endHour, duration));
-					logger.log("Friday timeslots " + ts.toString());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

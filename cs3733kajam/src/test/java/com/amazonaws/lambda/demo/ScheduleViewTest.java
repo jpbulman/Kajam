@@ -14,18 +14,12 @@ import com.amazonaws.services.lambda.runtime.Context;
 public class ScheduleViewTest {
 
     private static final String SAMPLE_INPUT_STRING = "{\"foo\": \"bar\"}";
-    private static final String EXPECTED_OUTPUT_STRING = "{\"headers\":{\"Access-Control-Allow-Origin\":\"*\",\"Access-Control-Allow-Methods\":\"GET,POST,OPTIONS\",\"Content-Type\":\"application\\/json\"},\"body\":\"{\\\"error\\\":\\\"Invalid input format Invalid start date Invalid end date\\\",\\\"httpCode\\\":400}\"}";    
+    private static final String EXPECTED_OUTPUT_STRING = "{\"headers\":{\"Access-Control-Allow-Origin\":\"*\",\"Access-Control-Allow-Methods\":\"GET,POST,OPTIONS\",\"Content-Type\":\"application\\/json\"},\"body\":\"{\\\"error\\\":\\\"Invalid ID Invalid Input Error Invalid date Errored while collecting timeslots \\\",\\\"httpCode\\\":400}\"}";    
     private static final String SAMPLE_INPUT_STRING2 = "{\n" + 
-    		"    \"arg1\": \"name\",\n" + 
-    		"    \"arg2\": \"3\",\n" + 
-    		"    \"arg3\": \"4\",\n" + 
-    		"    \"arg4\": \"2018\",\n" + 
-    		"    \"arg5\": \"1\",\n" + 
-    		"    \"arg6\": \"22\",\n" + 
-    		"    \"arg7\": \"2018\",\n" + 
-    		"    \"arg8\": \"1\",\n" + 
-    		"    \"arg9\": \"26\",\n" + 
-    		"    \"arg10\": \"15\"\n" + 
+    		"    \"arg1\": \"9944800c-15d9-43e1-b58c-8b81c55a26bb\",\n" + 
+    		"    \"arg2\": \"2018\",\n" + 
+    		"    \"arg3\": \"12\",\n" + 
+    		"    \"arg4\": \"10\",\n" +  
     		"}";
 	
 	
@@ -49,21 +43,21 @@ public class ScheduleViewTest {
         String sampleOutputString = output.toString();
         Assert.assertEquals(EXPECTED_OUTPUT_STRING, sampleOutputString);
     }
-//    
-//    //Tests with valid inputs
-//    @Test
-//    public void testLambdaFunctionHandler2() throws IOException {
-//        LambdaFunctionHandler handler = new LambdaFunctionHandler();
-//
-//        InputStream input = new ByteArrayInputStream(SAMPLE_INPUT_STRING2.getBytes());;
-//        OutputStream output = new ByteArrayOutputStream();
-//
-//        handler.handleRequest(input, output, createContext("sample"));
-//
-//        String sampleOutputString = output.toString();
-//        Assert.assertTrue(sampleOutputString.contains("httpCode\\\":200"));
-//        System.out.println(sampleOutputString);
-//    }
+    
+    //Tests with valid inputs
+    @Test
+    public void testLambdaFunctionHandler2() throws IOException {
+    	ScheduleViewHandler handler = new ScheduleViewHandler();
+
+        InputStream input = new ByteArrayInputStream(SAMPLE_INPUT_STRING2.getBytes());;
+        OutputStream output = new ByteArrayOutputStream();
+
+        handler.handleRequest(input, output, createContext("sample"));
+
+        String sampleOutputString = output.toString();
+        Assert.assertTrue(sampleOutputString.contains("httpCode\\\":200"));
+        System.out.println(sampleOutputString);
+    }
     
     
 	
