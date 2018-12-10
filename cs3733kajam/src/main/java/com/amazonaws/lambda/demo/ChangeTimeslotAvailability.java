@@ -154,7 +154,10 @@ public class ChangeTimeslotAvailability implements RequestStreamHandler{
 			
 			TimeSlot s;
 			try {
-				s = getTimeSlot(id, date, startTime);
+				if(id!=null)
+					s = getTimeSlot(id, date, startTime);
+				else
+					throw new Exception();
 			} catch (Exception e) {
 				s = null;
 				respError += "No timeslot matches given parameters ";
