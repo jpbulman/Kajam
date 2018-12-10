@@ -197,7 +197,7 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 					fri = dayInWeek;
 				}
 			}catch(Exception e) {
-				//day in week is null
+				e.printStackTrace();
 			}
 			
 			ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
@@ -213,6 +213,7 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 				ts.addAll(getTimeSlotsByDate(s.id, fri, startHour, endHour, duration));
 			} catch (Exception e) {
 				e.printStackTrace();
+				respError += "Errored while collecting timeslots ";
 			}
 			
 			
