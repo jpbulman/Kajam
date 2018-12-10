@@ -155,13 +155,14 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 				respError += "Invalid date ";
 			}
 			
+			boolean flag = false; //invalid date (date is either before/after start/end date)
 			if(s != null) {
 				if(s.startDate.compareTo(dayInWeek) > 0) {
-					respError += "Invalid date (date is before start date) ";
+					flag = true;
 				}
 				
 				if(s.endDate.compareTo(dayInWeek) < 0) {
-					respError += "Invalid date (date is after end date) ";
+					flag = true;
 				}
 			}
 				
@@ -220,14 +221,37 @@ public class ScheduleViewHandler implements RequestStreamHandler{
 				e.printStackTrace();
 			}
 			
+			
 			ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
 			
 			try {
-				ts.addAll(getTimeSlotsByDate(s.id, mon, startHour, endHour, duration));
-				ts.addAll(getTimeSlotsByDate(s.id, tues, startHour, endHour, duration));
-				ts.addAll(getTimeSlotsByDate(s.id, wed, startHour, endHour, duration));
-				ts.addAll(getTimeSlotsByDate(s.id, thur, startHour, endHour, duration));
-				ts.addAll(getTimeSlotsByDate(s.id, fri, startHour, endHour, duration));
+				if(flag) {
+					if(s.startDate.isBefore(mon) && s.endDate.isAfter(mon)) {
+						ts.addAll(getTimeSlotsByDate(s.id, mon, startHour, endHour, duration));
+					}
+					
+					if(s.startDate.isBefore(tues) && s.endDate.isAfter(tues)) {
+						ts.addAll(getTimeSlotsByDate(s.id, tues, startHour, endHour, duration));
+					}
+					
+					if(s.startDate.isBefore(wed) && s.endDate.isAfter(wed)) {
+						ts.addAll(getTimeSlotsByDate(s.id, wed, startHour, endHour, duration));
+					}
+					
+					if(s.startDate.isBefore(thur) && s.endDate.isAfter(thur)) {
+						ts.addAll(getTimeSlotsByDate(s.id, thur, startHour, endHour, duration));
+					}
+					
+					if(s.startDate.isBefore(fri) && s.endDate.isAfter(fri)) {
+						ts.addAll(getTimeSlotsByDate(s.id, fri, startHour, endHour, duration));
+					}
+				}else {
+					ts.addAll(getTimeSlotsByDate(s.id, mon, startHour, endHour, duration));
+					ts.addAll(getTimeSlotsByDate(s.id, tues, startHour, endHour, duration));
+					ts.addAll(getTimeSlotsByDate(s.id, wed, startHour, endHour, duration));
+					ts.addAll(getTimeSlotsByDate(s.id, thur, startHour, endHour, duration));
+					ts.addAll(getTimeSlotsByDate(s.id, fri, startHour, endHour, duration));
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				respError += "Errored while collecting timeslots ";
