@@ -37,44 +37,19 @@ public class EditScheduleHandler implements RequestStreamHandler {
 	private AmazonS3 s3 = AmazonS3ClientBuilder.standard()
 			.withRegion("us-east-2").build();
 	
-	
-	boolean createSchedule(UUID id, String name, int secretCode, int duration, LocalTime startTime, LocalTime endTime, LocalDate startDate, LocalDate endDate) throws Exception {
-		if (logger != null) { logger.log("in createSchedule"); }
+	Schedule getSchedule(UUID id) throws Exception{
+		if (logger != null) { logger.log("in getSchedule"); }
 		ScheduleDAO dao = new ScheduleDAO();
 		
 		// check if present
 		Schedule exist = dao.getSchedule(id);
 		if (exist == null) {
-			Timestamp ts = new Timestamp(System.currentTimeMillis()); // create timestamp based on current time and date
-			Schedule schedule = new Schedule (id, name, secretCode, duration, startTime, endTime, startDate, endDate, ts);			
-			
-			//TODO: uncomment when ready to add time slots to db when creating schedules, delete original return statement
-			return dao.addSchedule(schedule) && addTimeSlots(schedule); 
-			//return dao.addSchedule(schedule);
+			throw new NullPointerException();
 		} else {
-			return false;
-			//return dao.updateConstant(constant);
+			return exist;
 		}
 	}
 	
-	// Add time slots of newly created schedule to time slot table in RDS
-	boolean addTimeSlots(Schedule s) {
-		
-		s.generateTimeSlots();
-		TimeSlotDAO dao = new TimeSlotDAO();
-		
-		try {
-			for(TimeSlot t: s.timeSlots) {
-				dao.addTimeSlot(t);
-			}
-			return true;
-		}catch(Exception e){
-			return false;
-		}
-	}
-	
-	
-
     @Override
     public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
     	
@@ -122,93 +97,84 @@ public class EditScheduleHandler implements RequestStreamHandler {
 		}
 		
 		if (!processed) {
-			ScheduleRequest req = new Gson().fromJson(body, ScheduleRequest.class);
+			EditScheduleRequest req = new Gson().fromJson(body, EditScheduleRequest.class);
 			logger.log(req.toString());
 			
-			int val1 = 0; // start time
-			int val2 = 0; // end time
-			int val3 = 0; // start year
-			int val4 = 0; // start month
-			int val5 = 0; // start day
-			int val6 = 0; // end year
-			int val7 = 0; // end month
-			int val8 = 0; // end day
-			int val9 = 0; // duration
+			String respError = "";
 			
-			String r = "";
-			LocalTime startTime = null;
-			LocalTime endTime = null;
+			UUID id = null;
+			Schedule s = null;
+			try {
+				id = UUID.fromString(req.arg1);
+				s = getSchedule(id);
+			}catch(Exception e) {
+				respError += "Invalid ID ";
+			}
+			
+			String scheduleName = "";
+			if(req.arg2.compareTo("") != 0) {
+				scheduleName = req.arg2;
+			}
+			
 			LocalDate startDate = null;
 			LocalDate endDate = null;
+			int startYear = 0;
+			int startMonth = 0;
+			int startDay = 0;
+			int endYear = 0;
+			int endMonth = 0;
+			int endDay = 0;
 			
-			try {
-				val1 = Integer.parseInt(req.arg2);
-				val2 = Integer.parseInt(req.arg3);
-				val3 = Integer.parseInt(req.arg4);
-				val4 = Integer.parseInt(req.arg5);
-				val5 = Integer.parseInt(req.arg6);
-				val6 = Integer.parseInt(req.arg7);
-				val7 = Integer.parseInt(req.arg8);
-				val8 = Integer.parseInt(req.arg9);
-				val9 = Integer.parseInt(req.arg10);
-			} catch (NumberFormatException e){
-				r = "Invalid input format";
-			}
-			
-			try {
-				startTime = LocalTime.of(val1, 0);
-			} catch (Exception e){
-				r += " Invalid start time"; 
-			}
-			
-			try {
-				endTime = LocalTime.of(val2, 0);
-			} catch (Exception e) {
-				r += " Invalid end time";
-			}
-			
-			try {
-				startDate = LocalDate.of(val3, val4, val5);
-			} catch (Exception e) {
-				r += " Invalid start date";
-			}
-			
-			try {
-				endDate = LocalDate.of(val6, val7, val8);
-			} catch (Exception e) {
-				r += " Invalid end date";
-			}
-			
-			if(r.compareTo("") == 0) {
-				if(startTime.compareTo(endTime) >= 0) {
-					r += " endTime is before startTime";
+			if(req.arg3.compareTo("") != 0 && req.arg4.compareTo("") != 0 && req.arg5.compareTo("") != 0) {
+				try {
+					startYear = Integer.parseInt(req.arg3);
+					startMonth = Integer.parseInt(req.arg4);
+					startDay = Integer.parseInt(req.arg5);
+				} catch (Exception e) {
+					respError += "Invalid number format for start date ";
 				}
-				if(startDate.compareTo(endDate) > 0) {
-					r += " endDate is before startDate";
+				
+				try {
+					startDate = LocalDate.of(startYear, startMonth, startDay);
+				} catch (Exception e) {
+					respError += "Invalid startDate ";
+				}
+				
+				if(startDate.compareTo(s.startDate) != -1) {
+					startDate = s.startDate;
+					respError += "New start date is not before old start date ";
 				}
 			}
-
+			
+			if(req.arg6.compareTo("") != 0 && req.arg7.compareTo("") != 0 && req.arg8.compareTo("") != 0) {
+				try {
+					endYear = Integer.parseInt(req.arg6);
+					endMonth = Integer.parseInt(req.arg7);
+					endDay = Integer.parseInt(req.arg8);
+				} catch (Exception e) {
+					respError += "Invalid number format for end date ";
+				}
+				
+				try {
+					endDate = LocalDate.of(endYear, endMonth, endDay);
+				} catch (Exception e) {
+					respError += "Invalid endDate ";
+				}
+				
+				if(endDate.compareTo(s.endDate) != 1) {
+					endDate = s.endDate;
+					respError += "New end date is not after old end date ";
+				}
+			}
 			
 			// compute proper response
-			if(r.compareTo("") != 0) { // If there is an error in input
-				ErrorResponse ErrResp = new ErrorResponse(r, 400);
+			if(respError.compareTo("") != 0) { // If there is an error in input
+				ErrorResponse ErrResp = new ErrorResponse(respError, 400);
 				responseJson.put("body", new Gson().toJson(ErrResp));
 			
 			}else {
-				
-				try {
-					ScheduleResponse resp = new ScheduleResponse(req.arg1, startTime, endTime, startDate, endDate, val9, 200);
-					boolean scheduleCreated = createSchedule(resp.getId(), req.arg1, resp.getSecretCode(), val9, startTime, endTime, startDate, endDate);
-					if (scheduleCreated) {
-						responseJson.put("body", new Gson().toJson(resp)); 
-					} else { // could not add schedule to DB
-						ErrorResponse ErrResp = new ErrorResponse("Unable to create schedule", 400);
-						responseJson.put("body", new Gson().toJson(ErrResp));
-					}
-				} catch (Exception e) {
-					ErrorResponse ErrResp = new ErrorResponse("Unable to create schedule: " + e.getMessage(), 400);
-					responseJson.put("body", new Gson().toJson(ErrResp));
-				}
+				EditScheduleResponse resp = new EditScheduleResponse(id, scheduleName, startDate, endDate, 200);
+				responseJson.put("body", new Gson().toJson(resp));
 			}
 		}
 		
