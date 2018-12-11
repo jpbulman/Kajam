@@ -40,5 +40,4 @@ public class GetScheduleParticipantResponse {
 	public UUID getId() {
 		return id;
 	}
-
 }

@@ -91,19 +91,6 @@ public class ChangeTimeslotAvailability implements RequestStreamHandler{
 		return ts;
 	}
 	
-	Meeting getMeeting(UUID id) throws Exception{
-		if (logger != null) { logger.log("in getSchedule"); }
-		MeetingDAO dao = new MeetingDAO();
-		
-		// check if present 
-		Meeting exist = dao.getMeetingByTimeSlotID(id);
-		if (exist == null) {
-			throw new NullPointerException();
-		} else {
-			return exist;
-		}
-	}
-	
     @Override
     public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
     	
@@ -256,6 +243,5 @@ public class ChangeTimeslotAvailability implements RequestStreamHandler{
         OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
         writer.write(responseJson.toJSONString());  
         writer.close();
-        
     }
 }

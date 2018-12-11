@@ -15,6 +15,5 @@ public class OrgDeleteMeetingResponse {
 	@Override
 	public String toString() {
 		return "OrgDeleteMeetingResponse [timeSlotID=" + timeSlotID + ", httpCode=" + httpCode + "]";
-	}
-	
+	}	
 }
