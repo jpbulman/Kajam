@@ -65,19 +65,6 @@ public class ChangeTimeSlotAvailabilityByDayOfWeek implements RequestStreamHandl
 		}
 	}
 	
-	Meeting getMeeting(UUID id) throws Exception{
-		if (logger != null) { logger.log("in getSchedule"); }
-		MeetingDAO dao = new MeetingDAO();
-		
-		// check if present 
-		Meeting exist = dao.getMeetingByTimeSlotID(id);
-		if (exist == null) {
-			throw new NullPointerException();
-		} else {
-			return exist;
-		}
-	}
-	
 	ArrayList<TimeSlot> getTimeSlotsByDate(UUID id, LocalDate date, LocalTime startTime, LocalTime endTime, int duration) throws Exception{
 		if (logger != null) { logger.log("in getTimeSlotsByDate"); }
 		ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
@@ -302,7 +289,6 @@ public class ChangeTimeSlotAvailabilityByDayOfWeek implements RequestStreamHandl
         logger.log(responseJson.toJSONString());
         OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
         writer.write(responseJson.toJSONString());  
-        writer.close();
-        
+        writer.close();       
     }
 }
