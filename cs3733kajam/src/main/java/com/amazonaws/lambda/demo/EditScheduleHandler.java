@@ -7,8 +7,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.sql.Timestamp;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.json.simple.JSONObject;
@@ -47,6 +49,51 @@ public class EditScheduleHandler implements RequestStreamHandler {
 			throw new NullPointerException();
 		} else {
 			return exist;
+		}
+	}
+	
+	void extendStart(Schedule s, LocalDate newStart) {
+		ArrayList<TimeSlot> newTimes = new ArrayList<TimeSlot>();
+		for(LocalDate d = newStart; d.isBefore(s.startDate); d = d.plusDays(1)) {
+			DayOfWeek dow = d.getDayOfWeek();
+			if(dow != DayOfWeek.SATURDAY && dow != DayOfWeek.SUNDAY) {
+				LocalTime t = s.startTime;
+				while(t.isBefore(s.endTime)) {
+					newTimes.add(new TimeSlot(s.id, t, t.plusMinutes(s.duration),d,true));
+					t = t.plusMinutes(s.duration);
+				}
+			}
+			
+		}
+		addTimeSlots(newTimes);
+	}
+	
+	void extendEnd(Schedule s, LocalDate newEnd) {
+		ArrayList<TimeSlot> newTimes = new ArrayList<TimeSlot>();
+		for(LocalDate d = s.endDate.plusDays(1); d.isBefore(newEnd.plusDays(1)); d = d.plusDays(1)) {
+			DayOfWeek dow = d.getDayOfWeek();
+			if(dow != DayOfWeek.SATURDAY && dow != DayOfWeek.SUNDAY) {
+				LocalTime t = s.startTime;
+				while(t.isBefore(s.endTime)) {
+					newTimes.add(new TimeSlot(s.id, t, t.plusMinutes(s.duration),d,true));
+					t = t.plusMinutes(s.duration);
+				}
+			}
+			
+		}
+		addTimeSlots(newTimes);
+	}
+	
+	boolean addTimeSlots(ArrayList<TimeSlot> ts) {
+		TimeSlotDAO dao = new TimeSlotDAO();
+		
+		try {
+			for(TimeSlot t: ts) {
+				dao.addTimeSlot(t);
+			}
+			return true;
+		}catch(Exception e){
+			return false;
 		}
 	}
 	
@@ -175,7 +222,9 @@ public class EditScheduleHandler implements RequestStreamHandler {
 			}else {
 				try {
 					if(req.arg3.compareTo("") != 0 && req.arg4.compareTo("") != 0 && req.arg5.compareTo("") != 0) {
+						extendStart(s, startDate);
 						s.startDate = startDate;
+						
 					}
 					
 					if(req.arg2.compareTo("") != 0) {
@@ -183,8 +232,10 @@ public class EditScheduleHandler implements RequestStreamHandler {
 					}
 					
 					if(req.arg6.compareTo("") != 0 && req.arg7.compareTo("") != 0 && req.arg8.compareTo("") != 0) {
+						extendEnd(s, endDate);
 						s.endDate = endDate;
 					}
+					
 					
 					ScheduleDAO daoS = new ScheduleDAO();
 					daoS.updateSchedule(s);
