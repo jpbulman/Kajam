@@ -173,8 +173,27 @@ public class EditScheduleHandler implements RequestStreamHandler {
 				responseJson.put("body", new Gson().toJson(ErrResp));
 			
 			}else {
-				EditScheduleResponse resp = new EditScheduleResponse(id, scheduleName, startDate, endDate, 200);
-				responseJson.put("body", new Gson().toJson(resp));
+				try {
+					if(req.arg3.compareTo("") != 0 && req.arg4.compareTo("") != 0 && req.arg5.compareTo("") != 0) {
+						s.startDate = startDate;
+					}
+					
+					if(req.arg2.compareTo("") != 0) {
+						s.name = scheduleName;
+					}
+					
+					if(req.arg6.compareTo("") != 0 && req.arg7.compareTo("") != 0 && req.arg8.compareTo("") != 0) {
+						s.endDate = endDate;
+					}
+					
+					ScheduleDAO daoS = new ScheduleDAO();
+					daoS.updateSchedule(s);
+				
+					EditScheduleResponse resp = new EditScheduleResponse(id, scheduleName, startDate, endDate, 200);
+					responseJson.put("body", new Gson().toJson(resp));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}	
         logger.log("end result:" + responseJson.toJSONString());
