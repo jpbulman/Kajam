@@ -36,149 +36,96 @@ function clearTable(){
         var currentCell = document.getElementById("scheduleTable").rows[row].cells[col];
         currentCell.innerHTML = "";
         currentCell.classList.remove("openTS")
-        currentCell.classList.remove("closedTS")   
-
+        currentCell.classList.remove("closedTS")
+        currentCell.classList.remove("bookedTS")   
         }
     }
 
 }
 
-// function refreshTable(){
-//     clearTable()
-//     for(var a=1;a<=5;a++){
-//         // var cell = row.insertCell(a);
-//         if(a==1){
+function refreshTable(){
+    clearTable()
+    var dateInformation = getCurrColDateInfo(1);
+    // console.log(dateInformation)
 
-//             var dateInformation = getCurrColDateInfo(a);
-//             console.log(dateInformation)
+    var tsvReq = new XMLHttpRequest();
+    var posterUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleView";
+    tsvReq.open("POST",posterUrl,true);
 
-//             var tsvReq = new XMLHttpRequest();
-//             var posterUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleView";
-//             tsvReq.open("POST",posterUrl,true);
-        
-//             sender = {}
-//             sender["arg1"] = globalSchID.toString();
-//             sender["arg2"] = dateInformation["year"].toString();
-//             sender["arg3"] = (dateInformation["month"]+1).toString();
-//             sender["arg4"] = dateInformation["day"].toString();
+    sender = {}
+    sender["arg1"] = globalSchID.toString();
+    sender["arg2"] = dateInformation["year"].toString();
+    sender["arg3"] = (dateInformation["month"]+1).toString();
+    sender["arg4"] = dateInformation["day"].toString();
 
-//             console.log(JSON.stringify(sender));
+    // console.log(JSON.stringify(sender));
 
-//             tsvReq.send(JSON.stringify(sender));
+    tsvReq.send(JSON.stringify(sender));
 
-//             tsvReq.onloadend = function(){
-//                 if(tsvReq.readyState==XMLHttpRequest.DONE){
-//                     var body = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
-//                     var ts = body["ts"]
-//                     console.log(ts)
+    tsvReq.onloadend = function(){
+        if(tsvReq.readyState==XMLHttpRequest.DONE){
+            document.getElementById("loading").style.visibility = "hidden";
+            var body = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
+            var ts = body["ts"]
 
-//                     var row=1;
-//                     var col=1;
+            var row=1;
+            var col=1;
 
-//                     var table = document.getElementById("scheduleTable")
-//                     console.log(ts)
+            var table = document.getElementById("scheduleTable")
 
-//                     for(var k=0;k<ts.length;k++){
-//                         // console.log(ts.length)
-//                         var currentCell = table.rows[row].cells[col];
-//                         currentCell.setAttribute("data-year",ts[k]["date"]["year"])
-//                         currentCell.setAttribute("data-month",ts[k]["date"]["month"])
-//                         currentCell.setAttribute("data-dayOfMonth",ts[k]["date"]["day"])
-//                         currentCell.setAttribute("data-hour",ts[k]["startTime"]["hour"])
-//                         currentCell.setAttribute("data-minute",ts[k]["startTime"]["minute"])
-//                         currentCell.setAttribute("data-isFree",ts[k]["isFree"])
+            for(var k=0;k<ts.length;k++){
+                // console.log(ts.length)
+                var currentCell = table.rows[row].cells[col];
+                currentCell.setAttribute("data-year",ts[k]["date"]["year"])
+                currentCell.setAttribute("data-month",ts[k]["date"]["month"])
+                currentCell.setAttribute("data-dayOfMonth",ts[k]["date"]["day"])
+                currentCell.setAttribute("data-hour",ts[k]["startTime"]["hour"])
+                currentCell.setAttribute("data-minute",ts[k]["startTime"]["minute"])
+                currentCell.setAttribute("data-endHour",ts[k]["endTime"]["hour"])
+                currentCell.setAttribute("data-endMinute",ts[k]["endTime"]["minute"])
+                currentCell.setAttribute("data-isFree",ts[k]["isFree"])
+                currentCell.setAttribute("data-id",ts[k]["id"])
 
-//                         if(ts[k]["isFree"]){
-//                             currentCell.innerHTML="Open";
-//                             currentCell.classList.add("openTS")
-//                         }
-//                         else if(ts[k]["meeting"]["secretCode"]==0){
-//                             currentCell.innerHTML="Closed"
-//                             currentCell.classList.add("closedTS");
-//                         }
-//                         else{
-//                             currentCell.innerHTML=ts[k]["meeting"]["name"]
-//                         }
+                if(ts[k]["isFree"] && ts[k]["meeting"]["secretCode"]==0){
+                    currentCell.innerHTML="Open<br>(Click to book)";
+                    currentCell.classList.add("openTS")
+                    currentCell.setAttribute("data-isOpenEditable",true)
+                }
+                else if(ts[k]["meeting"]["secretCode"]==0){
+                    currentCell.innerHTML="Closed"
+                    currentCell.classList.add("closedTS");
+                }
+                else{
+                    currentCell.innerHTML="Booked Meeting<br>(Click to delete)"
+                    currentCell.classList.add("bookedTS")
+                    currentCell.setAttribute("data-isDeleteEditable",true)
+                }
 
-//                         currentCell.onclick = function (){
-//                             if(this.innerHTML=="Open"){
-//                                 this.classList.remove("openTS");
-//                                 this.classList.add("closedTS");
-//                                 this.innerHTML = "Closed";
+                currentCell.onclick = function (){
+                    if(this.getAttribute("data-isOpenEditable")){
+                        on();
+                        currTSID = this.getAttribute("data-id");
+                        var endStr = (this.getAttribute("data-endMinute")=='0')? "00":this.getAttribute("data-endMinute");
+                        var startStr = (this.getAttribute("data-minute")=='0')? "00":this.getAttribute("data-minute");
+                        currTSString = this.getAttribute("data-month")+"/"+this.getAttribute("data-dayOfMonth")+"/"+this.getAttribute("data-year")+" from "+this.getAttribute("data-hour")+":"+startStr+" until "+this.getAttribute("data-endHour")+":"+endStr;
+                        //
+                    }
+                    if(this.getAttribute("data-isDeleteEditable")){
+                        onDelete();
+                        currentDeleteAMeetingTSID = this.getAttribute("data-id")
+                    }
+                }
+                // console.log(row,col)
+                if(row%(ts.length/5)==0){
+                    row=0;
+                    col+=1;
+                }
+                row++;
+            }
 
-//                                 //id, year,m day,h,m,avail
-
-//                                 var changeAvailReq = new XMLHttpRequest();
-//                                 var availURL = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/timeslotavailability"
-//                                 changeAvailReq.open("POST",availURL,true);
-
-//                                 sender = {}
-//                                 sender["arg1"] = globalSchID;
-//                                 sender["arg2"] = this.getAttribute("data-year")
-//                                 sender["arg3"] = this.getAttribute("data-month")
-//                                 sender["arg4"] = this.getAttribute("data-dayOfMonth")
-//                                 sender["arg5"] = this.getAttribute("data-hour")
-//                                 sender["arg6"] = this.getAttribute("data-minute")
-//                                 sender["arg7"] = "unavailable";
-
-//                                 changeAvailReq.send(JSON.stringify(sender));
-//                                 console.log(JSON.stringify(sender));
-//                                 changeAvailReq.onloadend = function(){
-
-//                                     if(changeAvailReq.readyState==XMLHttpRequest.DONE){
-//                                         console.log("Done")
-//                                         console.log(changeAvailReq.responseText)
-//                                     }
-
-//                                 }
-
-//                             }
-//                             else if(this.innerHTML=="Closed"){
-//                                 this.classList.remove("closedTS");
-//                                 this.classList.add("openTS");
-//                                 this.innerHTML = "Open";
-
-//                                 var changeAvailReq = new XMLHttpRequest();
-//                                 var availURL = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/timeslotavailability"
-//                                 changeAvailReq.open("POST",availURL,true);
-
-//                                 sender = {}
-//                                 sender["arg1"] = scheduleID;
-//                                 sender["arg2"] = this.getAttribute("data-year")
-//                                 sender["arg3"] = this.getAttribute("data-month")
-//                                 sender["arg4"] = this.getAttribute("data-dayOfMonth")
-//                                 sender["arg5"] = this.getAttribute("data-hour")
-//                                 sender["arg6"] = this.getAttribute("data-minute")
-//                                 sender["arg7"] = "available";
-
-//                                 changeAvailReq.send(JSON.stringify(sender));
-//                                 console.log(JSON.stringify(sender));
-//                                 changeAvailReq.onloadend = function(){
-
-//                                     if(changeAvailReq.readyState==XMLHttpRequest.DONE){
-//                                         console.log("Done")
-//                                         console.log(changeAvailReq.responseText)
-//                                     }
-
-//                                 }
-//                             }
-//                             else{
-//                                 //Alert to confirm to cancel a meeting
-//                             }
-//                         }
-//                         // console.log(row,col)
-//                         if(row%(ts.length/5)==0){
-//                             row=0;
-//                             col+=1;
-//                         }
-//                         row++;
-//                     }
-
-//                 }
-//             }
-//         }
-//     }
-// }
+        }
+    }
+}
 
 function getNextWeek(){
     var mon = document.getElementById("MonDate").innerHTML;
@@ -233,8 +180,8 @@ function processMeetingInput(){
             console.log(JSON.stringify(makeMeetingReq.responseText))
             var secretyCode = JSON.parse(makeMeetingReq.responseText)["secretCode"]
             alert("This is your secret code for the meeting, make sure you remember it! "+secretyCode)
-            // document.location.reload(true)
             sendEmail(mre,secretyCode);
+            refreshTable()
         }
     }
 
@@ -270,10 +217,11 @@ function deleteAMeeting(){
         if(delMeetingReq.readyState==XMLHttpRequest.DONE){
             console.log(delMeetingReq.responseText)
             alert("Meeting deleted!")
-            document.location.reload(true)
+            refreshTable()
         }
     }
 
+    offDelete()
 }
 
 function getWeekDay(day){
@@ -361,87 +309,88 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
         // Populate rest of the row
         for(var a=1;a<=5;a++){
             var cell = row.insertCell(a);
-            if(a==1 && i==1){
+            refreshTable()
+            // if(a==1 && i==1){
 
-                var dateInformation = getCurrColDateInfo(a);
+            //     var dateInformation = getCurrColDateInfo(a);
 
-                var tsvReq = new XMLHttpRequest();
-                var posterUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleView";
-                tsvReq.open("POST",posterUrl,true);
+            //     var tsvReq = new XMLHttpRequest();
+            //     var posterUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleView";
+            //     tsvReq.open("POST",posterUrl,true);
             
-                sender = {}
-                sender["arg1"] = scheduleID.toString();
-                sender["arg2"] = dateInformation["year"].toString();
-                sender["arg3"] = (dateInformation["month"]+1).toString();
-                sender["arg4"] = dateInformation["day"].toString();
+            //     sender = {}
+            //     sender["arg1"] = scheduleID.toString();
+            //     sender["arg2"] = dateInformation["year"].toString();
+            //     sender["arg3"] = (dateInformation["month"]+1).toString();
+            //     sender["arg4"] = dateInformation["day"].toString();
 
-                console.log(JSON.stringify(sender));
+            //     console.log(JSON.stringify(sender));
 
-                tsvReq.send(JSON.stringify(sender));
+            //     tsvReq.send(JSON.stringify(sender));
 
-                tsvReq.onloadend = function(){
-                    if(tsvReq.readyState==XMLHttpRequest.DONE){
-                        document.getElementById("loading").style.visibility = "hidden";
-                        var body = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
-                        var ts = body["ts"]
+            //     tsvReq.onloadend = function(){
+            //         if(tsvReq.readyState==XMLHttpRequest.DONE){
+            //             document.getElementById("loading").style.visibility = "hidden";
+            //             var body = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
+            //             var ts = body["ts"]
 
-                        var row=1;
-                        var col=1;
+            //             var row=1;
+            //             var col=1;
 
-                        var table = document.getElementById("scheduleTable")
-                        console.log(ts)
+            //             var table = document.getElementById("scheduleTable")
+            //             console.log(ts)
 
-                        for(var k=0;k<ts.length;k++){
-                            var currentCell = table.rows[row].cells[col];
-                            currentCell.setAttribute("data-year",ts[k]["date"]["year"])
-                            currentCell.setAttribute("data-month",ts[k]["date"]["month"])
-                            currentCell.setAttribute("data-dayOfMonth",ts[k]["date"]["day"])
-                            currentCell.setAttribute("data-hour",ts[k]["startTime"]["hour"])
-                            currentCell.setAttribute("data-minute",ts[k]["startTime"]["minute"])
-                            currentCell.setAttribute("data-endHour",ts[k]["endTime"]["hour"])
-                            currentCell.setAttribute("data-endMinute",ts[k]["endTime"]["minute"])
-                            currentCell.setAttribute("data-isFree",ts[k]["isFree"])
-                            currentCell.setAttribute("data-id",ts[k]["id"])
+            //             for(var k=0;k<ts.length;k++){
+            //                 var currentCell = table.rows[row].cells[col];
+            //                 currentCell.setAttribute("data-year",ts[k]["date"]["year"])
+            //                 currentCell.setAttribute("data-month",ts[k]["date"]["month"])
+            //                 currentCell.setAttribute("data-dayOfMonth",ts[k]["date"]["day"])
+            //                 currentCell.setAttribute("data-hour",ts[k]["startTime"]["hour"])
+            //                 currentCell.setAttribute("data-minute",ts[k]["startTime"]["minute"])
+            //                 currentCell.setAttribute("data-endHour",ts[k]["endTime"]["hour"])
+            //                 currentCell.setAttribute("data-endMinute",ts[k]["endTime"]["minute"])
+            //                 currentCell.setAttribute("data-isFree",ts[k]["isFree"])
+            //                 currentCell.setAttribute("data-id",ts[k]["id"])
 
-                            if(ts[k]["isFree"] && ts[k]["meeting"]["secretCode"]==0){
-                                currentCell.innerHTML="Open<br>(Click to book)";
-                                currentCell.classList.add("openTS")
-                                currentCell.setAttribute("data-isOpenEditable",true)
-                            }
-                            else if(ts[k]["meeting"]["secretCode"]==0){
-                                currentCell.innerHTML="Closed"
-                                currentCell.classList.add("closedTS");
-                            }
-                            else{
-                                currentCell.innerHTML="Booked Meeting<br>(Click to delete)"
-                                currentCell.classList.add("bookedTS")
-                                currentCell.setAttribute("data-isDeleteEditable",true)
-                            }
+            //                 if(ts[k]["isFree"] && ts[k]["meeting"]["secretCode"]==0){
+            //                     currentCell.innerHTML="Open<br>(Click to book)";
+            //                     currentCell.classList.add("openTS")
+            //                     currentCell.setAttribute("data-isOpenEditable",true)
+            //                 }
+            //                 else if(ts[k]["meeting"]["secretCode"]==0){
+            //                     currentCell.innerHTML="Closed"
+            //                     currentCell.classList.add("closedTS");
+            //                 }
+            //                 else{
+            //                     currentCell.innerHTML="Booked Meeting<br>(Click to delete)"
+            //                     currentCell.classList.add("bookedTS")
+            //                     currentCell.setAttribute("data-isDeleteEditable",true)
+            //                 }
 
-                            currentCell.onclick = function (){
-                                if(this.getAttribute("data-isOpenEditable")){
-                                    on();
-                                    currTSID = this.getAttribute("data-id");
-                                    var endStr = (this.getAttribute("data-endMinute")=='0')? "00":this.getAttribute("data-endMinute");
-                                    var startStr = (this.getAttribute("data-minute")=='0')? "00":this.getAttribute("data-minute");
-                                    currTSString = this.getAttribute("data-month")+"/"+this.getAttribute("data-dayOfMonth")+"/"+this.getAttribute("data-year")+" from "+this.getAttribute("data-hour")+":"+startStr+" until "+this.getAttribute("data-endHour")+":"+endStr
-                                }
-                                if(this.getAttribute("data-isDeleteEditable")){
-                                    onDelete();
-                                    currentDeleteAMeetingTSID = this.getAttribute("data-id")
-                                }
-                            }
-                            // console.log(row,col)
-                            if(row%(ts.length/5)==0){
-                                row=0;
-                                col+=1;
-                            }
-                            row++;
-                        }
+            //                 currentCell.onclick = function (){
+            //                     if(this.getAttribute("data-isOpenEditable")){
+            //                         on();
+            //                         currTSID = this.getAttribute("data-id");
+            //                         var endStr = (this.getAttribute("data-endMinute")=='0')? "00":this.getAttribute("data-endMinute");
+            //                         var startStr = (this.getAttribute("data-minute")=='0')? "00":this.getAttribute("data-minute");
+            //                         currTSString = this.getAttribute("data-month")+"/"+this.getAttribute("data-dayOfMonth")+"/"+this.getAttribute("data-year")+" from "+this.getAttribute("data-hour")+":"+startStr+" until "+this.getAttribute("data-endHour")+":"+endStr
+            //                     }
+            //                     if(this.getAttribute("data-isDeleteEditable")){
+            //                         onDelete();
+            //                         currentDeleteAMeetingTSID = this.getAttribute("data-id")
+            //                     }
+            //                 }
+            //                 // console.log(row,col)
+            //                 if(row%(ts.length/5)==0){
+            //                     row=0;
+            //                     col+=1;
+            //                 }
+            //                 row++;
+            //             }
 
-                    }
-                }
-            }
+            //         }
+            //     }
+            // }
         }
 
         if(currMinute+duration == 60){
@@ -552,5 +501,5 @@ function sendEmail(email,sc){
      var template_id = "template_YFRkJzbx";
      console.log(email,sc,template_params["message_html"])
     //  document.location.reload(true)
-     emailjs.send(service_id,template_id,template_params);
+    //  emailjs.send(service_id,template_id,template_params);
 }
