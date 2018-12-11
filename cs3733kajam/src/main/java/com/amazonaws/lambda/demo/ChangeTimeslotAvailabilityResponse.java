@@ -7,19 +7,21 @@ import java.util.UUID;
 public class ChangeTimeslotAvailabilityResponse {
 	UUID id;
 	LocalDate date;
-	LocalTime time;
+	LocalTime startTime;
+	LocalTime endTime;
 	boolean available; 
 	int code;
 	
-	public ChangeTimeslotAvailabilityResponse(UUID scheduleID, LocalDate date, LocalTime time, boolean available, int httpCode) {
+	public ChangeTimeslotAvailabilityResponse(UUID scheduleID, LocalDate date, LocalTime starttime, LocalTime endtime, boolean available, int httpCode) {
 		id = scheduleID;
 		this.date = date;
-		this.time = time;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.available = available;
 		code = httpCode;
 	}
 	
 	public String toString() {
-		return "Value("+id+","+date+","+time+","+available+","+code+")";
+		return "Value("+id+","+date+","+startTime+","+endTime+","+available+","+code+")";
 	}
 }
