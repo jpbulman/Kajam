@@ -21,9 +21,7 @@ public class DeleteMeetingTest {
     private static final String SAMPLE_INPUT_STRING = "{\"foo\": \"bar\"}";
     private static final String EXPECTED_OUTPUT_STRING = "{\"headers\":{\"Access-Control-Allow-Origin\":\"*\",\"Access-Control-Allow-Methods\":\"GET,POST,OPTIONS\",\"Content-Type\":\"application\\/json\"},\"body\":\"{\\\"error\\\":\\\"Invalid input format\\\",\\\"httpCode\\\":400}\"}";    
     private static final String SAMPLE_INPUT_STRING3 = "{\n" + 
-    		"    \"id\": \"2c78a573-b5a7-46ad-814c-ff3d33808b9a\",\n" + 
-    		"    \"timeSlotID\": \"eea5770b-84ac-446f-bfdc-442f26fb2987\",\n" + 
-    		"    \"name\": \"name\",\n" + 
+    		"    \"timeSlotID\": \"eea5770b-84ac-446f-bfdc-442f26fb2987\",\n" +
     		"    \"secretCode\": \"88888\",\n" +
     		"}";
     //{"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"GET,POST,OPTIONS","Content-Type":"application\/json"},"body":"{\"id\":\"2c78a573-b5a7-46ad-814c-ff3d33808b8a\",\"timeSlotID\":\"eea5770b-84ac-446f-bfdc-442f26fb2977\",\"name\":\"name\",\"secretCode\":0,\"httpCode\":200}"}
