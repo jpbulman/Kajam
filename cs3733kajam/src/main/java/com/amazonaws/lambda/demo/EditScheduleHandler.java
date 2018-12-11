@@ -176,13 +176,11 @@ public class EditScheduleHandler implements RequestStreamHandler {
 				EditScheduleResponse resp = new EditScheduleResponse(id, scheduleName, startDate, endDate, 200);
 				responseJson.put("body", new Gson().toJson(resp));
 			}
-		}
-		
+		}	
         logger.log("end result:" + responseJson.toJSONString());
         logger.log(responseJson.toJSONString());
         OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
         writer.write(responseJson.toJSONString());  
         writer.close();
     }
-
 }

@@ -276,5 +276,4 @@ public class ScheduleViewHandler implements RequestStreamHandler{
         writer.write(responseJson.toJSONString());  
         writer.close();
 	}
-
 }

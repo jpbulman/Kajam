@@ -145,7 +145,6 @@ public class GetScheduleHandler implements RequestStreamHandler {
         logger.log(responseJson.toJSONString());
         OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
         writer.write(responseJson.toJSONString());  
-        writer.close();
-        
+        writer.close();       
     }
 }
