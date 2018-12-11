@@ -23,16 +23,17 @@ Tags on landing page
     <thead>
         <tr>
         <th scope="col">Time</th>
-        <th id="Mon" scope="col"><button type="button"><</button> Mon<a id="monDate">11/26/18></a></th>
+        <th id="Mon" scope="col"><button class="weekButton" type="button"><</button> Mon<a id="monDate">11/26/18></a></th>
         <th id="Tue" scope="col">Tue</br>11/27/18</th>
         <th id="Wed" scope="col">Wed</br>11/28/18</th>
         <th id="Thu" scope="col">Thu</br>11/29/18</th>
-        <th id="Fri" scope="col">Fri   <button type="button">></button></br>11/20/18</th>
+        <th id="Fri" scope="col">Fri<button class="weekButton" type="button">></button></br>11/20/18</th>
         </tr>
     </thead>
     <tbody id="tableBody">
     </tbody>
 </table>
+<h2 id="loading" class="loading">Loading Schedule</h2>
 </div>
 
 <div class="functionContainer">
@@ -102,6 +103,8 @@ Tags on landing page
         </div>
 
     </form>
+
+    <button type="button" onclick="copyToClip()" >Copy participant link</button>
 
     <button onclick="deleteSchedule()" class="del" type="button">Delete this schedule</button>
 

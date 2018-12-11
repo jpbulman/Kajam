@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html>
+
+<script type="text/javascript" src="https://cdn.emailjs.com/sdk/2.2.4/email.min.js"></script>
+<script type="text/javascript">
+    (function(){
+      emailjs.init("user_eHSFInCWfwil5R34byerY");
+    })();
+</script>
+
 <head>
 <title>Participant View</title>
     <link rel="stylesheet" href="participantView.css">
@@ -13,86 +21,42 @@
 <div style="float: left;width: 74%;margin-right: 1em;">
   <h1 style="text-align: center" id="schName">Participant View</h1>
   
+  <div id="overlayDiv" class="overlay">
+    <input id="meetingTextInput" type="text" value="Enter an email for the meeting">
+    <input onclick="processMeetingInput()" type="button" value="Book meeting">
+    <input type="button" onclick="off()" value="Cancel">
+    <h2 id="bookingMeeting" class="loading">Booking Meeting</h2>
+  </div>
+
+  <div id="deleteOverlayDiv" class="overlay">
+    <input id="deleteAMeetingCode" type="text" value="Enter secret code to delete a meeting">
+    <input onclick="deleteAMeeting()" type="button" value="Delete Meeting">
+    <input type="button" onclick="offDelete()" value="Cancel">
+  </div>
+
   <table id="scheduleTable" class="table table-bordered">
       <thead>
           <tr>
           <th scope="col">Time</th>
-          <th id="Mon" scope="col"><button type="button"><</button> Mon<a id="monDate">11/26/18></a></th>
+          <th id="Mon" scope="col"><button class="weekButton" type="button"><</button> Mon<a id="monDate">11/26/18></a></th>
           <th id="Tue" scope="col">Tue</br>11/27/18</th>
           <th id="Wed" scope="col">Wed</br>11/28/18</th>
           <th id="Thu" scope="col">Thu</br>11/29/18</th>
-          <th id="Fri" scope="col">Fri   <button type="button">></button></br>11/20/18</th>
+          <th id="Fri" scope="col">Fri   <button class="weekButton" type="button">></button></br>11/20/18</th>
           </tr>
       </thead>
       <tbody id="tableBody">
       </tbody>
   </table>
+<h2 id="loading" class="loading">Loading Schedule</h2>
 </div>
 
-<!-- <h1 id="schName">Participant View</h1> -->
-
-<!-- <div class="tableContainer"> -->
-<!-- <table id="scheduleTable">
-    <thead>
-      <tr>
-        <th scope="col">Time</th>
-        <th scope="col"><button type="button"><</button>   Mon</br>11/26/18</th>
-        <th scope="col">Tue</br>11/27/18</th>
-        <th scope="col">Wed</br>11/28/18</th>
-        <th scope="col">Thu</br>11/29/18</th>
-        <th scope="col">Fri   <button type="button">></button></br>11/20/18</th>
-        </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">10:00</th>
-        <td bgcolor="#FFA500"></td>
-        <td>Otto</td>
-        <td>@mdo</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-      </tr>
-      <tr>
-        <th scope="row">11:00</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td bgcolor="#FFA500"></td>
-        <td>Otto</td>
-        <td bgcolor="#FFA500"></td>
-      </tr>
-      <tr>
-        <th scope="row">12:00</th>
-        <td bgcolor="#FFA500"></td>
-        <td>@twitter</td>
-        <script>
-            function makeTextField(){
-              document.getElementById("11").type='text'
-              // document.getElementById("11").onkeypress='changeBack(event)'
-            } 
-
-            function changeBack(event){
-              var x = event.which || event.keyCode;
-              console.log(x==13)
-              if(x==13){
-                document.getElementById("11").type="button";
-                console.log(document.getElementById("11"))
-              }
-            }
-        </script>
-        <td><input onkeypress="changeBack(event)" id="11" onclick="makeTextField()" type="button" value="Book Meeting"></button></td>
-        <td><button type="button">Book Meeting</button></td>
-        <td bgcolor="#FFA500"></td>
-      </tr>
-    </tbody>
-</table>
-</div> -->
-
 <div class="functionContainer">
-  <h1>Delete A Meeting</h1>
+  <!-- <h1>Delete A Meeting</h1>
 
   <form>
     <div>
-      <input type="text" placeholder="Enter your secret code">
+      <input id="deleteAMeetingCode" type="text" placeholder="Enter your secret code">
     </div>
 
     <div>
@@ -102,7 +66,7 @@
     </div>
 
     <input type="button" value="Cancel">
-  </form>
+  </form> -->
 
   <h1>Search Open Time Slots</h1>
 
@@ -159,9 +123,34 @@
     <input type="button" value="Book Meeting">
   </div>
 
-  <h1>Your secret code is: 1729</h1>
+  <!-- <h1>Your secret code is: 1729</h1> -->
 
 </div>
+
+
+<script>
+  // function sender(){
+  //   var emailReq = new XMLHttpRequest()
+  //   var url = "https://api.emailjs.com/api/v1.0/email/send"
+
+  //   emailReq.open("POST",url,true);
+
+  //   sender = {}
+  //   sender["service_id"] = "default_service"
+  //   sender["template_id"] = "{hi}"
+  //   sender["user_id"] = "<meetingschedulerkajam@gmail.com>"
+
+  //   emailReq.send(JSON.stringify(sender))
+  //   console.log("req made")
+
+  //   emailReq.onloadend = function(){
+  //     if(emailReq.readyState==XMLHttpRequest.DONE){
+  //       console.log("done")
+  //     }
+  //   }
+
+  // }
+</script>
 
 </body>
 </html>

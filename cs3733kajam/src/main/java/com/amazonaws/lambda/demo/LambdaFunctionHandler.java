@@ -218,5 +218,4 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
         writer.write(responseJson.toJSONString());  
         writer.close();
     }
-
 }

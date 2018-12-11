@@ -23,5 +23,11 @@ public class Meeting {
 		name = "";
 		secretCode = 0;
 	}
+
+	@Override
+	public String toString() {
+		return "Meeting [id=" + id + ", timeSlotID=" + timeSlotID + ", name=" + name + ", secretCode=" + secretCode
+				+ "]";
+	}
 	
 }

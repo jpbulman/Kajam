@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.json.simple.JSONObject;
@@ -50,17 +51,44 @@ public class ChangeTimeslotAvailability implements RequestStreamHandler{
 		}
 	}
 	
-	Meeting getMeeting(UUID id) throws Exception{
+	Schedule getSchedule(UUID id) throws Exception{
 		if (logger != null) { logger.log("in getSchedule"); }
-		MeetingDAO dao = new MeetingDAO();
+		ScheduleDAO dao = new ScheduleDAO();
 		
-		// check if present 
-		Meeting exist = dao.getMeetingByTimeSlotID(id);
+		// check if present
+		Schedule exist = dao.getSchedule(id);
 		if (exist == null) {
 			throw new NullPointerException();
 		} else {
 			return exist;
 		}
+	}
+	
+	ArrayList<TimeSlot> getTimeSlotsByDate(UUID id, LocalDate date, LocalTime startTime, LocalTime endTime, int duration) throws Exception{
+		if (logger != null) { logger.log("in getTimeSlotsByDate"); }
+		ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
+		LocalTime currentTime = startTime;
+		if (logger != null) { 
+			logger.log("currentTime " + currentTime.toString()); 
+			logger.log("startTime " + startTime.toString());
+			logger.log("endTime " + endTime.toString());
+			logger.log("duration " + duration);
+			logger.log("date " + date);
+		}
+		while(currentTime.isBefore(endTime)) {
+			TimeSlot s = getTimeSlot(id, date, currentTime);
+			if(s != null) {
+				ts.add(s);
+			}
+			
+			if (logger != null) { 
+				logger.log("timeslot " + s.toString()); 
+			}
+			currentTime = currentTime.plusMinutes(duration);
+		}
+		
+		if (logger != null) { logger.log("at end of getTimeSlotsByDate"); }
+		return ts;
 	}
 	
     @Override
@@ -103,7 +131,7 @@ public class ChangeTimeslotAvailability implements RequestStreamHandler{
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
 			//TODO: add more parameters
-			response = new ChangeTimeslotAvailabilityResponse(UUID.randomUUID(), LocalDate.now(), LocalTime.now(), false, 422);  // unable to process input
+			response = new ChangeTimeslotAvailabilityResponse(UUID.randomUUID(), LocalDate.now(), LocalTime.now(), LocalTime.now(), false, 422);  // unable to process input
 	        responseJson.put("body", new Gson().toJson(response));
 	        processed = true;
 	        body = null;
@@ -116,24 +144,31 @@ public class ChangeTimeslotAvailability implements RequestStreamHandler{
 			String respError = "";
 			
 			UUID id;
+			Schedule s;
 			try {
 				id = UUID.fromString(req.arg1);
+				s = getSchedule(id);
 			} catch(Exception e) {
 				id = null;
+				s = null;
 				respError += "Invalid ID ";
 			}
 			
 			int year = 0;
 			int month = 0;
 			int day = 0;
-			int hour = 0;
-			int min = 0;
+			int starthour = 0;
+			int startmin = 0;
+			int endhour = 0;
+			int endmin = 0;
 			try {
 				year = Integer.parseInt(req.arg2);
 				month = Integer.parseInt(req.arg3);
 				day = Integer.parseInt(req.arg4);
-				hour = Integer.parseInt(req.arg5);
-				min = Integer.parseInt(req.arg6);
+				starthour = Integer.parseInt(req.arg5);
+				startmin = Integer.parseInt(req.arg6);
+				endhour = Integer.parseInt(req.arg7);
+				endmin = Integer.parseInt(req.arg8);
 			}catch(Exception e) {
 				respError += "Invalid number format ";
 			}
@@ -147,20 +182,24 @@ public class ChangeTimeslotAvailability implements RequestStreamHandler{
 			
 			LocalTime startTime = null;
 			try {
-				startTime = LocalTime.of(hour, min);
+				startTime = LocalTime.of(starthour, startmin);
 			}catch(Exception e) {
 				respError += "Invalid startTime ";
 			}
 			
-			TimeSlot s;
+			LocalTime endTime = null;
 			try {
-				if(id!=null)
-					s = getTimeSlot(id, date, startTime);
-				else
-					throw new Exception();
-			} catch (Exception e) {
-				s = null;
-				respError += "No timeslot matches given parameters ";
+				endTime = LocalTime.of(endhour, endmin);
+			}catch(Exception e) {
+				respError += "Invalid startTime ";
+			}
+			
+			ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
+			try {
+				ts.addAll(getTimeSlotsByDate(id, date, startTime, endTime, s.duration));
+			} catch(Exception e) {
+				e.printStackTrace();
+				respError += "Error retrieving timeslots ";
 			}
 			
 			// compute proper response
@@ -169,24 +208,31 @@ public class ChangeTimeslotAvailability implements RequestStreamHandler{
 				responseJson.put("body", new Gson().toJson(resp));
 			}else {
 				TimeSlotDAO daoTS = new TimeSlotDAO();
-				if(req.arg7.compareTo("available") == 0) {
-					s.isFree = true;
+				if(req.arg9.compareTo("available") == 0) {
 					try {
-						daoTS.updateTimeSlot(s);
+						for(int i = 0; i < ts.size(); i++) {
+							TimeSlot temp = ts.get(i);
+							temp.isFree = true;
+							daoTS.updateTimeSlot(temp);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					response = new ChangeTimeslotAvailabilityResponse(id, date, startTime, true, 200);
+
+					response = new ChangeTimeslotAvailabilityResponse(id, date, startTime, endTime, true, 200);
 					responseJson.put("body", new Gson().toJson(response));
 				}else {
-					s.isFree = false;
 					try {
-						daoTS.updateTimeSlot(s);
+						for(int i = 0; i < ts.size(); i++) {
+							TimeSlot temp = ts.get(i);
+							temp.isFree = false;
+							daoTS.updateTimeSlot(temp);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 					
-					response = new ChangeTimeslotAvailabilityResponse(id, date, startTime, false, 200);
+					response = new ChangeTimeslotAvailabilityResponse(id, date, startTime, endTime, false, 200);
 					responseJson.put("body", new Gson().toJson(response));
 				}
 			}
@@ -197,6 +243,5 @@ public class ChangeTimeslotAvailability implements RequestStreamHandler{
         OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
         writer.write(responseJson.toJSONString());  
         writer.close();
-        
     }
 }

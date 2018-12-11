@@ -6,18 +6,22 @@ import java.util.UUID;
 
 public class ChangeTimeslotAvailabilityByDayOfWeekResponse {
 	UUID id;
-	DayOfWeek day;
+	String day;
+	LocalTime startTime;
+	LocalTime endTime;
 	boolean available; 
 	int code;
 	
-	public ChangeTimeslotAvailabilityByDayOfWeekResponse(UUID scheduleID, DayOfWeek day, boolean available, int httpCode) {
+	public ChangeTimeslotAvailabilityByDayOfWeekResponse(UUID scheduleID, String day, LocalTime startTime, LocalTime endTime, boolean available, int httpCode) {
 		id = scheduleID;
 		this.day = day;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.available = available;
 		code = httpCode;
 	}
 	
 	public String toString() {
-		return "Value("+id+","+day+","+available+","+code+")";
+		return "Value("+id+","+day+","+startTime+","+endTime+","+available+","+code+")";
 	}
 }
