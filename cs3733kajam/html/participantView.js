@@ -225,6 +225,7 @@ function processMeetingInput(){
         if(makeMeetingReq.readyState == XMLHttpRequest.DONE){
             console.log(JSON.stringify(makeMeetingReq.responseText))
             alert("This is your secret code for the meeting, make sure you remember it! "+JSON.parse(makeMeetingReq.responseText)["secretCode"])
+            document.location.reload(true)
         }
     }
 
@@ -259,6 +260,8 @@ function deleteAMeeting(){
     delMeetingReq.onloadend = function(){
         if(delMeetingReq.readyState==XMLHttpRequest.DONE){
             console.log(delMeetingReq.responseText)
+            alert("Meeting deleted!")
+            document.location.reload(true)
         }
     }
 
