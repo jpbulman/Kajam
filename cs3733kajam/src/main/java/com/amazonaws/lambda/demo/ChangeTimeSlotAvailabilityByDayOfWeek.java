@@ -218,13 +218,27 @@ public class ChangeTimeSlotAvailabilityByDayOfWeek implements RequestStreamHandl
 				respError += "Invalid end time ";
 			}
 			
+			System.out.println("allDaysFlag " + allDaysFlag);
 			ArrayList<TimeSlot> ts = new ArrayList<TimeSlot>();
-			LocalDate curr = s.startDate;
+			LocalDate curr = null;
 			try {
+				curr = s.startDate;
 				if(allDaysFlag) {
+					if(curr.getDayOfWeek() == DayOfWeek.SATURDAY) {
+						curr = curr.plusDays(2);
+					}
+					
+					if(curr.getDayOfWeek() == DayOfWeek.SUNDAY) {
+						curr = curr.plusDays(1);
+					}
+					
 					while(curr.isBefore(s.endDate.plusDays(1))) {
 						ts.addAll(getTimeSlotsByDate(s.id, curr, startTime, endTime, s.duration));
-						curr = curr.plusDays(1);
+						if(curr.getDayOfWeek() == DayOfWeek.FRIDAY) {
+							curr = curr.plusDays(3);
+						}else {
+							curr = curr.plusDays(1);
+						}
 					}
 				}else {
 					while(curr.getDayOfWeek() != day) {
@@ -241,7 +255,7 @@ public class ChangeTimeSlotAvailabilityByDayOfWeek implements RequestStreamHandl
 				respError += "Error finding timeslots ";
 			}
 			
-			
+			System.out.println("allDaysFlag " + allDaysFlag);
 			// compute proper response
 			if(respError.compareTo("") != 0) { // If there is an error in input
 				ErrorResponse resp = new ErrorResponse(respError, 400);
@@ -275,6 +289,7 @@ public class ChangeTimeSlotAvailabilityByDayOfWeek implements RequestStreamHandl
 						e.printStackTrace();
 					}
 					
+					System.out.println("allDaysFlag " + allDaysFlag);
 					if(allDaysFlag) {
 						response = new ChangeTimeslotAvailabilityByDayOfWeekResponse(id, "all", startTime, endTime, false, 200);
 					}else {
