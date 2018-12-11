@@ -210,6 +210,7 @@ var currTSID = ""
 var currTSString = ""
 var mre = ""
 function processMeetingInput(){
+    document.getElementById("bookingMeeting").style.visibility = "visible";
     var input = "-"
 
     var docInput = document.getElementById("meetingTextInput").value;
@@ -228,6 +229,7 @@ function processMeetingInput(){
 
     makeMeetingReq.onloadend = function(){
         if(makeMeetingReq.readyState == XMLHttpRequest.DONE){
+            document.getElementById("bookingMeeting").style.visibility = "hidden";
             console.log(JSON.stringify(makeMeetingReq.responseText))
             var secretyCode = JSON.parse(makeMeetingReq.responseText)["secretCode"]
             alert("This is your secret code for the meeting, make sure you remember it! "+secretyCode)
@@ -456,7 +458,7 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
 
 
 
-
+// document.getElementById("bookingMeeting").style.visibility = "hidden";
 
 var url = window.location.href;
 var setOfParams = "";
