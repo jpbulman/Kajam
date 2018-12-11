@@ -179,11 +179,11 @@ function clearTable(){
 
 function refreshTable(){
     clearTable()
-    for(var a=1;a<=5;a++){
-        // var cell = row.insertCell(a);
-        if(a==1){
+    // for(var a=1;a<=5;a++){
+    //     // var cell = row.insertCell(a);
+    //     if(a==1){
 
-            var dateInformation = getCurrColDateInfo(a);
+            var dateInformation = getCurrColDateInfo(1);
             console.log(dateInformation)
 
             var tsvReq = new XMLHttpRequest();
@@ -204,12 +204,12 @@ function refreshTable(){
                 if(tsvReq.readyState==XMLHttpRequest.DONE){
                     var body = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
                     var ts = body["ts"]
-                    console.log(ts)
 
                     var row=1;
                     var col=1;
 
                     var table = document.getElementById("scheduleTable")
+                    console.log("Refresh")
                     console.log(ts)
 
                     for(var k=0;k<ts.length;k++){
@@ -220,7 +220,11 @@ function refreshTable(){
                         currentCell.setAttribute("data-dayOfMonth",ts[k]["date"]["day"])
                         currentCell.setAttribute("data-hour",ts[k]["startTime"]["hour"])
                         currentCell.setAttribute("data-minute",ts[k]["startTime"]["minute"])
+                        currentCell.setAttribute("data-endHour",ts[k]["endTime"]["hour"])
+                        currentCell.setAttribute("data-endMinute",ts[k]["endTime"]["minute"])
                         currentCell.setAttribute("data-isFree",ts[k]["isFree"])
+                        currentCell.setAttribute("data-tsid",ts[k]["id"])
+                        // console.log(ts)
 
                         if(ts[k]["isFree"]){
                             currentCell.innerHTML="Open";
@@ -253,7 +257,9 @@ function refreshTable(){
                                 sender["arg4"] = this.getAttribute("data-dayOfMonth")
                                 sender["arg5"] = this.getAttribute("data-hour")
                                 sender["arg6"] = this.getAttribute("data-minute")
-                                sender["arg7"] = "unavailable";
+                                sender["arg7"] = this.getAttribute("data-endHour")
+                                sender["arg8"] = this.getAttribute("data-endMinute")
+                                sender["arg9"] = "unavailable";
 
                                 changeAvailReq.send(JSON.stringify(sender));
                                 console.log(JSON.stringify(sender));
@@ -283,7 +289,9 @@ function refreshTable(){
                                 sender["arg4"] = this.getAttribute("data-dayOfMonth")
                                 sender["arg5"] = this.getAttribute("data-hour")
                                 sender["arg6"] = this.getAttribute("data-minute")
-                                sender["arg7"] = "available";
+                                sender["arg7"] = this.getAttribute("data-endHour")
+                                sender["arg8"] = this.getAttribute("data-endMinute")
+                                sender["arg9"] = "available";
 
                                 changeAvailReq.send(JSON.stringify(sender));
                                 console.log(JSON.stringify(sender));
@@ -297,7 +305,33 @@ function refreshTable(){
                                 }
                             }
                             else{
-                                confirm("Are you sure you want to delete this meeting?")
+                                var wantsToCancel = confirm("Are you sure you want to delete this meeting?")
+
+                                if(wantsToCancel){
+                                    var delReq = new XMLHttpRequest();
+                                    var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/meeting/organizer";
+                                    delReq.open("DELETE",url,true);
+
+                                    var sendInfo = {}
+                                    sendInfo["timeSlotID"] = this.getAttribute("data-tsid");
+
+                                    delReq.send(JSON.stringify(sendInfo))
+                                    console.log(JSON.stringify(sendInfo))
+
+                                    delReq.onloadend = function(){
+                                        if(delReq.readyState==XMLHttpRequest.DONE){
+                                            alert("Meeting deleted!")
+                                            document.location.reload(true);
+                                        }
+                                        else{   
+                                            console.log("ouch")
+                                        }
+                                    }
+
+                                }
+                                else{
+
+                                }
                             }
                         }
                         // console.log(row,col)
@@ -310,15 +344,13 @@ function refreshTable(){
 
                 }
             }
-        }
-    }
+    //     }
+    // }
 }
 
 function popTable(dayStartHour,dayEndHour,duration,scheduleID){
 
     document.getElementById("loading").style.visibility = "visible"
-
-    console.log(dayStartHour,dayEndHour,duration,scheduleID)
 
     var currHour,currMinute, i;
     for(currHour = dayStartHour, currMinute = 0, i=1;currHour<dayEndHour;i++){
@@ -357,8 +389,6 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                 sender["arg3"] = (dateInformation["month"]+1).toString();
                 sender["arg4"] = dateInformation["day"].toString();
 
-                console.log(JSON.stringify(sender));
-
                 tsvReq.send(JSON.stringify(sender));
 
                 tsvReq.onloadend = function(){
@@ -376,16 +406,16 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                         console.log(ts)
 
                         for(var k=0;k<ts.length;k++){
-                            // console.log(ts.length)
                             var currentCell = table.rows[row].cells[col];
                             currentCell.setAttribute("data-year",ts[k]["date"]["year"])
                             currentCell.setAttribute("data-month",ts[k]["date"]["month"])
                             currentCell.setAttribute("data-dayOfMonth",ts[k]["date"]["day"])
                             currentCell.setAttribute("data-hour",ts[k]["startTime"]["hour"])
                             currentCell.setAttribute("data-minute",ts[k]["startTime"]["minute"])
+                            currentCell.setAttribute("data-endHour",ts[k]["endTime"]["hour"])
+                            currentCell.setAttribute("data-endMinute",ts[k]["endTime"]["minute"])
                             currentCell.setAttribute("data-isFree",ts[k]["isFree"])
-
-                            console.log(ts[k]["meeting"]["secretCode"])
+                            currentCell.setAttribute("data-tsid",ts[k]["id"])
 
                             if(ts[k]["isFree"] && ts[k]["meeting"]["secretCode"]==0){
                                 currentCell.innerHTML="Open";
@@ -401,12 +431,13 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                             }
 
                             currentCell.onclick = function (){
+                                // console.log(this.getAttribute("data-endMinute"))
                                 if(this.innerHTML=="Open"){
                                     this.classList.remove("openTS");
                                     this.classList.add("closedTS");
                                     this.innerHTML = "Closed";
 
-                                    //id, year,m day,h,m,avail
+                                    //id, year,m day,h,m,eh,em,avail
 
                                     var changeAvailReq = new XMLHttpRequest();
                                     var availURL = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/timeslotavailability"
@@ -419,7 +450,9 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                                     sender["arg4"] = this.getAttribute("data-dayOfMonth")
                                     sender["arg5"] = this.getAttribute("data-hour")
                                     sender["arg6"] = this.getAttribute("data-minute")
-                                    sender["arg7"] = "unavailable";
+                                    sender["arg7"] = this.getAttribute("data-endHour")
+                                    sender["arg8"] = this.getAttribute("data-endMinute")
+                                    sender["arg9"] = "unavailable";
 
                                     changeAvailReq.send(JSON.stringify(sender));
                                     console.log(JSON.stringify(sender));
@@ -449,7 +482,9 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                                     sender["arg4"] = this.getAttribute("data-dayOfMonth")
                                     sender["arg5"] = this.getAttribute("data-hour")
                                     sender["arg6"] = this.getAttribute("data-minute")
-                                    sender["arg7"] = "available";
+                                    sender["arg7"] = this.getAttribute("data-endHour")
+                                    sender["arg8"] = this.getAttribute("data-endMinute")
+                                    sender["arg9"] = "available";
 
                                     changeAvailReq.send(JSON.stringify(sender));
                                     console.log(JSON.stringify(sender));
@@ -466,6 +501,25 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                                     var wantsToCancel = confirm("Are you sure you want to delete this meeting?")
 
                                     if(wantsToCancel){
+                                        var delReq = new XMLHttpRequest();
+                                        var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/meeting/organizer";
+                                        delReq.open("DELETE",url,true);
+
+                                        var sendInfo = {}
+                                        sendInfo["timeSlotID"] = this.getAttribute("data-tsid");
+
+                                        delReq.send(JSON.stringify(sendInfo))
+                                        console.log(JSON.stringify(sendInfo))
+
+                                        delReq.onloadend = function(){
+                                            if(delReq.readyState==XMLHttpRequest.DONE){
+                                                alert("Meeting deleted!")
+                                                document.location.reload(true);
+                                            }
+                                            else{   
+                                                console.log("ouch")
+                                            }
+                                        }
 
                                     }
                                     else{

@@ -260,9 +260,7 @@ function deleteAMeeting(){
     delMeetingReq.open("DELETE",url,true);
 
     var sender = {}
-    sender["id"] = currentDeleteAMeetingTSID;
     sender["timeSlotID"] = currentDeleteAMeetingTSID;
-    sender["name"] = "";
     sender["secretCode"] = secretCode;
     console.log(sender)
     
@@ -272,7 +270,7 @@ function deleteAMeeting(){
         if(delMeetingReq.readyState==XMLHttpRequest.DONE){
             console.log(delMeetingReq.responseText)
             alert("Meeting deleted!")
-            // document.location.reload(true)
+            document.location.reload(true)
         }
     }
 
@@ -553,5 +551,6 @@ function sendEmail(email,sc){
      var service_id = "default_service";
      var template_id = "template_YFRkJzbx";
      console.log(email,sc,template_params["message_html"])
+    //  document.location.reload(true)
      emailjs.send(service_id,template_id,template_params);
 }
