@@ -179,10 +179,6 @@ function clearTable(){
 
 function refreshTable(){
     clearTable()
-    // for(var a=1;a<=5;a++){
-    //     // var cell = row.insertCell(a);
-    //     if(a==1){
-
             var dateInformation = getCurrColDateInfo(1);
             console.log(dateInformation)
 
@@ -213,7 +209,7 @@ function refreshTable(){
                     console.log(ts)
 
                     for(var k=0;k<ts.length;k++){
-                        // console.log(ts.length)
+                        console.log(row,col)
                         var currentCell = table.rows[row].cells[col];
                         currentCell.setAttribute("data-year",ts[k]["date"]["year"])
                         currentCell.setAttribute("data-month",ts[k]["date"]["month"])
@@ -226,7 +222,7 @@ function refreshTable(){
                         currentCell.setAttribute("data-tsid",ts[k]["id"])
                         // console.log(ts)
 
-                        if(ts[k]["isFree"]){
+                        if(ts[k]["isFree"] && ts[k]["meeting"]["secretCode"]==0){
                             currentCell.innerHTML="Open";
                             currentCell.classList.add("openTS")
                         }
@@ -236,6 +232,7 @@ function refreshTable(){
                         }
                         else{
                             currentCell.innerHTML=ts[k]["meeting"]["name"]
+                            currentCell.classList.add("bookedTS")
                         }
 
                         currentCell.onclick = function (){
@@ -334,8 +331,8 @@ function refreshTable(){
                                 }
                             }
                         }
-                        // console.log(row,col)
-                        if(row%(ts.length/5)==0){
+                        
+                        if(row%(table.rows.length-1)==0){
                             row=0;
                             col+=1;
                         }
@@ -344,8 +341,6 @@ function refreshTable(){
 
                 }
             }
-    //     }
-    // }
 }
 
 function popTable(dayStartHour,dayEndHour,duration,scheduleID){
@@ -529,7 +524,7 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                                 }
                             }
                             // console.log(row,col)
-                            if(row%(ts.length/5)==0){
+                            if(row%(table.rows.length-1)==0){
                                 row=0;
                                 col+=1;
                             }
@@ -549,6 +544,15 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
             currMinute+=duration;
         }
     }
+}
+
+function editSchedule(){
+    var editRequest = new XMLHttpRequest();
+    var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/schedule/settings"
+    editRequest.open("POST",url,true)
+
+    var sendInfo = {}
+
 }
 
 function updateView(json){
@@ -581,6 +585,24 @@ function updateView(json){
     // console.log(document.getElementById("11").innerHTML)    
     // console.log(startYear)
     // getTimeSlotView(scheduleID,startYear,startMonth,startDay,dayStartHour,"00");
+}
+
+function copyToClip(){
+    var currUrl = window.location.href
+    currUrl = currUrl.replace("organizerView","participantView")
+
+    for(var i=0;i<currUrl.length;i++){
+        if(currUrl.substring(i,i+1)==="&"){
+            currUrl = currUrl.substring(0,i)
+        }
+    }
+
+    var area = document.createElement('textarea');
+    area.value = currUrl;
+    document.body.appendChild(area)
+    area.select();
+    document.execCommand('copy')
+    document.body.removeChild(area)
 }
 
 for(var i=0;i<url.length;i++){
