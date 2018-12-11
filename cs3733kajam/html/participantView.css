@@ -36,7 +36,7 @@ td, th{
 }
 
 .closedTS:hover{
-    background-color: darkred;
+    /* background-color: darkred; */
 }
 
 .takenTS{
@@ -122,4 +122,9 @@ input[type=text]{
     font-family: Arial, Helvetica, sans-serif;
     border: 3px solid gray;
     border-radius: 8px;
+}
+
+.overlay{
+    display: none;
+    text-align: center;
 }

@@ -381,7 +381,9 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                             currentCell.setAttribute("data-minute",ts[k]["startTime"]["minute"])
                             currentCell.setAttribute("data-isFree",ts[k]["isFree"])
 
-                            if(ts[k]["isFree"]){
+                            console.log(ts[k]["meeting"]["secretCode"])
+
+                            if(ts[k]["isFree"] && ts[k]["meeting"]["secretCode"]==0){
                                 currentCell.innerHTML="Open";
                                 currentCell.classList.add("openTS")
                             }
