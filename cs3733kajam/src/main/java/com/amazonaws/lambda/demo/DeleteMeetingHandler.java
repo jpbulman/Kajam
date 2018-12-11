@@ -38,20 +38,11 @@ public class DeleteMeetingHandler implements RequestStreamHandler{
 			.withRegion("us-east-2").build();
 	
 	
-	boolean deleteMeeting(UUID id, UUID timeSlotid, String name, int secretCode) throws Exception {
+	boolean deleteMeeting(UUID timeSlotid, int secretCode) throws Exception {
 		if (logger != null) { logger.log("in createMeeting"); }
 		MeetingDAO dao = new MeetingDAO();
 		Meeting exist;
-		// check if present
 		
-		/*try {
-			//exist = dao.getMeetingByTimeSlotID(timeSlotid);
-			
-		} catch (Exception e){
-			//exist = null;
-			return false;
-			//throw new NullPointerException();
-		}*/
 		exist = dao.getMeetingByTimeSlotID(timeSlotid);
 		if (exist == null) {
 			//throw new NullPointerException();
@@ -105,7 +96,7 @@ public class DeleteMeetingHandler implements RequestStreamHandler{
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
 			//TODO: add more parameters
-			response = new DeleteMeetingResponse(null, null, "", 0, 400);  // unable to process input
+			response = new DeleteMeetingResponse(null, 0, 400);  // unable to process input
 	        responseJson.put("body", new Gson().toJson(response));
 	        processed = true;
 	        body = null;
@@ -118,7 +109,6 @@ public class DeleteMeetingHandler implements RequestStreamHandler{
 			String respError = "";
 			UUID val1 = null; // timeslot
 			int val2 = 0;     // secretcode
-			UUID val3 = null; // id
 			
 			Meeting m;
 			try {
@@ -132,12 +122,6 @@ public class DeleteMeetingHandler implements RequestStreamHandler{
 				val1 = null;
 				respError = "Invalid input format";
 			}
-			try {
-				val3 = UUID.fromString(req.id);
-			} catch (Exception e) {
-				val3 = null;
-				respError = "Invalid input format";
-			}
 			
 			// compute proper response
 			if(respError.compareTo("") != 0) { // If there is an error in input
@@ -145,8 +129,8 @@ public class DeleteMeetingHandler implements RequestStreamHandler{
 				responseJson.put("body", new Gson().toJson(resp));
 			}else {
 				try {
-					if(deleteMeeting(val3, val1, req.name, val2)) {
-						DeleteMeetingResponse resp = new DeleteMeetingResponse(val3, val1, req.name, val2, 200);
+					if(deleteMeeting(val1, val2)) {
+						DeleteMeetingResponse resp = new DeleteMeetingResponse(val1, val2, 200);
 						responseJson.put("body", new Gson().toJson(resp));
 					}else {
 						ErrorResponse resp = new ErrorResponse("Invalid secretCode", 400);
