@@ -41,6 +41,7 @@ public class MeetingDAOTest {
 	    try {
 	    	Meeting m = md.getMeetingByTimeSlotID(UUID.fromString("eea5770b-84ac-446f-bfdc-442f26fb2992"));
 	    	System.out.println("Schedule " + m.name + " with id: " + m.id);
+	    	System.out.println(m.toString());
 	    } catch (Exception e) {
 	    	fail ("didn't work:" + e.getMessage());
 	    }

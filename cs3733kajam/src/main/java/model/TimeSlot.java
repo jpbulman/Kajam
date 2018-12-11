@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
+import db.MeetingDAO;
+
 public class TimeSlot {
 	public UUID id;
 	public UUID scheduleID;
@@ -37,7 +39,17 @@ public class TimeSlot {
 		this.date = date;
 		this.isFree = isFree;
 		this.hasMeeting = false;
-		this.meeting = new Meeting();
+		//this.meeting = new Meeting();
+		
+		MeetingDAO dao = new MeetingDAO();
+		Meeting m = dao.getMeetingByTimeSlotID(id);
+		if(m==null) {
+			meeting = new Meeting();
+		}
+		else {
+			meeting = m;
+		}
+		
 	}
 
 	@Override
