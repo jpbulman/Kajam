@@ -209,7 +209,6 @@ function refreshTable(){
                     console.log(ts)
 
                     for(var k=0;k<ts.length;k++){
-                        console.log(row,col)
                         var currentCell = table.rows[row].cells[col];
                         currentCell.setAttribute("data-year",ts[k]["date"]["year"])
                         currentCell.setAttribute("data-month",ts[k]["date"]["month"])
@@ -551,7 +550,66 @@ function editSchedule(){
     var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/schedule/settings"
     editRequest.open("POST",url,true)
 
+    var nameVal = document.getElementById("editScheduleName").value;
+    var startDateVals = document.getElementById("editScheduleSD").value;
+
+    var startMonth="",startDay="",startYear="";
+    var k=0;
+    for(var i=0;i<startDateVals.length;i++){
+        var currChar = startDateVals.substring(i,i+1)
+        if(currChar==="/"){
+            k++;
+        }
+        else{
+            switch(k){
+                case 0:startMonth+=currChar;break;
+                case 1:startDay+=currChar;break;
+                case 2:startYear+=currChar;break;
+            }
+        }
+    }
+
+    var endDateVals = document.getElementById("editScheduleED").value;
+
+    var endMonth = "", endDay="",endYear="";
+    var a=0;
+    for(var j=0;j<endDateVals.length;j++){
+        var currChar = endDateVals.substring(j,j+1)
+        if(currChar==="/"){
+            a++;
+        }
+        else{
+            switch (a) {
+                case 0:endMonth+=currChar; break;
+                case 1:endDay+=currChar; break;
+                case 2:endYear+=currChar; break;
+                default:
+                    console.log("not going to happen")
+                    break;
+            }
+        }
+    }
+
+    console.log(nameVal)
+
     var sendInfo = {}
+    sendInfo["arg1"] = document.getElementById("scheduleTable").getAttribute("data-scheduleID");
+    sendInfo["arg2"] = (nameVal=="Enter schedule name")? "":nameVal;
+    sendInfo["arg3"] = startYear
+    sendInfo["arg4"] = startMonth
+    sendInfo["arg5"] = startDay
+    sendInfo["arg6"] = endYear
+    sendInfo["arg7"] = endMonth
+    sendInfo["arg8"] = endDay
+
+    editRequest.send(JSON.stringify(sendInfo))
+    console.log(JSON.stringify(sendInfo))
+
+    editRequest.onloadend = function(){
+        if(editRequest.readyState==XMLHttpRequest.DONE){
+            console.log(editRequest.responseText)
+        }
+    }
 
 }
 
@@ -559,6 +617,7 @@ function updateView(json){
     document.getElementById("schName").innerHTML = json["name"];
 
     var scheduleID = json["id"];
+    document.getElementById("scheduleTable").setAttribute("data-scheduleID",scheduleID)
 
     var startMonth = parseInt(json["startDate"]["month"]);
     var startDay = parseInt(json["startDate"]["day"]);

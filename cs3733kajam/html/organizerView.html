@@ -40,18 +40,18 @@ Tags on landing page
     <h1 style="text-decoration: underline" >Edit Schedule</h1>
 
     <form>
-        <input type="text" placeholder="Enter schedule name">
+        <input id="editScheduleName" type="text" placeholder="Enter schedule name">
 
         <div>
-            <input type="text" placeholder="Start day (MM/DD/YYYY)">
+            <input id="editScheduleSD" type="text" placeholder="Start day (MM/DD/YYYY)">
         </div>
 
         <div>
-            <input type="text" placeholder="End day (MM/DD/YYYY)">
+            <input id="editScheduleED" type="text" placeholder="End day (MM/DD/YYYY)">
         </div>
 
         <div>
-            <input class="set" type="button" value="Set">
+            <input onclick="editSchedule()" class="set" type="button" value="Set">
         </div>
 
     </form>
