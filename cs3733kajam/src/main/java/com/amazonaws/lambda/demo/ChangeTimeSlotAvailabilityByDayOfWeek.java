@@ -281,7 +281,7 @@ public class ChangeTimeSlotAvailabilityByDayOfWeek implements RequestStreamHandl
 					try {
 						for(int i = 0; i < ts.size(); i++) {
 							TimeSlot temp = ts.get(i);
-							temp.isFree = true;
+							temp.isFree = false;
 							daoTS.updateTimeSlot(temp);
 						}
 					} catch (Exception e) {

@@ -221,7 +221,7 @@ public class ChangeTimeslotAvailability implements RequestStreamHandler{
 				responseJson.put("body", new Gson().toJson(resp));
 			}else {
 				TimeSlotDAO daoTS = new TimeSlotDAO();
-				if(req.arg7.compareTo("available") == 0) {
+				if(req.arg9.compareTo("available") == 0) {
 					try {
 						for(int i = 0; i < ts.size(); i++) {
 							TimeSlot temp = ts.get(i);
@@ -238,7 +238,7 @@ public class ChangeTimeslotAvailability implements RequestStreamHandler{
 					try {
 						for(int i = 0; i < ts.size(); i++) {
 							TimeSlot temp = ts.get(i);
-							temp.isFree = true;
+							temp.isFree = false;
 							daoTS.updateTimeSlot(temp);
 						}
 					} catch (Exception e) {
