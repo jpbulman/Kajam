@@ -242,8 +242,12 @@ function updateView(json){
                                 currentCell.innerHTML="Open";
                                 currentCell.classList.add("openTS")
                             }
+                            else if(ts[k]["meeting"]["secretCode"]==0){
+                                currentCell.innerHTML="Closed"
+                                currentCell.classList.add("closedTS");
+                            }
                             else{
-
+                                currentCell.innerHTML=ts[k]["meeting"]["name"]
                             }
 
                             currentCell.onclick = function (){
@@ -265,7 +269,7 @@ function updateView(json){
                                     sender["arg4"] = this.getAttribute("data-dayOfMonth")
                                     sender["arg5"] = this.getAttribute("data-hour")
                                     sender["arg6"] = this.getAttribute("data-minute")
-                                    sender["arg7"] = (this.getAttribute("data-isFree")) ? "unavailable":"available";
+                                    sender["arg7"] = "unavailable";
 
                                     changeAvailReq.send(JSON.stringify(sender));
                                     console.log(JSON.stringify(sender));
@@ -283,6 +287,30 @@ function updateView(json){
                                     this.classList.remove("closedTS");
                                     this.classList.add("openTS");
                                     this.innerHTML = "Open";
+
+                                    var changeAvailReq = new XMLHttpRequest();
+                                    var availURL = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/timeslotavailability"
+                                    changeAvailReq.open("POST",availURL,true);
+
+                                    sender = {}
+                                    sender["arg1"] = scheduleID;
+                                    sender["arg2"] = this.getAttribute("data-year")
+                                    sender["arg3"] = this.getAttribute("data-month")
+                                    sender["arg4"] = this.getAttribute("data-dayOfMonth")
+                                    sender["arg5"] = this.getAttribute("data-hour")
+                                    sender["arg6"] = this.getAttribute("data-minute")
+                                    sender["arg7"] = "available";
+
+                                    changeAvailReq.send(JSON.stringify(sender));
+                                    console.log(JSON.stringify(sender));
+                                    changeAvailReq.onloadend = function(){
+
+                                        if(changeAvailReq.readyState==XMLHttpRequest.DONE){
+                                            console.log("Done")
+                                            console.log(changeAvailReq.responseText)
+                                        }
+
+                                    }
                                 }
                                 else{
                                     //Alert to confirm to cancel a meeting
