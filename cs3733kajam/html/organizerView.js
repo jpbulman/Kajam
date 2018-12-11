@@ -15,10 +15,10 @@ function getWeekDay(day){
 
 function fillInDate(dayOfWeek,actualDate){
     if(dayOfWeek=="Mon"){
-        document.getElementById(dayOfWeek).innerHTML = '<button onclick="getPrevWeek()" type="button"><</button> <a id="MonDate">'+actualDate.toDateString()+'</a>';
+        document.getElementById(dayOfWeek).innerHTML = '<button onclick="getPrevWeek()" class="weekButton" type="button"><</button> <a id="MonDate">'+actualDate.toDateString()+'</a>';
     }
     else if(dayOfWeek.toString()=="Fri"){
-        document.getElementById(dayOfWeek).innerHTML = '<a id="FriDate">'+actualDate.toDateString()+'</a>'+' <button onclick="getNextWeek()" type="button">></button>'; 
+        document.getElementById(dayOfWeek).innerHTML = '<a id="FriDate">'+actualDate.toDateString()+'</a>'+' <button class="weekButton" onclick="getNextWeek()" type="button">></button>'; 
     }
     else{
         document.getElementById(dayOfWeek).innerHTML = '<a id="'+getWeekDay(actualDate)+'Date">'+actualDate.toDateString()
@@ -170,8 +170,8 @@ function clearTable(){
         var currentCell = document.getElementById("scheduleTable").rows[row].cells[col];
         currentCell.innerHTML = "";
         currentCell.classList.remove("openTS")
-        currentCell.classList.remove("closedTS")   
-
+        currentCell.classList.remove("closedTS")  
+        currentCell.classList.remove("bookedTS")    
         }
     }
 
@@ -297,7 +297,7 @@ function refreshTable(){
                                 }
                             }
                             else{
-                                //Alert to confirm to cancel a meeting
+                                confirm("Are you sure you want to delete this meeting?")
                             }
                         }
                         // console.log(row,col)
@@ -315,6 +315,8 @@ function refreshTable(){
 }
 
 function popTable(dayStartHour,dayEndHour,duration,scheduleID){
+
+    document.getElementById("loading").style.visibility = "visible"
 
     console.log(dayStartHour,dayEndHour,duration,scheduleID)
 
@@ -361,6 +363,8 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
 
                 tsvReq.onloadend = function(){
                     if(tsvReq.readyState==XMLHttpRequest.DONE){
+                        document.getElementById("loading").style.visibility = "hidden"
+
                         var body = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
                         var ts = body["ts"]
                         console.log(ts)
@@ -393,6 +397,7 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                             }
                             else{
                                 currentCell.innerHTML=ts[k]["meeting"]["name"]
+                                currentCell.classList.add("bookedTS")
                             }
 
                             currentCell.onclick = function (){
@@ -458,7 +463,15 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                                     }
                                 }
                                 else{
-                                    //Alert to confirm to cancel a meeting
+                                    var wantsToCancel = confirm("Are you sure you want to delete this meeting?")
+
+                                    if(wantsToCancel){
+
+                                    }
+                                    else{
+
+                                    }
+
                                 }
                             }
                             // console.log(row,col)

@@ -43,142 +43,142 @@ function clearTable(){
 
 }
 
-function refreshTable(){
-    clearTable()
-    for(var a=1;a<=5;a++){
-        // var cell = row.insertCell(a);
-        if(a==1){
+// function refreshTable(){
+//     clearTable()
+//     for(var a=1;a<=5;a++){
+//         // var cell = row.insertCell(a);
+//         if(a==1){
 
-            var dateInformation = getCurrColDateInfo(a);
-            console.log(dateInformation)
+//             var dateInformation = getCurrColDateInfo(a);
+//             console.log(dateInformation)
 
-            var tsvReq = new XMLHttpRequest();
-            var posterUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleView";
-            tsvReq.open("POST",posterUrl,true);
+//             var tsvReq = new XMLHttpRequest();
+//             var posterUrl = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/scheduleView";
+//             tsvReq.open("POST",posterUrl,true);
         
-            sender = {}
-            sender["arg1"] = globalSchID.toString();
-            sender["arg2"] = dateInformation["year"].toString();
-            sender["arg3"] = (dateInformation["month"]+1).toString();
-            sender["arg4"] = dateInformation["day"].toString();
+//             sender = {}
+//             sender["arg1"] = globalSchID.toString();
+//             sender["arg2"] = dateInformation["year"].toString();
+//             sender["arg3"] = (dateInformation["month"]+1).toString();
+//             sender["arg4"] = dateInformation["day"].toString();
 
-            console.log(JSON.stringify(sender));
+//             console.log(JSON.stringify(sender));
 
-            tsvReq.send(JSON.stringify(sender));
+//             tsvReq.send(JSON.stringify(sender));
 
-            tsvReq.onloadend = function(){
-                if(tsvReq.readyState==XMLHttpRequest.DONE){
-                    var body = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
-                    var ts = body["ts"]
-                    console.log(ts)
+//             tsvReq.onloadend = function(){
+//                 if(tsvReq.readyState==XMLHttpRequest.DONE){
+//                     var body = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
+//                     var ts = body["ts"]
+//                     console.log(ts)
 
-                    var row=1;
-                    var col=1;
+//                     var row=1;
+//                     var col=1;
 
-                    var table = document.getElementById("scheduleTable")
-                    console.log(ts)
+//                     var table = document.getElementById("scheduleTable")
+//                     console.log(ts)
 
-                    for(var k=0;k<ts.length;k++){
-                        // console.log(ts.length)
-                        var currentCell = table.rows[row].cells[col];
-                        currentCell.setAttribute("data-year",ts[k]["date"]["year"])
-                        currentCell.setAttribute("data-month",ts[k]["date"]["month"])
-                        currentCell.setAttribute("data-dayOfMonth",ts[k]["date"]["day"])
-                        currentCell.setAttribute("data-hour",ts[k]["startTime"]["hour"])
-                        currentCell.setAttribute("data-minute",ts[k]["startTime"]["minute"])
-                        currentCell.setAttribute("data-isFree",ts[k]["isFree"])
+//                     for(var k=0;k<ts.length;k++){
+//                         // console.log(ts.length)
+//                         var currentCell = table.rows[row].cells[col];
+//                         currentCell.setAttribute("data-year",ts[k]["date"]["year"])
+//                         currentCell.setAttribute("data-month",ts[k]["date"]["month"])
+//                         currentCell.setAttribute("data-dayOfMonth",ts[k]["date"]["day"])
+//                         currentCell.setAttribute("data-hour",ts[k]["startTime"]["hour"])
+//                         currentCell.setAttribute("data-minute",ts[k]["startTime"]["minute"])
+//                         currentCell.setAttribute("data-isFree",ts[k]["isFree"])
 
-                        if(ts[k]["isFree"]){
-                            currentCell.innerHTML="Open";
-                            currentCell.classList.add("openTS")
-                        }
-                        else if(ts[k]["meeting"]["secretCode"]==0){
-                            currentCell.innerHTML="Closed"
-                            currentCell.classList.add("closedTS");
-                        }
-                        else{
-                            currentCell.innerHTML=ts[k]["meeting"]["name"]
-                        }
+//                         if(ts[k]["isFree"]){
+//                             currentCell.innerHTML="Open";
+//                             currentCell.classList.add("openTS")
+//                         }
+//                         else if(ts[k]["meeting"]["secretCode"]==0){
+//                             currentCell.innerHTML="Closed"
+//                             currentCell.classList.add("closedTS");
+//                         }
+//                         else{
+//                             currentCell.innerHTML=ts[k]["meeting"]["name"]
+//                         }
 
-                        currentCell.onclick = function (){
-                            if(this.innerHTML=="Open"){
-                                this.classList.remove("openTS");
-                                this.classList.add("closedTS");
-                                this.innerHTML = "Closed";
+//                         currentCell.onclick = function (){
+//                             if(this.innerHTML=="Open"){
+//                                 this.classList.remove("openTS");
+//                                 this.classList.add("closedTS");
+//                                 this.innerHTML = "Closed";
 
-                                //id, year,m day,h,m,avail
+//                                 //id, year,m day,h,m,avail
 
-                                var changeAvailReq = new XMLHttpRequest();
-                                var availURL = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/timeslotavailability"
-                                changeAvailReq.open("POST",availURL,true);
+//                                 var changeAvailReq = new XMLHttpRequest();
+//                                 var availURL = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/timeslotavailability"
+//                                 changeAvailReq.open("POST",availURL,true);
 
-                                sender = {}
-                                sender["arg1"] = globalSchID;
-                                sender["arg2"] = this.getAttribute("data-year")
-                                sender["arg3"] = this.getAttribute("data-month")
-                                sender["arg4"] = this.getAttribute("data-dayOfMonth")
-                                sender["arg5"] = this.getAttribute("data-hour")
-                                sender["arg6"] = this.getAttribute("data-minute")
-                                sender["arg7"] = "unavailable";
+//                                 sender = {}
+//                                 sender["arg1"] = globalSchID;
+//                                 sender["arg2"] = this.getAttribute("data-year")
+//                                 sender["arg3"] = this.getAttribute("data-month")
+//                                 sender["arg4"] = this.getAttribute("data-dayOfMonth")
+//                                 sender["arg5"] = this.getAttribute("data-hour")
+//                                 sender["arg6"] = this.getAttribute("data-minute")
+//                                 sender["arg7"] = "unavailable";
 
-                                changeAvailReq.send(JSON.stringify(sender));
-                                console.log(JSON.stringify(sender));
-                                changeAvailReq.onloadend = function(){
+//                                 changeAvailReq.send(JSON.stringify(sender));
+//                                 console.log(JSON.stringify(sender));
+//                                 changeAvailReq.onloadend = function(){
 
-                                    if(changeAvailReq.readyState==XMLHttpRequest.DONE){
-                                        console.log("Done")
-                                        console.log(changeAvailReq.responseText)
-                                    }
+//                                     if(changeAvailReq.readyState==XMLHttpRequest.DONE){
+//                                         console.log("Done")
+//                                         console.log(changeAvailReq.responseText)
+//                                     }
 
-                                }
+//                                 }
 
-                            }
-                            else if(this.innerHTML=="Closed"){
-                                this.classList.remove("closedTS");
-                                this.classList.add("openTS");
-                                this.innerHTML = "Open";
+//                             }
+//                             else if(this.innerHTML=="Closed"){
+//                                 this.classList.remove("closedTS");
+//                                 this.classList.add("openTS");
+//                                 this.innerHTML = "Open";
 
-                                var changeAvailReq = new XMLHttpRequest();
-                                var availURL = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/timeslotavailability"
-                                changeAvailReq.open("POST",availURL,true);
+//                                 var changeAvailReq = new XMLHttpRequest();
+//                                 var availURL = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/timeslotavailability"
+//                                 changeAvailReq.open("POST",availURL,true);
 
-                                sender = {}
-                                sender["arg1"] = scheduleID;
-                                sender["arg2"] = this.getAttribute("data-year")
-                                sender["arg3"] = this.getAttribute("data-month")
-                                sender["arg4"] = this.getAttribute("data-dayOfMonth")
-                                sender["arg5"] = this.getAttribute("data-hour")
-                                sender["arg6"] = this.getAttribute("data-minute")
-                                sender["arg7"] = "available";
+//                                 sender = {}
+//                                 sender["arg1"] = scheduleID;
+//                                 sender["arg2"] = this.getAttribute("data-year")
+//                                 sender["arg3"] = this.getAttribute("data-month")
+//                                 sender["arg4"] = this.getAttribute("data-dayOfMonth")
+//                                 sender["arg5"] = this.getAttribute("data-hour")
+//                                 sender["arg6"] = this.getAttribute("data-minute")
+//                                 sender["arg7"] = "available";
 
-                                changeAvailReq.send(JSON.stringify(sender));
-                                console.log(JSON.stringify(sender));
-                                changeAvailReq.onloadend = function(){
+//                                 changeAvailReq.send(JSON.stringify(sender));
+//                                 console.log(JSON.stringify(sender));
+//                                 changeAvailReq.onloadend = function(){
 
-                                    if(changeAvailReq.readyState==XMLHttpRequest.DONE){
-                                        console.log("Done")
-                                        console.log(changeAvailReq.responseText)
-                                    }
+//                                     if(changeAvailReq.readyState==XMLHttpRequest.DONE){
+//                                         console.log("Done")
+//                                         console.log(changeAvailReq.responseText)
+//                                     }
 
-                                }
-                            }
-                            else{
-                                //Alert to confirm to cancel a meeting
-                            }
-                        }
-                        // console.log(row,col)
-                        if(row%(ts.length/5)==0){
-                            row=0;
-                            col+=1;
-                        }
-                        row++;
-                    }
+//                                 }
+//                             }
+//                             else{
+//                                 //Alert to confirm to cancel a meeting
+//                             }
+//                         }
+//                         // console.log(row,col)
+//                         if(row%(ts.length/5)==0){
+//                             row=0;
+//                             col+=1;
+//                         }
+//                         row++;
+//                     }
 
-                }
-            }
-        }
-    }
-}
+//                 }
+//             }
+//         }
+//     }
+// }
 
 function getNextWeek(){
     var mon = document.getElementById("MonDate").innerHTML;
@@ -198,6 +198,8 @@ function getPrevWeek(){
 
 function on(){
     document.getElementById("overlayDiv").style.display = "block"
+    document.getElementById("meetingTextInput").select()
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
 }
 
 function off(){
@@ -205,10 +207,13 @@ function off(){
 }
 
 var currTSID = ""
+var currTSString = ""
+var mre = ""
 function processMeetingInput(){
     var input = "-"
 
     var docInput = document.getElementById("meetingTextInput").value;
+    mre = docInput
     
     var makeMeetingReq = new XMLHttpRequest();
     var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/meeting"
@@ -224,8 +229,10 @@ function processMeetingInput(){
     makeMeetingReq.onloadend = function(){
         if(makeMeetingReq.readyState == XMLHttpRequest.DONE){
             console.log(JSON.stringify(makeMeetingReq.responseText))
-            alert("This is your secret code for the meeting, make sure you remember it! "+JSON.parse(makeMeetingReq.responseText)["secretCode"])
-            document.location.reload(true)
+            var secretyCode = JSON.parse(makeMeetingReq.responseText)["secretCode"]
+            alert("This is your secret code for the meeting, make sure you remember it! "+secretyCode)
+            // document.location.reload(true)
+            sendEmail(mre,secretyCode);
         }
     }
 
@@ -233,7 +240,9 @@ function processMeetingInput(){
 }
 
 function onDelete(){
-    document.getElementById("deleteOverlayDiv").style.display = "block"
+    document.getElementById("deleteOverlayDiv").style.display = "block";
+    var secretCode = document.getElementById("deleteAMeetingCode").select()
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
 }
 
 function offDelete(){
@@ -261,7 +270,7 @@ function deleteAMeeting(){
         if(delMeetingReq.readyState==XMLHttpRequest.DONE){
             console.log(delMeetingReq.responseText)
             alert("Meeting deleted!")
-            document.location.reload(true)
+            // document.location.reload(true)
         }
     }
 
@@ -273,10 +282,10 @@ function getWeekDay(day){
 
 function fillInDate(dayOfWeek,actualDate){
     if(dayOfWeek=="Mon"){
-        document.getElementById(dayOfWeek).innerHTML = '<button onclick="getPrevWeek()" type="button"><</button> <a id="MonDate">'+actualDate.toDateString()+'</a>';
+        document.getElementById(dayOfWeek).innerHTML = '<button class="weekButton" onclick="getPrevWeek()" type="button"><</button> <a id="MonDate">'+actualDate.toDateString()+'</a>';
     }
     else if(dayOfWeek.toString()=="Fri"){
-        document.getElementById(dayOfWeek).innerHTML = '<a id="FriDate">'+actualDate.toDateString()+'</a>'+' <button onclick="getNextWeek()" type="button">></button>'; 
+        document.getElementById(dayOfWeek).innerHTML = '<a id="FriDate">'+actualDate.toDateString()+'</a>'+' <button class="weekButton" onclick="getNextWeek()" type="button">></button>'; 
     }
     else{
         document.getElementById(dayOfWeek).innerHTML = '<a id="'+getWeekDay(actualDate)+'Date">'+actualDate.toDateString()
@@ -326,6 +335,7 @@ function getMonday(currDate){
 
 function popTable(dayStartHour,dayEndHour,duration,scheduleID){
 
+    document.getElementById("loading").style.visibility = "visible";
     console.log(dayStartHour,dayEndHour,duration,scheduleID)
 
     var currHour,currMinute, i;
@@ -371,6 +381,7 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
 
                 tsvReq.onloadend = function(){
                     if(tsvReq.readyState==XMLHttpRequest.DONE){
+                        document.getElementById("loading").style.visibility = "hidden";
                         var body = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
                         var ts = body["ts"]
 
@@ -387,6 +398,8 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                             currentCell.setAttribute("data-dayOfMonth",ts[k]["date"]["day"])
                             currentCell.setAttribute("data-hour",ts[k]["startTime"]["hour"])
                             currentCell.setAttribute("data-minute",ts[k]["startTime"]["minute"])
+                            currentCell.setAttribute("data-endHour",ts[k]["endTime"]["hour"])
+                            currentCell.setAttribute("data-endMinute",ts[k]["endTime"]["minute"])
                             currentCell.setAttribute("data-isFree",ts[k]["isFree"])
                             currentCell.setAttribute("data-id",ts[k]["id"])
 
@@ -401,6 +414,7 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                             }
                             else{
                                 currentCell.innerHTML="Booked Meeting<br>(Click to delete)"
+                                currentCell.classList.add("bookedTS")
                                 currentCell.setAttribute("data-isDeleteEditable",true)
                             }
 
@@ -408,6 +422,9 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                                 if(this.getAttribute("data-isOpenEditable")){
                                     on();
                                     currTSID = this.getAttribute("data-id");
+                                    var endStr = (this.getAttribute("data-endMinute")=='0')? "00":this.getAttribute("data-endMinute");
+                                    var startStr = (this.getAttribute("data-minute")=='0')? "00":this.getAttribute("data-minute");
+                                    currTSString = this.getAttribute("data-month")+"/"+this.getAttribute("data-dayOfMonth")+"/"+this.getAttribute("data-year")+" from "+this.getAttribute("data-hour")+":"+startStr+" until "+this.getAttribute("data-endHour")+":"+endStr
                                 }
                                 if(this.getAttribute("data-isDeleteEditable")){
                                     onDelete();
@@ -515,3 +532,24 @@ xhr.onloadend = function(){
     }
 
 };
+
+
+
+
+
+
+
+function sendEmail(email,sc){
+    var template_params = {
+        "send_to": email,
+        "reply_to": "reply_to_value",
+        "from_name": "your organizer",
+        "to_name": "user",
+        "message_html": "You've got a meeting on "+currTSString+". The secret code for this meeting is: "+sc+"."
+     }
+     
+     var service_id = "default_service";
+     var template_id = "template_YFRkJzbx";
+     console.log(email,sc,template_params["message_html"])
+     emailjs.send(service_id,template_id,template_params);
+}

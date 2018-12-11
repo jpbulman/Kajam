@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html>
+
+<script type="text/javascript" src="https://cdn.emailjs.com/sdk/2.2.4/email.min.js"></script>
+<script type="text/javascript">
+    (function(){
+      emailjs.init("user_eHSFInCWfwil5R34byerY");
+    })();
+</script>
+
 <head>
 <title>Participant View</title>
     <link rel="stylesheet" href="participantView.css">
@@ -14,8 +22,8 @@
   <h1 style="text-align: center" id="schName">Participant View</h1>
   
   <div id="overlayDiv" class="overlay">
-    <input id="meetingTextInput" type="text" value="Enter a string for the meeting">
-    <input onclick="processMeetingInput()" type="button" value="Go">
+    <input id="meetingTextInput" type="text" value="Enter an email for the meeting">
+    <input onclick="processMeetingInput()" type="button" value="Book meeting">
     <input type="button" onclick="off()" value="Cancel">
   </div>
 
@@ -29,16 +37,17 @@
       <thead>
           <tr>
           <th scope="col">Time</th>
-          <th id="Mon" scope="col"><button type="button"><</button> Mon<a id="monDate">11/26/18></a></th>
+          <th id="Mon" scope="col"><button class="weekButton" type="button"><</button> Mon<a id="monDate">11/26/18></a></th>
           <th id="Tue" scope="col">Tue</br>11/27/18</th>
           <th id="Wed" scope="col">Wed</br>11/28/18</th>
           <th id="Thu" scope="col">Thu</br>11/29/18</th>
-          <th id="Fri" scope="col">Fri   <button type="button">></button></br>11/20/18</th>
+          <th id="Fri" scope="col">Fri   <button class="weekButton" type="button">></button></br>11/20/18</th>
           </tr>
       </thead>
       <tbody id="tableBody">
       </tbody>
   </table>
+<h2 id="loading" class="loading">Loading Schedule</h2>
 </div>
 
 <div class="functionContainer">
@@ -116,6 +125,32 @@
   <!-- <h1>Your secret code is: 1729</h1> -->
 
 </div>
+
+
+<script>
+  // function sender(){
+  //   var emailReq = new XMLHttpRequest()
+  //   var url = "https://api.emailjs.com/api/v1.0/email/send"
+
+  //   emailReq.open("POST",url,true);
+
+  //   sender = {}
+  //   sender["service_id"] = "default_service"
+  //   sender["template_id"] = "{hi}"
+  //   sender["user_id"] = "<meetingschedulerkajam@gmail.com>"
+
+  //   emailReq.send(JSON.stringify(sender))
+  //   console.log("req made")
+
+  //   emailReq.onloadend = function(){
+  //     if(emailReq.readyState==XMLHttpRequest.DONE){
+  //       console.log("done")
+  //     }
+  //   }
+
+  // }
+</script>
+<button onclick="senderEmailer()">Send</button>
 
 </body>
 </html>
