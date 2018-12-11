@@ -140,7 +140,7 @@ public class EditScheduleHandler implements RequestStreamHandler {
 					respError += "Invalid startDate ";
 				}
 				
-				if(startDate.compareTo(s.startDate) != -1) {
+				if(startDate.isAfter(s.startDate)) {
 					startDate = s.startDate;
 					respError += "New start date is not before old start date ";
 				}
@@ -161,7 +161,7 @@ public class EditScheduleHandler implements RequestStreamHandler {
 					respError += "Invalid endDate ";
 				}
 				
-				if(endDate.compareTo(s.endDate) != 1) {
+				if(endDate.isBefore(s.endDate)) {
 					endDate = s.endDate;
 					respError += "New end date is not after old end date ";
 				}
