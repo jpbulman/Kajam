@@ -94,7 +94,7 @@ public class OrgDeleteMeetingHandler implements RequestStreamHandler {
 		}
 
 		if (!processed) {
-			DeleteMeetingRequest req = new Gson().fromJson(body, DeleteMeetingRequest.class);
+			OrgDeleteMeetingRequest req = new Gson().fromJson(body, OrgDeleteMeetingRequest.class);
 			logger.log(req.toString());
 			
 			String respError = "";
