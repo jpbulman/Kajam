@@ -5,15 +5,13 @@ import java.util.UUID;
 
 public class OrgDeleteMeetingRequest {
 	String timeSlotID;
-	String name;
-	String id;
 	
-	public OrgDeleteMeetingRequest(String id, String timeSlotid, String name) {
-		this.name = name;
+	public OrgDeleteMeetingRequest(String timeSlotid) {
 		this.timeSlotID = timeSlotid;
-		this.id = id;
 	}
+
+	@Override
 	public String toString() {
-		return "Meeting(" + name + "," + timeSlotID + "," + id + ")";
+		return "OrgDeleteMeetingRequest [timeSlotID=" + timeSlotID + "]";
 	}
 }

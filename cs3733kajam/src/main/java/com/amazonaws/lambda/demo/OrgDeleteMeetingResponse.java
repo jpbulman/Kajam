@@ -5,20 +5,16 @@ import java.util.UUID;
 
 public class OrgDeleteMeetingResponse {
 	UUID timeSlotID;
-	String name;
 	int httpCode;
-	UUID id;
 	
-	public OrgDeleteMeetingResponse(UUID id, UUID timeSlotid, String name, int code) {
-		this.name = name;
-		
+	public OrgDeleteMeetingResponse(UUID timeSlotid, int code) {
 		this.timeSlotID = timeSlotid;
-		
 		this.httpCode = code;
-		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "OrgDeleteMeetingResponse [timeSlotID=" + timeSlotID + ", httpCode=" + httpCode + "]";
 	}
 	
-	public String toString() {
-		return "Meeting(" + name + "," + timeSlotID + "," + id + ")";
-	}
 }

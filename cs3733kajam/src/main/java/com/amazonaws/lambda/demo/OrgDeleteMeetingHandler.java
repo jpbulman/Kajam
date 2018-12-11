@@ -32,12 +32,12 @@ public class OrgDeleteMeetingHandler implements RequestStreamHandler {
 			.withRegion("us-east-2").build();
 	
 	
-	boolean deleteMeeting(UUID id, UUID timeSlotid, String name, int secretCode) throws Exception {
+	boolean deleteMeeting(UUID timeSlotid) throws Exception {
 		if (logger != null) { logger.log("in createMeeting"); }
 		MeetingDAO dao = new MeetingDAO();
 		Meeting exist;
 		// check if present
-		exist = dao.getMeeting(id);
+		exist = dao.getMeetingByTimeSlotID(timeSlotid);
 		if (exist == null) {
 			return false;
 		} else {
@@ -61,7 +61,7 @@ public class OrgDeleteMeetingHandler implements RequestStreamHandler {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 		
-		DeleteMeetingResponse response;
+		OrgDeleteMeetingResponse response;
 		
 		String body;
 		boolean processed = false;
@@ -87,7 +87,7 @@ public class OrgDeleteMeetingHandler implements RequestStreamHandler {
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
 			//TODO: add more parameters
-			response = new DeleteMeetingResponse(null, null, "", 0, 400);  // unable to process input
+			response = new OrgDeleteMeetingResponse(null, 400);  // unable to process input
 	        responseJson.put("body", new Gson().toJson(response));
 	        processed = true;
 	        body = null;
@@ -98,26 +98,13 @@ public class OrgDeleteMeetingHandler implements RequestStreamHandler {
 			logger.log(req.toString());
 			
 			String respError = "";
-			UUID val1 = null; // timeslot
-			int val2 = 0;     // secretcode
-			UUID val3 = null; // id
+			UUID val1 = null; // time slot id
 			
 			Meeting m;
-			try {
-				val2 = Integer.parseInt(req.secretCode);
-			} catch (NumberFormatException e){
-				respError = "Invalid input format";
-			}
 			try {
 				val1 = UUID.fromString(req.timeSlotID);
 			} catch (Exception e) {
 				val1 = null;
-				respError = "Invalid input format";
-			}
-			try {
-				val3 = UUID.fromString(req.id);
-			} catch (Exception e) {
-				val3 = null;
 				respError = "Invalid input format";
 			}
 			
@@ -127,8 +114,8 @@ public class OrgDeleteMeetingHandler implements RequestStreamHandler {
 				responseJson.put("body", new Gson().toJson(resp));
 			}else {
 				try {
-					if(deleteMeeting(val3, val1, req.name, val2)) {
-						DeleteMeetingResponse resp = new DeleteMeetingResponse(val3, val1, req.name, val2, 200);
+					if(deleteMeeting(val1)) {
+						OrgDeleteMeetingResponse resp = new OrgDeleteMeetingResponse(val1, 200);
 						responseJson.put("body", new Gson().toJson(resp));
 					}
 				} catch (Exception e) {
