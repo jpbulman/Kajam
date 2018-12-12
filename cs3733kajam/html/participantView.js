@@ -502,5 +502,5 @@ function sendEmail(email,sc){
      var template_id = "template_YFRkJzbx";
      console.log(email,sc,template_params["message_html"])
     //  document.location.reload(true)
-    //  emailjs.send(service_id,template_id,template_params);
+     emailjs.send(service_id,template_id,template_params);
 }
