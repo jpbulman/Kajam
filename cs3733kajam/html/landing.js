@@ -18,13 +18,8 @@ function createNewSchedule(){
     var startHour = parseInt(document.getElementById("startHour").value);
     var endHour = parseInt(document.getElementById("endHour").value);
 
-    if(scheduleName=="override"){
-        scheduleName = "debugger";
-        lenMeetings = 10;
-        startDay = "12/05/2018";
-        endDay = "12/06/2018";
-        startHour = 0;
-        endHour = 1;
+    if(scheduleName=="Klotski"){
+        window.location.href = "Error Pages/Secret/index1.html"
     }
 
     if(scheduleName==""||lenMeetings==""||startDay==""||endDay==""||startHour===""||endHour===""){

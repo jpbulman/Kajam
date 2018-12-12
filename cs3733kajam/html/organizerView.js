@@ -767,6 +767,7 @@ function updateView(json){
 }
 
 function copyToClip(){
+    document.getElementById("copied").style.visibility="visible"
     var currUrl = window.location.href
     currUrl = currUrl.replace("organizerView","participantView")
 
@@ -782,6 +783,12 @@ function copyToClip(){
     area.select();
     document.execCommand('copy')
     document.body.removeChild(area)
+
+    var timeOut = 750;
+    setTimeout(function(){
+        document.getElementById("copied").style.visibility="hidden"
+    },timeOut);
+
 }
 
 for(var i=0;i<url.length;i++){

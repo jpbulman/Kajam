@@ -3,7 +3,7 @@ The goal of this project is for a leader of an organization to be able to create
 ## Software
 The vision for the assignment was to get each group familiar with all of the different aspects of basic web programming. The projects use Amazon Web Services (herein after referred to as AWS) to help us run the program as a live web application.
 
-Backend - The server on AWS uses Java lambda function. Essentially, each task that requires new lookup into the database or the processing of information will have it's own lambda function.
+Backend - The server on AWS uses Java based lambda functions. Essentially, each task that requires new lookup into the database or the processing of information will have it's own lambda function.
 
 Frontend - The frontend is standard HTML/CSS/JS. It uses basic HTTP requests (mostly POST and DELETE) to send and recieve information to and from AWS.
 ## The Team
