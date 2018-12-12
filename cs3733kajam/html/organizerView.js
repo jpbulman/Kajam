@@ -424,6 +424,43 @@ function setAvailabilitySpecific(){
 
 }
 
+function setAvailability(){
+    var date = document.getElementById("dateHolder")
+    if(date===""){
+        setAvailabilityGeneric()
+    }
+    else{
+        setAvailabilitySpecific()
+    }
+}
+
+function dropDownChange(){
+    var val = document.getElementById("daysDropDown").value
+
+    if(val!="None"){
+        document.getElementById("dateHolder").disabled = true;
+        document.getElementById("dateHolder").value = "";
+        document.getElementById("dateHolder").style.backgroundColor = "grey"
+    }
+    else{
+        document.getElementById("dateHolder").disabled = false;
+        document.getElementById("dateHolder").style.backgroundColor = "white"
+    }
+
+}
+
+function dateHolderChange(){
+    var val = document.getElementById("dateHolder").value
+
+    if(val==""){
+        document.getElementById("daysDropDown").disabled=false;
+    }
+    else{
+        document.getElementById("daysDropDown").disabled=true;
+    }
+
+}
+
 function popTable(dayStartHour,dayEndHour,duration,scheduleID){
 
     document.getElementById("loading").style.visibility = "visible"

@@ -160,5 +160,12 @@ function createNewSchedule(){
 
 }
 
+function login(){
+    var id = document.getElementById("scheduleIDField").value
+    var sc = document.getElementById("organizerIDField").value
+
+    window.location.href = "organizerView.html?"+"id="+id+"&secretCode="+sc
+}
+
 document.getElementById("gearWrapper").style.visibility = "hidden";
 document.getElementById("loading").style.visibility = "hidden";

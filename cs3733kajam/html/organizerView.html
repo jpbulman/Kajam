@@ -78,7 +78,7 @@ Tags on landing page
 
         <h2>On</h2>
 
-        <select id="daysDropDown">
+        <select onchange="dropDownChange()" id="daysDropDown">
             <option disabled selected hidden>Mondays, Tuesdays,...,all days, etc.</option>
             <option>All Mondays</option>
             <option>All Tuesdays</option>
@@ -86,12 +86,13 @@ Tags on landing page
             <option>All Thursdays</option>
             <option>All Fridays</option>
             <option>All days</option>
+            <option>None</option>
         </select>
 
         <h2>Or</h2>
 
         <div>
-            <input id="dateHolder" type="text" id="dayAvailability" placeholder="MM/DD/YYYY"></br>
+            <input id="dateHolder" onchange="dateHolderChange()" type="text" id="dayAvailability" placeholder="MM/DD/YYYY"></br>
         </div>
 
         <!-- <div>
@@ -99,7 +100,7 @@ Tags on landing page
         </div> -->
 
         <div>
-            <input onclick="setAvailabilitySpecific()" style="margin-bottom: .5em;" class="set" type="button" value="Set">
+            <input onclick="setAvailability()" style="margin-bottom: .5em;" class="set" type="button" value="Set">
         </div>
 
     </form>
