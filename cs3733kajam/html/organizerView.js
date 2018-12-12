@@ -342,6 +342,88 @@ function refreshTable(){
             }
 }
 
+function setAvailabilityGeneric(){
+    var availablity = (document.getElementById("selectAvailability").value).toLowerCase();
+    var fromHour = (document.getElementById("fromTimeField").value).substring(0,2)
+    var fromMinute = (document.getElementById("fromTimeField").value).substring(3,5)
+    var toHour = (document.getElementById("toTimeField").value).substring(0,2)
+    var toMinute = (document.getElementById("toTimeField").value).substring(3,5);
+    var currDayVal = document.getElementById("daysDropDown").value;
+
+    var changeDay = "Not working";
+
+    switch(currDayVal){
+        case "All Mondays":changeDay=1;break;
+        case "All Tuesdays":changeDay=2;break;
+        case "All Wednesdays":changeDay=3;break;
+        case "All Thursdays":changeDay=4;break;
+        case "All Fridays":changeDay=5;break;
+        default: changeDay=-1;
+    }
+    changeDay = changeDay.toString()
+
+    var setRequest = new XMLHttpRequest();
+    var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/timeslotavailability/general"
+    setRequest.open("POST",url,true)
+
+    var sender = {}
+    //schid, changeDay, starthour, startmin, eh, em, av
+    sender["arg1"] = document.getElementById("scheduleTable").getAttribute("data-scheduleID")
+    sender["arg2"] = changeDay;
+    sender["arg3"] = fromHour;
+    sender["arg4"] = fromMinute;
+    sender["arg5"] = toHour;
+    sender["arg6"] = toMinute;
+    sender["arg7"] = availablity
+
+    setRequest.send(JSON.stringify(sender))
+    console.log(JSON.stringify(sender))
+
+    setRequest.onloadend = function(){
+        if(setRequest.readyState==XMLHttpRequest.DONE){
+            console.log(setRequest.responseText)
+        }
+    }
+
+}
+
+function setAvailabilitySpecific(){
+    var availablity = (document.getElementById("selectAvailability").value).toLowerCase();
+    var fromHour = (document.getElementById("fromTimeField").value).substring(0,2)
+    var fromMinute = (document.getElementById("fromTimeField").value).substring(3,5)
+    var toHour = (document.getElementById("toTimeField").value).substring(0,2)
+    var toMinute = (document.getElementById("toTimeField").value).substring(3,5);
+    var dateVal = (document.getElementById("dateHolder").value);
+    var startMonth = dateVal.substring(0,2)
+    var startDay = dateVal.substring(3,5)
+    var startYear = dateVal.substring(6,10)
+
+    var setReq = new XMLHttpRequest();
+    var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/timeslotavailability"
+    setReq.open("POST",url,true);
+
+    var sender = {}
+    sender["arg1"] = document.getElementById("scheduleTable").getAttribute("data-scheduleID")
+    sender["arg2"] = startYear
+    sender["arg3"] = startMonth
+    sender["arg4"] = startDay;
+    sender["arg5"] = fromHour;
+    sender["arg6"] = fromMinute;
+    sender["arg7"] = toHour
+    sender["arg8"] = toMinute;
+    sender["arg9"] = availablity
+
+    setReq.send(JSON.stringify(sender))
+    console.log(JSON.stringify(sender))
+
+    setReq.onloadend = function(){
+        if(setReq.readyState==XMLHttpRequest.DONE){
+            console.log(setReq.responseText)
+        }
+    }
+
+}
+
 function popTable(dayStartHour,dayEndHour,duration,scheduleID){
 
     document.getElementById("loading").style.visibility = "visible"
@@ -387,6 +469,7 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
 
                 tsvReq.onloadend = function(){
                     if(tsvReq.readyState==XMLHttpRequest.DONE){
+                        // console.log(tsvReq.responseText)
                         document.getElementById("loading").style.visibility = "hidden"
 
                         var body = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);

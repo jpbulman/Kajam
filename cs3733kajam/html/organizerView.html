@@ -62,7 +62,7 @@ Tags on landing page
 
         <h2>I'm</h2>
 
-        <select>
+        <select id="selectAvailability">
             <option disabled hidden selected>Available/Unavailable</option>
             <option>Available</option>
             <option>Unavailable</option>
@@ -70,15 +70,15 @@ Tags on landing page
 
         <h2>From</h2>
 
-        <input type="text" placeholder="HH:MM">
+        <input id="fromTimeField" type="text" placeholder="HH:MM">
 
         <h2>To</h2>
 
-        <input type="text" placeholder="HH:MM">
+        <input id="toTimeField" type="text" placeholder="HH:MM">
 
         <h2>On</h2>
 
-        <select>
+        <select id="daysDropDown">
             <option disabled selected hidden>Mondays, Tuesdays,...,all days, etc.</option>
             <option>All Mondays</option>
             <option>All Tuesdays</option>
@@ -91,15 +91,15 @@ Tags on landing page
         <h2>Or</h2>
 
         <div>
-            <input type="text" id="dayAvailability" placeholder="MM/DD/YYYY"></br>
+            <input id="dateHolder" type="text" id="dayAvailability" placeholder="MM/DD/YYYY"></br>
         </div>
 
-        <div>
+        <!-- <div>
             <input type="text" placeholder="Your secret code"></br>
-        </div>
+        </div> -->
 
         <div>
-            <input style="margin-bottom: .5em;" class="set" type="button" value="Set">
+            <input onclick="setAvailabilitySpecific()" style="margin-bottom: .5em;" class="set" type="button" value="Set">
         </div>
 
     </form>

@@ -67,6 +67,7 @@ function refreshTable(){
             document.getElementById("loading").style.visibility = "hidden";
             var body = JSON.parse(JSON.parse(tsvReq.responseText)["body"]);
             var ts = body["ts"]
+            // console.log(ts)
 
             var row=1;
             var col=1;
