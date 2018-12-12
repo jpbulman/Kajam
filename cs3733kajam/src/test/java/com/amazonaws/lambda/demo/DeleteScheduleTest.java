@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -58,7 +59,7 @@ public class DeleteScheduleTest {
         Schedule s = new Schedule(UUID.fromString(id), "deleteTestName",125,
     			30,LocalTime.of(0, 0), LocalTime.of(3, 0), 
     			LocalDate.of(2000, 1, 1), LocalDate.of(2000, 1, 10),
-    			new Timestamp(System.currentTimeMillis()));
+    			LocalDateTime.now().toString());
         try {
 			dao.addSchedule(s);
 		} catch (Exception e) {

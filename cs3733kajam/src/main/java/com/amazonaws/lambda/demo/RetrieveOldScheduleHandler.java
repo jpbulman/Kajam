@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,7 +39,7 @@ public class RetrieveOldScheduleHandler implements RequestStreamHandler {
 
 	boolean useRDS = true;
 
-	ArrayList<Schedule> getSchedules(int n, String respError) throws Exception{
+	ArrayList<Schedule> getSchedules(int n) throws Exception{
 		if (logger != null) { logger.log("in getSchedule"); }
 		ScheduleDAO dao = new ScheduleDAO();
 
@@ -50,11 +51,14 @@ public class RetrieveOldScheduleHandler implements RequestStreamHandler {
 		}
 		//logger.log(ts.toString());
 		for (Schedule s : schedules) {
-			//Timestamp ts = new Timestamp(System.currentTimeMillis());
-			//ts.setDate((LocalDate.now().getDayOfYear() - n));
-			LocalDate ld = LocalDate.ofYearDay(LocalDate.now().getYear(), LocalDate.now().getDayOfYear() - n);
-			if (s.endDate.isBefore(ld)) {
-				underN.add(s);
+			LocalDateTime ts = LocalDateTime.now();
+			ts = ts.minusDays(n);
+			try {
+				if (LocalDateTime.parse(s.timestamp).isBefore(ts)) {
+					underN.add(s);
+				}
+			}catch (Exception e) {
+				if (logger != null) { logger.log("old format"); }
 			}
 		}
 		return underN;
@@ -133,7 +137,7 @@ public class RetrieveOldScheduleHandler implements RequestStreamHandler {
 			}
 			if (temp != 0) {
 				try {
-					sArr = getSchedules(temp, respError);
+					sArr = getSchedules(temp);
 				} catch (Exception e){
 					sArr = null;
 					respError += "My Error";

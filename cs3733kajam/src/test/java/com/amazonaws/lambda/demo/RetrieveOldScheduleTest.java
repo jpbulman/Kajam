@@ -32,31 +32,14 @@ public class RetrieveOldScheduleTest {
     
     //Tests getSchedule with invalid id
     @Test
-    public void RetrieveNewSchedulevalidID() throws IOException {
-    	RetrieveNewScheduleHandler handler = new RetrieveNewScheduleHandler();
-    	
-		UUID id1 = UUID.fromString("eea5770b-84ac-446f-bfdc-442f26fb2211");
-       
-        ScheduleDAO dao = new ScheduleDAO();
-        
-		try {
-			dao.addSchedule(s);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    public void RetrieveOldSchedulevalidID() throws IOException {
+    	RetrieveOldScheduleHandler handler = new RetrieveOldScheduleHandler();
     	
         InputStream input = new ByteArrayInputStream(SAMPLE_INPUT_STRING.getBytes());;
         OutputStream output = new ByteArrayOutputStream();
         
-		String sampleOutputString = output.toString();
         handler.handleRequest(input, output, createContext("sample2"));
+        String sampleOutputString = output.toString();
         Assert.assertTrue(sampleOutputString.contains("httpCode\\\":200"));
-		
-		try {
-			dao.deleteSchedule(dao.getSchedule(id1));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
 }

@@ -16,11 +16,11 @@ public class Schedule {
 	public LocalTime endTime;
 	public LocalDate startDate;
 	public LocalDate endDate;
-	public Timestamp timestamp;
+	public String timestamp;
 	public ArrayList<TimeSlot> timeSlots;
 	
 	public Schedule(UUID id, String name, int secretCode, int duration, LocalTime startTime, LocalTime endTime,
-			LocalDate startDate, LocalDate endDate, Timestamp timestamp) {
+			LocalDate startDate, LocalDate endDate, String timestamp) {
 		this.id = id;
 		this.name = name;
 		this.secretCode = secretCode;
