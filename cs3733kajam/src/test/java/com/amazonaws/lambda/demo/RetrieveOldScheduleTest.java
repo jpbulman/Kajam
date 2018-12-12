@@ -22,7 +22,7 @@ public class RetrieveOldScheduleTest {
 
 
 	private static final String SAMPLE_INPUT_STRING = "{\n" +
-    		"    \"arg1\": \"3\"" + "}";
+    		"    \"arg1\": \"0\"" + "}";
     
     Context createContext(String apiCall) {
         TestContext ctx = new TestContext();

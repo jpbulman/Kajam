@@ -16,7 +16,7 @@ public class DeleteOldSchedulesTest {
     private static final String SAMPLE_INPUT_STRING = "{\"foo\": \"bar\"}";
     private static final String EXPECTED_OUTPUT_STRING = "{\"headers\":{\"Access-Control-Allow-Origin\":\"*\",\"Access-Control-Allow-Methods\":\"DELETE,GET,POST,OPTIONS\",\"Content-Type\":\"application\\/json\"},\"body\":\"{\\\"error\\\":\\\"Invalid input\\\",\\\"httpCode\\\":400}\"}";    
     private static final String SAMPLE_INPUT_STRING2 = "{\n" + 
-    		"    \"arg1\": \"0\",\n" +  
+    		"    \"arg1\": \"5\",\n" +  
     		"}";
 	
 	

@@ -135,7 +135,7 @@ public class RetrieveOldScheduleHandler implements RequestStreamHandler {
 				logger.log(req.arg1);
 				respError += "Invalid num ";
 			}
-			if (temp != 0) {
+			if(respError.compareTo("") == 0) {
 				try {
 					sArr = getSchedules(temp);
 				} catch (Exception e){

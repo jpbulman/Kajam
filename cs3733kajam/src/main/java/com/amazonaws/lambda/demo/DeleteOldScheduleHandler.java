@@ -141,7 +141,7 @@ public class DeleteOldScheduleHandler implements RequestStreamHandler {
 				respError = "Invalid input";
 			}
 			
-			if(respError.compareTo("") != 0) {
+			if(respError.compareTo("") == 0) {
 				try {
 					sArr = deleteSchedules(val1);
 				}catch(Exception e) {
