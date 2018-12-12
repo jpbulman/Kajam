@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,11 +51,17 @@ public class RetrieveNewScheduleHandler implements RequestStreamHandler {
 		}
 		//logger.log(ts.toString());
 		for (Schedule s : schedules) {
-			Timestamp ts = new Timestamp(System.currentTimeMillis());
-//			ts.setHours(ts.getHours() - n);
-//			if (s.timestamp.after(ts)) {
-//				underN.add(s);
-//			}
+			LocalDateTime ts = LocalDateTime.now();
+			ts = ts.minusHours(n);
+			try {
+				System.out.println(s.timestamp);
+				System.out.println(ts.toString());
+				if (LocalDateTime.parse(s.timestamp).isAfter(ts)) {
+					underN.add(s);
+				}
+			}catch (Exception e) {
+				if (logger != null) { logger.log("old format"); }
+			}
 		}
 		return underN;
 	}
