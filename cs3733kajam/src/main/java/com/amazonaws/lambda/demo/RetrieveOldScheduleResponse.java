@@ -5,10 +5,12 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class RetrieveOldScheduleResponse {
-	ArrayList<UUID> schedulesList;
+import model.Schedule;
 
-	public RetrieveOldScheduleResponse(ArrayList<UUID> schedules) {
+public class RetrieveOldScheduleResponse {
+	ArrayList<Schedule> schedulesList;
+
+	public RetrieveOldScheduleResponse(ArrayList<Schedule> schedules) {
 		this.schedulesList = schedules;
 	}
 	

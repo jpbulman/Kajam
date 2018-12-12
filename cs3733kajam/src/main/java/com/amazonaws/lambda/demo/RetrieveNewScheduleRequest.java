@@ -1,7 +1,7 @@
 package com.amazonaws.lambda.demo;
 
 public class RetrieveNewScheduleRequest {
-	String arg1; // N days
+	String arg1; // N hours
 	
 	public RetrieveNewScheduleRequest(String a1) {
 		arg1 = a1;
