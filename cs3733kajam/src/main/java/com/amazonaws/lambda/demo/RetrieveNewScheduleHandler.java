@@ -38,7 +38,7 @@ public class RetrieveNewScheduleHandler implements RequestStreamHandler {
 
 	boolean useRDS = true;
 
-	ArrayList<Schedule> getSchedules(int n, String respError) throws Exception{
+	ArrayList<Schedule> getSchedules(int n) throws Exception{
 		if (logger != null) { logger.log("in getSchedule"); }
 		ScheduleDAO dao = new ScheduleDAO();
 
@@ -51,7 +51,7 @@ public class RetrieveNewScheduleHandler implements RequestStreamHandler {
 		//logger.log(ts.toString());
 		for (Schedule s : schedules) {
 			Timestamp ts = new Timestamp(System.currentTimeMillis());
-			ts.setHours(((LocalTime.now().getHour() - n) + 5)); // +5 is converting to gmt
+			ts.setHours(ts.getHours() - n);
 			if (s.timestamp.after(ts)) {
 				underN.add(s);
 			}
@@ -132,10 +132,10 @@ public class RetrieveNewScheduleHandler implements RequestStreamHandler {
 			}
 			if (temp != 0) {
 				try {
-					sArr = getSchedules(temp, respError);
+					sArr = getSchedules(temp);
 				} catch (Exception e){
 					sArr = null;
-					respError += "My Error";
+					respError += "Error retrieving schedules ";
 				}
 			}
 			
