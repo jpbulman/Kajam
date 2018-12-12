@@ -55,15 +55,17 @@ public class RetrieveNewScheduleTest {
         InputStream input = new ByteArrayInputStream(SAMPLE_INPUT_STRING.getBytes());;
         OutputStream output = new ByteArrayOutputStream();
        
-        
-		String sampleOutputString = output.toString();
         handler.handleRequest(input, output, createContext("sample2"));
+        String sampleOutputString = output.toString();
+        
 		try {
 			dao.deleteSchedule(dao.getSchedule(id1));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.print("sampleOutputString " + sampleOutputString);
         Assert.assertTrue(sampleOutputString.contains("123456789"));
 		
 		
