@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -37,14 +38,14 @@ public class RetrieveNewScheduleTest {
     	
 		UUID id1 = UUID.fromString("eea5770b-84ac-446f-bfdc-442f26fb0111");
        
-		Timestamp ts = new Timestamp(System.currentTimeMillis());
-		ts.setHours(LocalTime.now().getHour() + 5);
+		//Timestamp ts = new Timestamp(System.currentTimeMillis());
+		//ts.setHours(LocalTime.now().getHour() + 5);
 
         ScheduleDAO dao = new ScheduleDAO();
 		Schedule s = new Schedule(id1, "123456789",125, 30, 
 				LocalTime.of(0, 0), LocalTime.of(3, 0),
 				LocalDate.of(2000, 1, 1), LocalDate.of(2000, 1, 10), 
-				ts);
+				LocalDateTime.now().toString());
         
 		try {
 			dao.addSchedule(s);

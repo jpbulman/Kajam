@@ -104,7 +104,7 @@ public class ScheduleDAO {
             ps.setInt(6, s.endTime.getHour());
             ps.setDate(7, Date.valueOf(s.startDate));
             ps.setDate(8, Date.valueOf(s.endDate));
-            ps.setTimestamp(9, s.timestamp);
+            ps.setString(9, s.timestamp);
             ps.execute();
             return true;
 
@@ -124,7 +124,7 @@ public class ScheduleDAO {
             ps.setInt(5, s.endTime.getHour());
             ps.setDate(6, Date.valueOf(s.startDate));
             ps.setDate(7, Date.valueOf(s.endDate));
-            ps.setTimestamp(8, s.timestamp);
+            ps.setString(8, s.timestamp);
             ps.setString(9, s.id.toString());
             int numAffected = ps.executeUpdate();
             ps.close();
@@ -144,7 +144,7 @@ public class ScheduleDAO {
         int endTime = resultSet.getInt("endHour");
         Date startDate = resultSet.getDate("startDate");
         Date endDate = resultSet.getDate("endDate");
-        Timestamp ts = resultSet.getTimestamp("creationDateTime");
+        String ts = resultSet.getString("creationDateTime");
         
         
         return new Schedule (UUID.fromString(id),name, secretCode, duration, LocalTime.of(startTime, 0),

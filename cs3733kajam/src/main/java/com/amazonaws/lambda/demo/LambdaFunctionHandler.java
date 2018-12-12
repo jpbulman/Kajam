@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -45,7 +46,8 @@ public class LambdaFunctionHandler implements RequestStreamHandler {
 		// check if present
 		Schedule exist = dao.getSchedule(id);
 		if (exist == null) {
-			Timestamp ts = new Timestamp(System.currentTimeMillis()); // create timestamp based on current time and date
+			String ts = LocalDateTime.now().toString();
+			//Timestamp ts = new Timestamp(System.currentTimeMillis()); // create timestamp based on current time and date
 			Schedule schedule = new Schedule (id, name, secretCode, duration, startTime, endTime, startDate, endDate, ts);			
 			
 			//TODO: uncomment when ready to add time slots to db when creating schedules, delete original return statement

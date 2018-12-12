@@ -51,10 +51,10 @@ public class RetrieveNewScheduleHandler implements RequestStreamHandler {
 		//logger.log(ts.toString());
 		for (Schedule s : schedules) {
 			Timestamp ts = new Timestamp(System.currentTimeMillis());
-			ts.setHours(ts.getHours() - n);
-			if (s.timestamp.after(ts)) {
-				underN.add(s);
-			}
+//			ts.setHours(ts.getHours() - n);
+//			if (s.timestamp.after(ts)) {
+//				underN.add(s);
+//			}
 		}
 		return underN;
 	}
