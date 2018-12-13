@@ -198,6 +198,14 @@ public class SearchTimeSlotHandler implements RequestStreamHandler {
 				try {
 					ArrayList<TimeSlot> ts = getAllTimeSlots(UUID.fromString(req.id));
 					
+					// check isFree
+					for(Iterator<TimeSlot> i = ts.iterator(); i.hasNext();) {
+						TimeSlot t = i.next();
+						if(!t.isFree) {
+							i.remove();
+						}
+					}
+					
 					// check year
 					if(year != -1) {
 						for(Iterator<TimeSlot> i = ts.iterator(); i.hasNext();) {
