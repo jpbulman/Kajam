@@ -465,6 +465,7 @@ function setAvailabilityGeneric(){
     setRequest.onloadend = function(){
         if(setRequest.readyState==XMLHttpRequest.DONE){
             console.log(setRequest.responseText)
+            document.location.reload(true);
         }
     }
 
@@ -502,6 +503,7 @@ function setAvailabilitySpecific(){
     setReq.onloadend = function(){
         if(setReq.readyState==XMLHttpRequest.DONE){
             console.log(setReq.responseText)
+            document.location.reload(true);
         }
     }
 
@@ -515,7 +517,7 @@ function setAvailability(){
     else{
         setAvailabilitySpecific()
     }
-    document.location.reload(true);
+    // document.location.reload(true);
     // refreshTable()
 }
 
