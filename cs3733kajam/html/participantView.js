@@ -274,13 +274,13 @@ function processMeetingInput(){
                 document.getElementById("bookingMeeting").style.visibility = "hidden";
                 console.log(JSON.stringify(makeMeetingReq.responseText))
                 var secretyCode = JSON.parse(makeMeetingReq.responseText)["secretCode"]
+                refreshTable()
                 alert("This is your secret code for the meeting, make sure you remember it! "+secretyCode)
 
                 if(document.getElementById("emailCheck").checked){
                     sendEmail(mre,secretyCode);
                 }
 
-                refreshTable()
             }
         }
 
@@ -744,7 +744,7 @@ function populateMonthDD(){
             case 8:text="August";break;
             case 9:text="September";break;
             case 10:text="October";break;
-            case 11:text="Novemember";break;
+            case 11:text="November";break;
             case 12:text="December";break;
         }
         var option = document.createElement("option")

@@ -515,8 +515,8 @@ function setAvailability(){
     else{
         setAvailabilitySpecific()
     }
-    // document.location.reload(true);
-    refreshTable()
+    document.location.reload(true);
+    // refreshTable()
 }
 
 function dropDownChange(){
