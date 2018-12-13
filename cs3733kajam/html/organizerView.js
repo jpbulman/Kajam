@@ -190,10 +190,12 @@ function giveCellsAttr(){
     var currEndHour = currHour;
     var currEndMinute = currMinute+duration
 
-    var currDate = new Date(document.getElementById("scheduleTable").getAttribute("data-monday"));
+    // console.log(document.getElementById("scheduleTable").getAttribute("data-schStartDate"))
+    var currDate = new Date(document.getElementById("scheduleTable").getAttribute("data-schStartDate"));
+    // console.log(currDate)
 
     if(currEndMinute==60){
-        currHour+=1;
+        currEndHour+=1;
         currEndMinute=0
     }
 
@@ -233,7 +235,12 @@ function giveCellsAttr(){
         currMinute = 0
     
         currEndHour = currHour;
-        currEndMinute = currMinute+duration
+        currEndMinute = currMinute+duration;
+
+        if(currEndMinute==60){
+            currEndHour+=1;
+            currEndMinute=0
+        }
     }
 }
 
@@ -502,13 +509,15 @@ function setAvailabilitySpecific(){
 }
 
 function setAvailability(){
-    var date = document.getElementById("dateHolder")
+    var date = document.getElementById("dateHolder").value
     if(date===""){
         setAvailabilityGeneric()
     }
     else{
         setAvailabilitySpecific()
     }
+    // document.location.reload(true);
+    refreshTable()
 }
 
 function dropDownChange(){
@@ -604,6 +613,14 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                             for(var searchRow=1;searchRow<table.rows.length;searchRow++){
                                 for(var searchColumn=1;searchColumn<table.rows[searchRow].cells.length;searchColumn++){
                                     var cc = table.rows[searchRow].cells[searchColumn];
+                                    console.log(cc.getAttribute("data-year"),
+                                    cc.getAttribute("data-month"),
+                                    cc.getAttribute("data-dayOfMonth"),
+                                    cc.getAttribute("data-hour"),
+                                    cc.getAttribute("data-minute"),
+                                    cc.getAttribute("data-endHour"),
+                                    cc.getAttribute("data-endMinute"))
+
                                     if(cc.getAttribute("data-year")==ts[k]["date"]["year"]&&
                                         cc.getAttribute("data-month")==ts[k]["date"]["month"]&&
                                         cc.getAttribute("data-dayOfMonth")==ts[k]["date"]["day"]&&
@@ -612,6 +629,7 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                                         cc.getAttribute("data-endHour")==ts[k]["endTime"]["hour"]&&
                                         cc.getAttribute("data-endMinute")==ts[k]["endTime"]["minute"]){
                                         currentCell = cc;
+                                        console.log(cc)
                                     }
                                 }
                             }
@@ -823,7 +841,7 @@ function editSchedule(){
     editRequest.onloadend = function(){
         if(editRequest.readyState==XMLHttpRequest.DONE){
             console.log(editRequest.responseText)
-            refreshTable()
+            document.location.reload(true)
         }
     }
 
@@ -838,6 +856,12 @@ function updateView(json){
     var startMonth = parseInt(json["startDate"]["month"]);
     var startDay = parseInt(json["startDate"]["day"]);
     var startYear = parseInt(json["startDate"]["year"]);
+
+    console.log(startYear,startMonth,startDay)
+
+    var schStartDate = new Date(startYear,startMonth-1,startDay)
+    console.log(schStartDate)
+    document.getElementById("scheduleTable").setAttribute("data-schStartDate",schStartDate)
 
     var duration = parseInt(json["meetingDuration"]);
     document.getElementById("scheduleTable").setAttribute("data-duration",duration)

@@ -527,12 +527,18 @@ function filter(){
 
             for(j in responses){
                 var i = responses[j]
-                var entryText = i["date"]["month"]+"/"+i["date"]["day"]+"/"+i["date"]["year"]+" from "+i["startTime"]["hour"]+":"+i["startTime"]["minute"]+" to "+i["endTime"]["hour"]+":"+i["endTime"]["minute"]
-
+                var startMinStr = (i["startTime"]["minute"]=="0")? "00":i["startTime"]["minute"];
+                var endMinStr = (i["endTime"]["minute"]=="0")? "00":i["endTime"]["minute"];
+                var entryText = i["date"]["month"]+"/"+i["date"]["day"]+"/"+i["date"]["year"]+" from "+i["startTime"]["hour"]+":"+startMinStr+" to "+i["endTime"]["hour"]+":"+endMinStr;
                 var button = document.createElement("BUTTON");
                 var text = document.createTextNode(entryText);
                 button.appendChild(text)
                 button.classList.add("filteredResultsEntry");
+                button.setAttribute("TSID",i["id"])
+                button.onclick = function(){
+                    currTSID = this.getAttribute("TSID")
+                    on()
+                }
                 var div = document.createElement("div")
                 div.appendChild(button);
                 document.getElementById("filteredResults").appendChild(div);
