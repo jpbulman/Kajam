@@ -363,7 +363,7 @@ function refreshTable(){
                                 changeAvailReq.open("POST",availURL,true);
 
                                 sender = {}
-                                sender["arg1"] = scheduleID;
+                                sender["arg1"] = globalSchID;
                                 sender["arg2"] = this.getAttribute("data-year")
                                 sender["arg3"] = this.getAttribute("data-month")
                                 sender["arg4"] = this.getAttribute("data-dayOfMonth")
