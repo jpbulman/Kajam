@@ -242,7 +242,7 @@ public class SearchTimeSlotHandler implements RequestStreamHandler {
 					if(time != null) {
 						for(Iterator<TimeSlot> i = ts.iterator(); i.hasNext();) {
 							TimeSlot t = i.next();
-							if(t.startTime != time) {
+							if(!(t.startTime.equals(time))) {
 								i.remove();
 							}
 						}
