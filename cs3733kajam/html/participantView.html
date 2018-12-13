@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="participantView.css">
     <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
     <META HTTP-EQUIV="Expires" CONTENT="-1">
+<script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
 
@@ -22,9 +23,17 @@
   <h1 style="text-align: center" id="schName">Participant View</h1>
   
   <div id="overlayDiv" class="overlay">
-    <input id="meetingTextInput" type="text" value="Enter an email for the meeting">
+    <input id="meetingTextInput" type="text" value="Enter a email or string for the meeting">
     <input onclick="processMeetingInput()" type="button" value="Book meeting">
     <input type="button" onclick="off()" value="Cancel">
+    <div>
+      <label class="emailConf">Send me an email</label>
+      <input id="emailCheck" type="checkbox" value="hi">
+      <div style="left:50%">
+          <div class="g-recaptcha" data-sitekey="6Le9_YAUAAAAAC--zsDp2XFxrDv2zPjBPwGTPhw5"></div>
+      </div>
+    </div>
+
     <h2 id="bookingMeeting" class="loading">Booking Meeting</h2>
   </div>
 
@@ -68,36 +77,41 @@
     <input type="button" value="Cancel">
   </form> -->
 
-  <h1>Search Open Time Slots</h1>
+  <h1><span style="text-decoration: underline">Search Open Time Slots</span> <i class="fas fa-search"></i></h1>
 
   <form>
 
     <!-- <div>
       <input type="text" placeholder="🔎">
     </div> -->
-    <select id="monthDropDown">
+    <select class="dd" id="monthDropDown">
       <option disabled selected hidden>Month</option>
+      <option>None</option>
     </select>
 
     <!-- Day of Month Dropdown -->
-    <select id="DOMDD">
+    <select class="dd" id="DOMDD">
       <option disabled selected hidden>Day of month</option>
+      <option>None</option>
     </select>
 
-    <select id="yearDD">
+    <select class="dd" id="yearDD">
       <option disabled selected hidden>Year</option>
+      <option>None</option>
     </select>
 
-    <select id="DOWDD">
+    <select class="dd" id="DOWDD">
         <option disabled selected hidden>Day of week</option>
+        <option>None</option>
     </select>
 
-    <select id="startTimeDropDown">
+    <select class="dd" id="startTimeDropDown">
         <option disabled selected hidden>Start Time</option>
+        <option>None</option>
     </select>
 
     <div>
-      <input onclick="filter()" type="button" value="Go">
+      <input onclick="filter()" class="set" type="button" value="Go">
     </div>
 
   </form>

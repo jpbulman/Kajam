@@ -4,7 +4,7 @@ var globalDuration = 0;
 var globalSchID = "";
 
 function updateView(json){
-    document.getElementById("schName").innerHTML = json["name"];
+    document.getElementById("schName").innerHTML = json["name"]+' <i class="fas fa-calendar-alt"></i>';
 
     var scheduleID = json["id"];
     document.getElementById("scheduleTable").setAttribute("data-schID",scheduleID)
@@ -249,35 +249,46 @@ var currTSID = ""
 var currTSString = ""
 var mre = ""
 function processMeetingInput(){
-    document.getElementById("bookingMeeting").style.visibility = "visible";
-    var input = "-"
 
-    var docInput = document.getElementById("meetingTextInput").value;
-    mre = docInput
-    
-    var makeMeetingReq = new XMLHttpRequest();
-    var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/meeting"
-    makeMeetingReq.open("POST",url,true);
+    var cap = grecaptcha.getResponse()
+    if(cap!=""){
+        document.getElementById("bookingMeeting").style.visibility = "visible";
+        var input = "-"
 
-    var sender = {}
-    sender["timeSlotID"] = currTSID;
-    sender["name"] = docInput;
+        var docInput = document.getElementById("meetingTextInput").value;
+        mre = docInput
+        
+        var makeMeetingReq = new XMLHttpRequest();
+        var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/meeting"
+        makeMeetingReq.open("POST",url,true);
 
-    makeMeetingReq.send(JSON.stringify(sender))
-    console.log(JSON.stringify(sender))
+        var sender = {}
+        sender["timeSlotID"] = currTSID;
+        sender["name"] = docInput;
 
-    makeMeetingReq.onloadend = function(){
-        if(makeMeetingReq.readyState == XMLHttpRequest.DONE){
-            document.getElementById("bookingMeeting").style.visibility = "hidden";
-            console.log(JSON.stringify(makeMeetingReq.responseText))
-            var secretyCode = JSON.parse(makeMeetingReq.responseText)["secretCode"]
-            alert("This is your secret code for the meeting, make sure you remember it! "+secretyCode)
-            sendEmail(mre,secretyCode);
-            refreshTable()
+        makeMeetingReq.send(JSON.stringify(sender))
+        console.log(JSON.stringify(sender))
+
+        makeMeetingReq.onloadend = function(){
+            if(makeMeetingReq.readyState == XMLHttpRequest.DONE){
+                document.getElementById("bookingMeeting").style.visibility = "hidden";
+                console.log(JSON.stringify(makeMeetingReq.responseText))
+                var secretyCode = JSON.parse(makeMeetingReq.responseText)["secretCode"]
+                alert("This is your secret code for the meeting, make sure you remember it! "+secretyCode)
+
+                if(document.getElementById("emailCheck").checked){
+                    sendEmail(mre,secretyCode);
+                }
+
+                refreshTable()
+            }
         }
-    }
 
-    off();
+        off();
+    }
+    else{
+        alert("Please click the captcha")
+    }
 }
 
 function onDelete(){
@@ -520,9 +531,9 @@ function filter(){
     var sendInformation = {}
     sendInformation["id"] = document.getElementById("scheduleTable").getAttribute("data-schID")
     sendInformation["month"] = monthToInt(document.getElementById("monthDropDown").value).toString()
-    sendInformation["year"] = (document.getElementById("yearDD").value.toString()=="Year")? "" : document.getElementById("yearDD").value.toString()
+    sendInformation["year"] = (document.getElementById("yearDD").value.toString()=="Year" || document.getElementById("yearDD").value.toString()=="None")? "" : document.getElementById("yearDD").value.toString()
     sendInformation["dayOfWeek"] = dowToInt(document.getElementById("DOWDD").value).toString()
-    sendInformation["day"] = (document.getElementById("DOMDD").value=="Day of month")? "":document.getElementById("DOMDD").value;
+    sendInformation["day"] = (document.getElementById("DOMDD").value=="Day of month"||document.getElementById("DOMDD").value=="None")? "":document.getElementById("DOMDD").value;
     sendInformation["hour"] = getSelectedHour()
     sendInformation["minute"] = getSelectedMinute()
 
@@ -810,12 +821,13 @@ function sendEmail(email,sc){
         "reply_to": "reply_to_value",
         "from_name": "your organizer",
         "to_name": "user",
-        "message_html": "You've got a meeting on "+currTSString+". The secret code for this meeting is: "+sc+"."
+        "message_html": "You've got a meeting on "+currTSString+". The secret code for this meeting is: "+sc+". You can view it here: "+window.location.href
      }
      
      var service_id = "default_service";
      var template_id = "template_YFRkJzbx";
      console.log(email,sc,template_params["message_html"])
     //  document.location.reload(true)
-    //  emailjs.send(service_id,template_id,template_params);
+    refreshTable()
+     emailjs.send(service_id,template_id,template_params);
 }

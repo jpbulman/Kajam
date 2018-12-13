@@ -38,7 +38,7 @@ Tags on landing page
 </div>
 
 <div class="functionContainer">
-    <h1><span style="text-decoration: underline">Schedule</span> <i class="fas fa-edit"></i></h1>
+    <h1><span style="text-decoration: underline">Edit Schedule</span> <i class="fas fa-edit"></i></h1>
 
     <form>
         <input id="editScheduleName" type="text" placeholder="Enter schedule name">
@@ -57,13 +57,13 @@ Tags on landing page
 
     </form>
 
-    <h1 style="text-decoration: underline">Set Availability</h1>
+    <h1><span style="text-decoration: underline">Set Availability</span> <i class="fas fa-wrench"></i></h1>
 
     <form>
 
         <h2>I'm</h2>
 
-        <select id="selectAvailability">
+        <select class="dd" id="selectAvailability">
             <option disabled hidden selected>Available/Unavailable</option>
             <option>Available</option>
             <option>Unavailable</option>
@@ -79,7 +79,7 @@ Tags on landing page
 
         <h2>On</h2>
 
-        <select onchange="dropDownChange()" id="daysDropDown">
+        <select class="dd" onchange="dropDownChange()" id="daysDropDown">
             <option disabled selected hidden>Mondays, Tuesdays,...,all days, etc.</option>
             <option>All Mondays</option>
             <option>All Tuesdays</option>

@@ -847,7 +847,7 @@ function editSchedule(){
 }
 
 function updateView(json){
-    document.getElementById("schName").innerHTML = json["name"];
+    document.getElementById("schName").innerHTML = json["name"]+' <i class="fas fa-calendar-alt"></i>';
 
     var scheduleID = json["id"];
     document.getElementById("scheduleTable").setAttribute("data-scheduleID",scheduleID)
