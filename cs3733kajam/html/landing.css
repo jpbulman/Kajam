@@ -26,6 +26,13 @@ input[type=text], select{
     font-size: 2em;
 }
 
+input[type=password], select{
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    height: 2em;
+    font-size: 2em;
+}
+
 input[type=button]{
     background: orange;
     border-radius: 10px;
