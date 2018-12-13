@@ -612,13 +612,6 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
                             for(var searchRow=1;searchRow<table.rows.length;searchRow++){
                                 for(var searchColumn=1;searchColumn<table.rows[searchRow].cells.length;searchColumn++){
                                     var cc = table.rows[searchRow].cells[searchColumn];
-                                    console.log(cc.getAttribute("data-year"),
-                                    cc.getAttribute("data-month"),
-                                    cc.getAttribute("data-dayOfMonth"),
-                                    cc.getAttribute("data-hour"),
-                                    cc.getAttribute("data-minute"),
-                                    cc.getAttribute("data-endHour"),
-                                    cc.getAttribute("data-endMinute"))
 
                                     if(cc.getAttribute("data-year")==ts[k]["date"]["year"]&&
                                         cc.getAttribute("data-month")==ts[k]["date"]["month"]&&
