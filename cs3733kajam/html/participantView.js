@@ -211,14 +211,14 @@ function refreshTable(){
                 row++;
             }
 
-            populateYearDD(lowYear,highYear)
+            // populateYearDD(lowYear,highYear)
 
         }
     }
 }
 
 function getNextWeek(){
-    clearYears()
+    // clearYears()
     var mon = document.getElementById("MonDate").innerHTML;
     var d = new Date(mon);
     d.setDate(d.getDate()+7);
@@ -227,7 +227,7 @@ function getNextWeek(){
 }
 
 function getPrevWeek(){
-    clearYears()
+    // clearYears()
     var mon = document.getElementById("MonDate").innerHTML;
     var d = new Date(mon);
     d.setDate(d.getDate()-7);
@@ -394,6 +394,7 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
     populateMonthDD()
     populateDOMDD()
     populateDOW()
+    populateYearDD()
 
     var currHour,currMinute, i;
     for(currHour = dayStartHour, currMinute = 0, i=1;currHour<dayEndHour;i++){
@@ -765,7 +766,15 @@ function populateDOMDD(){
 
 }
 
-function populateYearDD(ly,hy){
+function populateYearDD(){
+
+    // var opt = document.createElement("option")
+    // opt.text="None";
+
+    // document.getElementById("yearDD").add(opt)
+
+    var ly = 2018;
+    var hy = 2025;
     while(ly<=hy){
         var option = document.createElement("option")
         option.text=ly;
@@ -776,12 +785,12 @@ function populateYearDD(ly,hy){
     }
 }
 
-function clearYears(){
-    var dd = document.getElementById("yearDD");
-    for(var i=0;i<dd.options.length;i++){
-        dd.options[i] = null;
-    }
-}
+// function clearYears(){
+//     var dd = document.getElementById("yearDD");
+//     for(var i=0;i<dd.options.length;i++){
+//         dd.options[i] = null;
+//     }
+// }
 
 function dowToInt(i){
     switch(i){

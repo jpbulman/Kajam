@@ -128,6 +128,7 @@ function deleteNDays(){
         if(delReq.readyState==XMLHttpRequest.DONE){
             console.log(delReq.responseText)
             clearDaysOld()
+            alert("Deleted")
         }
     }
 
