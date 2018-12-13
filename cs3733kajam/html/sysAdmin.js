@@ -73,10 +73,12 @@ function clearDaysOld(){
     }
 }
 
+var mostRecentN = 0
 function getDaysOld(){
     if(checkInputDaysOld()){
         clearDaysOld()
         var val = parseInt(document.getElementById("daysOldTF").value);
+        mostRecentN = val;
         var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/daysold"
 
         var dayReq = new XMLHttpRequest();
@@ -90,14 +92,45 @@ function getDaysOld(){
 
         dayReq.onloadend = function(){
             if(dayReq.readyState==XMLHttpRequest.DONE){
-                console.log(dayReq.responseText)
+                var response = JSON.parse(dayReq.responseText)["schedulesList"]
+                console.log(response)
+                for(i in response){
+                    var currSch = response[i];
+                    
+                    var cont = document.getElementById("daysOldContainer")
+                    var button = document.createElement("button")
+                    var text = document.createTextNode(currSch["name"])
+                    button.classList.add("entry")
+                    button.appendChild(text)
+
+                    var div = document.createElement("div")
+                    div.appendChild(button)
+                    cont.appendChild(div)
+                }
+
             }
         }
     }
 }
 
 function deleteNDays(){
-    
+    var delReq = new XMLHttpRequest();
+    var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/daysold"
+    delReq.open("DELETE",url,true);
+
+    var sender = {}
+    sender["arg1"] = mostRecentN;
+
+    delReq.send(JSON.stringify(sender))
+    console.log(JSON.stringify(sender))
+
+    delReq.onloadend = function(){
+        if(delReq.readyState==XMLHttpRequest.DONE){
+            console.log(delReq.responseText)
+            clearDaysOld()
+        }
+    }
+
 }
 
 var url = window.location.href;
