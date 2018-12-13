@@ -231,7 +231,7 @@ public class SearchTimeSlotHandler implements RequestStreamHandler {
 					if(day != -1) {
 						for(Iterator<TimeSlot> i = ts.iterator(); i.hasNext();) {
 							TimeSlot t = i.next();
-							if(t.date.getDayOfYear() != day) {
+							if(t.date.getDayOfMonth() != day) {
 								i.remove();
 							}
 						}
