@@ -190,9 +190,8 @@ function giveCellsAttr(){
     var currEndHour = currHour;
     var currEndMinute = currMinute+duration
 
-    // console.log(document.getElementById("scheduleTable").getAttribute("data-schStartDate"))
-    var currDate = new Date(document.getElementById("scheduleTable").getAttribute("data-schStartDate"));
-    // console.log(currDate)
+    console.log(document.getElementById("scheduleTable").getAttribute("data-schStartDate"))
+    var currDate = new Date(document.getElementById("scheduleTable").getAttribute("data-monday"));
 
     if(currEndMinute==60){
         currEndHour+=1;

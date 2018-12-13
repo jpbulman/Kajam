@@ -140,7 +140,6 @@ function refreshTable(){
             var highYear = 0000;
 
             for(var k=0;k<ts.length;k++){
-                // console.log(ts.length)
                 var currentCell = table.rows[row].cells[col];
                 
                 if(parseInt(ts[k]["date"]["year"])<lowYear){
@@ -200,7 +199,7 @@ function refreshTable(){
                     }
                 }
                 // console.log(row,col)
-                if(row%(ts.length/5)==0){
+                if(row%(table.rows.length-1)==0){
                     row=0;
                     col+=1;
                 }
@@ -498,7 +497,15 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
     refreshTable()
 }
 
+function removeFilterChilderen(){
+    console.log(document.getElementById("filteredResults").children.length)
+    for(var i=0;i<document.getElementById("filteredResults").children.length;i++){
+        document.getElementById("filteredResults").removeChild(document.getElementById("filteredResults").children[i])
+    }
+}
+
 function filter(){
+    // removeFilterChilderen()
     var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/filtertimeslots"
     //schid, month(1-12),year,dow(1-5),dom(1-31),h,m
 
