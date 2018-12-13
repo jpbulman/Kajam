@@ -22,6 +22,7 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
+import db.MeetingDAO;
 import db.ScheduleDAO;
 import db.TimeSlotDAO;
 import model.Schedule;
@@ -31,7 +32,7 @@ public class SearchTimeSlotHandler implements RequestStreamHandler {
 	
 	public LambdaLogger logger = null;
 
-	Schedule getSchedule(UUID id) throws Exception{
+	private Schedule getSchedule(UUID id) throws Exception{
 		if (logger != null) { logger.log("in getSchedule"); }
 		ScheduleDAO dao = new ScheduleDAO();
 		
@@ -44,7 +45,7 @@ public class SearchTimeSlotHandler implements RequestStreamHandler {
 		}
 	}
 	
-	ArrayList<TimeSlot> getAllTimeSlots(UUID id) throws Exception{
+	private ArrayList<TimeSlot> getAllTimeSlots(UUID id) throws Exception{
 		if (logger != null) { logger.log("in getAllTimeSlots"); }
 		TimeSlotDAO dao = new TimeSlotDAO();
 		
@@ -244,6 +245,14 @@ public class SearchTimeSlotHandler implements RequestStreamHandler {
 							if(t.startTime != time) {
 								i.remove();
 							}
+						}
+					}
+					
+					MeetingDAO md = new MeetingDAO();
+					for(Iterator<TimeSlot> i = ts.iterator(); i.hasNext();) {
+						TimeSlot t = i.next();
+						if(md.getMeetingByTimeSlotID(t.id) != null) {
+							i.remove();
 						}
 					}
 					
