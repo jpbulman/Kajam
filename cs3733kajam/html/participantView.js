@@ -7,12 +7,14 @@ function updateView(json){
     document.getElementById("schName").innerHTML = json["name"];
 
     var scheduleID = json["id"];
+    document.getElementById("scheduleTable").setAttribute("data-schID",scheduleID)
 
     var startMonth = parseInt(json["startDate"]["month"]);
     var startDay = parseInt(json["startDate"]["day"]);
     var startYear = parseInt(json["startDate"]["year"]);
 
     var duration = parseInt(json["meetingDuration"]);
+    document.getElementById("scheduleTable").setAttribute("data-duration",duration)
 
     var startingDate = new Date(startMonth+" "+startDay+" "+startYear);
 
@@ -20,7 +22,9 @@ function updateView(json){
     fillInWeek(mondayOfWeek);
 
     var dayStartHour = parseInt(json["startTime"]["hour"]);
+    document.getElementById("scheduleTable").setAttribute("data-dailyStartHour",dayStartHour)
     var dayEndHour = parseInt(json["endTime"]["hour"]);
+    document.getElementById("scheduleTable").setAttribute("data-dailyEndHour",dayEndHour)
 
     globalSchID = scheduleID;
     globalSchStartHour = dayStartHour;
@@ -41,6 +45,64 @@ function clearTable(){
         }
     }
 
+}
+
+function giveCellsAttr(){
+    var table = document.getElementById("scheduleTable")
+
+    var duration = parseInt(document.getElementById("scheduleTable").getAttribute("data-duration"))
+
+    var currHour = parseInt(document.getElementById("scheduleTable").getAttribute("data-dailyStartHour"))
+    var currMinute = 0
+
+    var currEndHour = currHour;
+    var currEndMinute = currMinute+duration
+
+    var currDate = new Date(document.getElementById("scheduleTable").getAttribute("data-monday"));
+
+    if(currEndMinute==60){
+        currHour+=1;
+        currEndMinute=0
+    }
+
+    var currMonth = currDate.getMonth()+1
+    var currDay = currDate.getDate()
+    var currYear = currDate.getFullYear()
+
+    for(var i=1;i<6;i++){
+        for(var j=1;j<table.rows.length;j++){
+            var currentCell = table.rows[j].cells[i];
+            // console.log(currentCell)
+            currentCell.setAttribute("data-year",currYear)
+            currentCell.setAttribute("data-month",currMonth)
+            currentCell.setAttribute("data-dayOfMonth",currDay)
+            currentCell.setAttribute("data-hour",currHour)
+            currentCell.setAttribute("data-minute",currMinute)
+            currentCell.setAttribute("data-endHour",currEndHour)
+            currentCell.setAttribute("data-endMinute",currEndMinute)
+
+            currMinute+=duration
+            currEndMinute+=duration
+            if(currMinute==60){
+                currMinute=0;
+                currHour+=1;
+            }
+            if(currEndMinute==60){
+                currEndMinute=0;
+                currEndHour+=1;
+            }
+        }
+        currDate.setDate(currDate.getDate()+1)
+        currMonth = currDate.getMonth()+1
+        currDay = currDate.getDate()
+        currYear = currDate.getFullYear()
+
+        currHour = parseInt(document.getElementById("scheduleTable").getAttribute("data-dailyStartHour"))
+        currMinute = 0
+    
+        currEndHour = currHour;
+        currEndMinute = currMinute+duration
+    }
 }
 
 function refreshTable(){
@@ -74,16 +136,37 @@ function refreshTable(){
 
             var table = document.getElementById("scheduleTable")
 
+            var lowYear = 9999;
+            var highYear = 0000;
+
             for(var k=0;k<ts.length;k++){
                 // console.log(ts.length)
                 var currentCell = table.rows[row].cells[col];
-                currentCell.setAttribute("data-year",ts[k]["date"]["year"])
-                currentCell.setAttribute("data-month",ts[k]["date"]["month"])
-                currentCell.setAttribute("data-dayOfMonth",ts[k]["date"]["day"])
-                currentCell.setAttribute("data-hour",ts[k]["startTime"]["hour"])
-                currentCell.setAttribute("data-minute",ts[k]["startTime"]["minute"])
-                currentCell.setAttribute("data-endHour",ts[k]["endTime"]["hour"])
-                currentCell.setAttribute("data-endMinute",ts[k]["endTime"]["minute"])
+                
+                if(parseInt(ts[k]["date"]["year"])<lowYear){
+                    lowYear = parseInt(ts[k]["date"]["year"])
+                }
+                if(parseInt(ts[k]["date"]["year"])>highYear){
+                    highYear=parseInt(ts[k]["date"]["year"])
+                }
+
+                giveCellsAttr()
+
+                for(var searchRow=1;searchRow<table.rows.length;searchRow++){
+                    for(var searchColumn=1;searchColumn<table.rows[searchRow].cells.length;searchColumn++){
+                        var cc = table.rows[searchRow].cells[searchColumn];
+                        if(cc.getAttribute("data-year")==ts[k]["date"]["year"]&&
+                            cc.getAttribute("data-month")==ts[k]["date"]["month"]&&
+                            cc.getAttribute("data-dayOfMonth")==ts[k]["date"]["day"]&&
+                            cc.getAttribute("data-hour")==ts[k]["startTime"]["hour"]&&
+                            cc.getAttribute("data-minute")==ts[k]["startTime"]["minute"]&&
+                            cc.getAttribute("data-endHour")==ts[k]["endTime"]["hour"]&&
+                            cc.getAttribute("data-endMinute")==ts[k]["endTime"]["minute"]){
+                            currentCell = cc;
+                        }
+                    }
+                }
+                
                 currentCell.setAttribute("data-isFree",ts[k]["isFree"])
                 currentCell.setAttribute("data-id",ts[k]["id"])
 
@@ -124,11 +207,14 @@ function refreshTable(){
                 row++;
             }
 
+            populateYearDD(lowYear,highYear)
+
         }
     }
 }
 
 function getNextWeek(){
+    clearYears()
     var mon = document.getElementById("MonDate").innerHTML;
     var d = new Date(mon);
     d.setDate(d.getDate()+7);
@@ -137,6 +223,7 @@ function getNextWeek(){
 }
 
 function getPrevWeek(){
+    clearYears()
     var mon = document.getElementById("MonDate").innerHTML;
     var d = new Date(mon);
     d.setDate(d.getDate()-7);
@@ -279,6 +366,7 @@ function getMonday(currDate){
             currDate.setDate(currDate.getDate()-1);
         }
     }
+    document.getElementById("scheduleTable").setAttribute("data-monday",currDate.toDateString())
     return currDate;
 }
 
@@ -286,6 +374,11 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
 
     document.getElementById("loading").style.visibility = "visible";
     console.log(dayStartHour,dayEndHour,duration,scheduleID)
+
+    populateStartTimeDD()
+    populateMonthDD()
+    populateDOMDD()
+    populateDOW()
 
     var currHour,currMinute, i;
     for(currHour = dayStartHour, currMinute = 0, i=1;currHour<dayEndHour;i++){
@@ -310,7 +403,7 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
         // Populate rest of the row
         for(var a=1;a<=5;a++){
             var cell = row.insertCell(a);
-            refreshTable()
+            // refreshTable()
             // if(a==1 && i==1){
 
             //     var dateInformation = getCurrColDateInfo(a);
@@ -402,6 +495,52 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
             currMinute+=duration;
         }
     }
+    refreshTable()
+}
+
+function filter(){
+    var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/filtertimeslots"
+    //schid, month(1-12),year,dow(1-5),dom(1-31),h,m
+
+    var filReq = new XMLHttpRequest();
+    filReq.open("POST",url,true);
+
+    var sendInformation = {}
+    sendInformation["id"] = document.getElementById("scheduleTable").getAttribute("data-schID")
+    sendInformation["month"] = monthToInt(document.getElementById("monthDropDown").value).toString()
+    sendInformation["year"] = (document.getElementById("yearDD").value.toString()=="Year")? "" : document.getElementById("yearDD").value.toString()
+    sendInformation["dayOfWeek"] = dowToInt(document.getElementById("DOWDD").value).toString()
+    sendInformation["day"] = (document.getElementById("DOMDD").value=="Day of month")? "":document.getElementById("DOMDD").value;
+    sendInformation["hour"] = getSelectedHour()
+    sendInformation["minute"] = getSelectedMinute()
+
+    console.log(JSON.stringify(sendInformation))
+    filReq.send(JSON.stringify(sendInformation))
+
+    filReq.onloadend = function(){
+        if(filReq.readyState==XMLHttpRequest.DONE){
+            // console.log(filReq.responseText)
+
+            var responses = JSON.parse(filReq.responseText)["timeSlots"]
+
+            console.log(responses)
+
+            for(j in responses){
+                var i = responses[j]
+                var entryText = i["date"]["month"]+"/"+i["date"]["day"]+"/"+i["date"]["year"]+" from "+i["startTime"]["hour"]+":"+i["startTime"]["minute"]+" to "+i["endTime"]["hour"]+":"+i["endTime"]["minute"]
+
+                var button = document.createElement("BUTTON");
+                var text = document.createTextNode(entryText);
+                button.appendChild(text)
+                button.classList.add("filteredResultsEntry");
+                var div = document.createElement("div")
+                div.appendChild(button);
+                document.getElementById("filteredResults").appendChild(div);
+            }
+
+        }
+    }
+
 }
 
 
@@ -483,7 +622,165 @@ xhr.onloadend = function(){
 
 };
 
+function getSelectedHour(){
+    var val = document.getElementById("startTimeDropDown").value;
+    var ret = ""
 
+    for(var i=0;i<val.length;i++){
+        var curr = val.substring(i,i+1)
+        if(curr==":"){
+            return ret;
+        }
+        else{
+            ret+=curr;
+        }
+    }
+
+    return ""
+}
+
+function getSelectedMinute(){
+    var val = document.getElementById("startTimeDropDown").value;
+    var ret = ""
+
+    for(var i=0;i<val.length;i++){
+        var curr = val.substring(i,i+1)
+        if(curr==":"){
+            return val.substring(i+1,val.length)
+        }
+    }
+
+    return ""
+}
+
+function populateStartTimeDD(){
+    var dropDown = document.getElementById("startTimeDropDown");
+
+    var DSH = parseInt(document.getElementById("scheduleTable").getAttribute("data-dailyStartHour"))
+    var DEH = parseInt(document.getElementById("scheduleTable").getAttribute("data-dailyEndHour"))
+    var dur = parseInt(document.getElementById("scheduleTable").getAttribute("data-duration"));
+    var currMinute = 0;
+    while(DSH<DEH){
+
+        var option = document.createElement("option")
+        
+        var currMinStr = currMinute;
+        if(currMinute==0){
+            currMinStr="00"
+        }
+
+        option.text=DSH+":"+currMinStr;
+        dropDown.add(option)
+
+        currMinute+=dur;
+        if(currMinute==60){
+            DSH++;
+            currMinute=0;
+        }
+    }
+
+}
+
+function monthToInt(i){
+    switch(i){
+        case "January":return 1;
+        case "February":return 2;
+        case "March":return 3;
+        case "April":return 4;
+        case "May":return 5;
+        case "June":return 6;
+        case "July":return 7;
+        case "August":return 8;
+        case "September":return 9;
+        case "October":return 10;
+        case "November":return 11;
+        case "December":return 12;
+    }
+    return ""
+}
+
+function populateMonthDD(){
+    var dropDown = document.getElementById("monthDropDown")
+
+    for(var i=1;i<=12;i++){
+        var text = ""
+        switch(i){
+            case 1:text="January";break;
+            case 2:text="February";break;
+            case 3:text="March";break;
+            case 4:text="April";break;
+            case 5:text="May";break;
+            case 6:text="June";break;
+            case 7:text="July";break;
+            case 8:text="August";break;
+            case 9:text="September";break;
+            case 10:text="October";break;
+            case 11:text="Novemember";break;
+            case 12:text="December";break;
+        }
+        var option = document.createElement("option")
+        option.text=text;
+        dropDown.add(option)
+    }
+
+}
+
+function populateDOMDD(){
+    var dropDown = document.getElementById("DOMDD");
+
+    for(var i=1;i<=31;i++){
+        var option = document.createElement("option")
+        option.text=i;
+        dropDown.add(option)
+    }
+
+}
+
+function populateYearDD(ly,hy){
+    while(ly<=hy){
+        var option = document.createElement("option")
+        option.text=ly;
+
+        document.getElementById("yearDD").add(option)
+
+        ly++;
+    }
+}
+
+function clearYears(){
+    var dd = document.getElementById("yearDD");
+    for(var i=0;i<dd.options.length;i++){
+        dd.options[i] = null;
+    }
+}
+
+function dowToInt(i){
+    switch(i){
+        case "Monday":return 1;
+        case "Tuesday":return 2;
+        case "Wednesday":return 3;
+        case "Thursday":return 4;
+        case "Friday":return 5;
+    }
+    return ""
+}
+
+function populateDOW(){
+    var dropDown = document.getElementById("DOWDD")
+    for(var i=1;i<=5;i++){
+        var text="day";
+        switch(i){
+            case 1:text="Monday";break;
+            case 2:text="Tuesday";break;
+            case 3:text="Wednesday";break;
+            case 4:text="Thursday";break;
+            case 5:text="Friday";break;
+        }
+        var option = document.createElement("option")
+        option.text = text;
+        dropDown.add(option)
+    }
+}
 
 
 
@@ -502,5 +799,5 @@ function sendEmail(email,sc){
      var template_id = "template_YFRkJzbx";
      console.log(email,sc,template_params["message_html"])
     //  document.location.reload(true)
-     emailjs.send(service_id,template_id,template_params);
+    //  emailjs.send(service_id,template_id,template_params);
 }

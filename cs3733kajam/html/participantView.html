@@ -42,7 +42,7 @@
           <th id="Tue" scope="col">Tue</br>11/27/18</th>
           <th id="Wed" scope="col">Wed</br>11/28/18</th>
           <th id="Thu" scope="col">Thu</br>11/29/18</th>
-          <th id="Fri" scope="col">Fri   <button class="weekButton" type="button">></button></br>11/20/18</th>
+          <th id="Fri" scope="col">Fri<button class="weekButton" type="button">></button></br>11/20/18</th>
           </tr>
       </thead>
       <tbody id="tableBody">
@@ -75,45 +75,42 @@
     <!-- <div>
       <input type="text" placeholder="🔎">
     </div> -->
-    <select>
+    <select id="monthDropDown">
       <option disabled selected hidden>Month</option>
     </select>
 
-    <select>
-      <option disabled selected hidden>Year</option>
-    </select>
-
-    <select>
-        <option disabled selected hidden>Day of week</option>
-    </select>
-
-    <select>
+    <!-- Day of Month Dropdown -->
+    <select id="DOMDD">
       <option disabled selected hidden>Day of month</option>
     </select>
 
-    <select>
-        <option disabled selected hidden>Time slot</option>
+    <select id="yearDD">
+      <option disabled selected hidden>Year</option>
+    </select>
+
+    <select id="DOWDD">
+        <option disabled selected hidden>Day of week</option>
+    </select>
+
+    <select id="startTimeDropDown">
+        <option disabled selected hidden>Start Time</option>
     </select>
 
     <div>
-      <input type="button" value="Go">
+      <input onclick="filter()" type="button" value="Go">
     </div>
 
   </form>
 
   <div></br></div>
 
-  <div class="filteredResults">
-    <h1 class="filteredResultsEntry">Timeslot 1</h1>
-    <h1 class="filteredResultsEntry">Timeslot 2</h1>
-    <h1 class="filteredResultsEntry">Timeslot 3</h1>
-    <h1 class="filteredResultsEntry">Timeslot 4</h1>
-    <h1 class="filteredResultsEntry">Timeslot 5</h1>
+  <div id="filteredResults" class="filteredResults">
+ <!-- Results go here -->
   </div>
 
   <div></br></div>
 
-  <div>
+  <!-- <div>
     <input type="text" id="meetingName" placeholder="Meeting Name"></br>
   </div>
 
@@ -121,7 +118,7 @@
 
   <div>
     <input type="button" value="Book Meeting">
-  </div>
+  </div> -->
 
   <!-- <h1>Your secret code is: 1729</h1> -->
 

@@ -823,6 +823,7 @@ function editSchedule(){
     editRequest.onloadend = function(){
         if(editRequest.readyState==XMLHttpRequest.DONE){
             console.log(editRequest.responseText)
+            refreshTable()
         }
     }
 
