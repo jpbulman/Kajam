@@ -107,11 +107,19 @@ Tags on landing page
     </form>
 
     <div>
-        <button class="copy" type="button" onclick="copyToClip()" ><i class="far fa-copy"></i> Copy participant link </button>
+        <button class="copy" type="button" onclick="copyToClip()" ><i class="far fa-copy"></i> Copy participant link</button>
     </div>
 
     <div>
         <button id="copied" class="copied">Copied!</h3>
+    </div>
+
+    <div>
+        <button class="copy" type="button" onclick="copyToClipSA()" ><i class="fas fa-unlock-alt"></i> Copy sys-admin link</button>
+    </div>
+
+    <div>
+        <button id="copiedSA" class="copied">Copied!</h3>
     </div>
 
     <button onclick="deleteSchedule()" class="del" type="button"><i class="fas fa-trash-alt"></i> Delete this schedule </button>

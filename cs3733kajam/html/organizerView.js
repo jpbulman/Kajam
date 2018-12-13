@@ -913,6 +913,30 @@ function copyToClip(){
 
 }
 
+function copyToClipSA(){
+    document.getElementById("copiedSA").style.visibility="visible"
+    var currUrl = window.location.href
+    currUrl = currUrl.replace("organizerView","sysAdminView")
+
+    for(var i=0;i<currUrl.length;i++){
+        if(currUrl.substring(i,i+1)==="?"){
+            currUrl = currUrl.substring(0,i)
+        }
+    }
+
+    var area = document.createElement('textarea');
+    area.value = currUrl;
+    document.body.appendChild(area)
+    area.select();
+    document.execCommand('copy')
+    document.body.removeChild(area)
+
+    var timeOut = 750;
+    setTimeout(function(){
+        document.getElementById("copiedSA").style.visibility="hidden"
+    },timeOut);
+}
+
 for(var i=0;i<url.length;i++){
     if(url.substring(i,i+1)==="?"){
         i++;
