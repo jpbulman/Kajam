@@ -61,7 +61,7 @@ function giveCellsAttr(){
     var currDate = new Date(document.getElementById("scheduleTable").getAttribute("data-monday"));
 
     if(currEndMinute==60){
-        currHour+=1;
+        currEndHour+=1;
         currEndMinute=0
     }
 
@@ -101,7 +101,12 @@ function giveCellsAttr(){
         currMinute = 0
     
         currEndHour = currHour;
-        currEndMinute = currMinute+duration
+        currEndMinute = currMinute+duration;
+
+        if(currEndMinute==60){
+            currEndHour+=1;
+            currEndMinute=0
+        }
     }
 }
 
@@ -317,10 +322,10 @@ function getWeekDay(day){
 
 function fillInDate(dayOfWeek,actualDate){
     if(dayOfWeek=="Mon"){
-        document.getElementById(dayOfWeek).innerHTML = '<button class="weekButton" onclick="getPrevWeek()" type="button"><</button> <a id="MonDate">'+actualDate.toDateString()+'</a>';
+        document.getElementById(dayOfWeek).innerHTML = '<button class="weekButton" onclick="getPrevWeek()" type="button"><i class="fas fa-chevron-circle-left"></i></button> <a id="MonDate">'+actualDate.toDateString()+'</a>';
     }
     else if(dayOfWeek.toString()=="Fri"){
-        document.getElementById(dayOfWeek).innerHTML = '<a id="FriDate">'+actualDate.toDateString()+'</a>'+' <button class="weekButton" onclick="getNextWeek()" type="button">></button>'; 
+        document.getElementById(dayOfWeek).innerHTML = '<a id="FriDate">'+actualDate.toDateString()+'</a>'+' <button class="weekButton" onclick="getNextWeek()" type="button"><i class="fas fa-chevron-circle-right"></i></button>'; 
     }
     else{
         document.getElementById(dayOfWeek).innerHTML = '<a id="'+getWeekDay(actualDate)+'Date">'+actualDate.toDateString()
@@ -498,14 +503,14 @@ function popTable(dayStartHour,dayEndHour,duration,scheduleID){
 }
 
 function removeFilterChilderen(){
-    console.log(document.getElementById("filteredResults").children.length)
-    for(var i=0;i<document.getElementById("filteredResults").children.length;i++){
-        document.getElementById("filteredResults").removeChild(document.getElementById("filteredResults").children[i])
+    var div = document.getElementById("filteredResults");
+    while(div.firstChild){
+        div.removeChild(div.firstChild)
     }
 }
 
 function filter(){
-    // removeFilterChilderen()
+    removeFilterChilderen()
     var url = "https://f1a5ytx922.execute-api.us-east-2.amazonaws.com/Beta/filtertimeslots"
     //schid, month(1-12),year,dow(1-5),dom(1-31),h,m
 

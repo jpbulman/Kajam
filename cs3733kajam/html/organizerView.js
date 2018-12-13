@@ -15,10 +15,10 @@ function getWeekDay(day){
 
 function fillInDate(dayOfWeek,actualDate){
     if(dayOfWeek=="Mon"){
-        document.getElementById(dayOfWeek).innerHTML = '<button onclick="getPrevWeek()" class="weekButton" type="button"><</button> <a id="MonDate">'+actualDate.toDateString()+'</a>';
+        document.getElementById(dayOfWeek).innerHTML = '<button onclick="getPrevWeek()" class="weekButton" type="button"><i class="fas fa-chevron-circle-left"></i></button> <a id="MonDate">'+actualDate.toDateString()+'</a>';
     }
     else if(dayOfWeek.toString()=="Fri"){
-        document.getElementById(dayOfWeek).innerHTML = '<a id="FriDate">'+actualDate.toDateString()+'</a>'+' <button class="weekButton" onclick="getNextWeek()" type="button">></button>'; 
+        document.getElementById(dayOfWeek).innerHTML = '<a id="FriDate">'+actualDate.toDateString()+'</a>'+' <button class="weekButton" onclick="getNextWeek()" type="button"><i class="fas fa-chevron-circle-right"></i></button>'; 
     }
     else{
         document.getElementById(dayOfWeek).innerHTML = '<a id="'+getWeekDay(actualDate)+'Date">'+actualDate.toDateString()
